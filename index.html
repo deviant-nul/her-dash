@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Her · Дашборд</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb;
+  --plane: #f9f9f7;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --track: #d9d8d0;
+  --good: #006300;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #6250d6;
+  --series-8: #e34948;
+  --font: system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+  --text-hero: 52px;
+  --text-title: 26px;
+  --text-subtitle: 17px;
+  --text-body: 16px;
+  --text-label: 14px;
+  --text-caption: 12px;
+  --weight-regular: 400;
+  --weight-medium: 510;
+  --weight-semibold: 590;
+  --weight-bold: 700;
+  --chart-bar-max: 24;
+  --chart-bar-radius: 4;
+  --chart-line: 2;
+  --chart-marker-radius: 4;
+  --chart-gap: 2;
+  --chart-grid: 1;
+  --chart-area-alpha: 0.1;
+  --chart-radius: 16;
+  --chart-pad: 32;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface: #1a1a19;
+    --plane: #0d0d0d;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --track: #3a3a37;
+    --good: #0ca30c;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #1a1a19;
+  --plane: #0d0d0d;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255,255,255,0.10);
+  --track: #3a3a37;
+  --good: #0ca30c;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+}
+
+/* Her dashboard (#174). Colors, type and marks come from her.design (the tokens above). */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { background: var(--plane); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px calc(env(safe-area-inset-bottom, 0px) + 96px); overscroll-behavior-y: none; user-select: none; -webkit-user-select: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+svg { display: block; overflow: visible; }
+
+/* the period: segmented control and the window, swipe to step */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 3; background: var(--plane); padding-bottom: 6px; margin: 0 -16px; padding-inline: 16px; }
+.spans { position: relative; display: flex; padding: 4px; border-radius: 14px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+.spans button { position: relative; z-index: 1; flex: 1; font: var(--weight-medium) 14px/32px var(--font); color: var(--muted); transition: color .3s; }
+.spans button.on { color: var(--plane); }
+.spans-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 10px; background: var(--ink); transition: transform .45s cubic-bezier(.3,1.3,.5,1), width .45s; }
+.period { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.step { width: 36px; height: 28px; font-size: 22px; line-height: 1; color: var(--ink-2); border-radius: 10px; transition: opacity .2s; }
+.step:disabled { opacity: .18; }
+.eyebrow { font: var(--weight-semibold) 12px/1 var(--font); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; }
+
+/* screens */
+main { position: relative; }
+.screen { display: none; }
+.screen.on { display: block; animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.screen.slide-l { animation: from-r .45s cubic-bezier(.2,.8,.2,1) both; }
+.screen.slide-r { animation: from-l .45s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes from-r { from { opacity: 0; transform: translateX(40px); } }
+@keyframes from-l { from { opacity: 0; transform: translateX(-40px); } }
+
+.hero { font: var(--weight-bold) 64px/1 var(--font); letter-spacing: -.03em; font-variant-numeric: tabular-nums; margin-top: 18px; }
+.hero small { font-size: 22px; letter-spacing: 0; color: var(--ink-2); font-weight: var(--weight-medium); margin-left: 6px; }
+.sub { font: 15px/1.35 var(--font); color: var(--ink-2); margin-top: 8px; font-variant-numeric: tabular-nums; }
+.delta { display: inline-block; font: var(--weight-semibold) 13px/1 var(--font); margin-top: 10px; padding: 6px 10px; border-radius: 99px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); color: var(--ink-2); }
+.delta.up { color: var(--good); }
+
+/* cards: a tap shows the next view, the dots say which */
+.card { position: relative; background: var(--surface); border-radius: 24px; box-shadow: inset 0 0 0 1px var(--border); padding: 20px 20px 14px; margin-top: 12px; overflow: hidden; transition: transform .2s; }
+.card.tappable:active { transform: scale(.985); }
+.card.deep { background: radial-gradient(120% 90% at 50% 0%, color-mix(in oklab, var(--series-7) 14%, var(--surface)), var(--surface)); }
+.card h3 { font: var(--weight-semibold) 17px/1.2 var(--font); }
+.card .hint { font: 13px/1.3 var(--font); color: var(--muted); margin-top: 3px; min-height: 17px; }
+.view { margin-top: 14px; }
+.view.in { animation: view-in .42s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes view-in { from { opacity: 0; transform: translateX(24px) scale(.98); } }
+.dots { display: flex; justify-content: center; gap: 6px; margin-top: 12px; height: 6px; }
+.dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--track); transition: width .35s cubic-bezier(.3,1.3,.5,1), background .35s; }
+.dots i.on { width: 18px; background: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 13px/1.2 var(--font); color: var(--ink-2); margin-top: 12px; }
+.sw { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 6px; vertical-align: 1px; }
+.names { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-top: 14px; }
+.names div { font: 14px/1.2 var(--font); color: var(--ink-2); }
+.names b { display: block; font: var(--weight-semibold) 17px/1.25 var(--font); color: var(--ink); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.empty { font: 15px/1.4 var(--font); color: var(--muted); padding: 28px 0 18px; text-align: center; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* tiles (treemap strip), waffle */
+.tiles { display: flex; gap: 3px; height: 128px; border-radius: 14px; overflow: hidden; }
+.tiles div { min-width: 6px; border-radius: 6px; padding: 10px; color: #fff; font: var(--weight-semibold) 14px/1.2 var(--font); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; transform-origin: left; animation: grow .6s cubic-bezier(.2,.8,.2,1) both; }
+.tiles span { font: var(--weight-medium) 12px var(--font); opacity: .85; }
+@keyframes grow { from { transform: scaleX(.2); opacity: 0; } }
+.waffle { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; }
+.waffle i { aspect-ratio: 1; border-radius: 3px; background: var(--track); animation: pop .35s both; }
+@keyframes pop { from { transform: scale(0); } }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
+
+/* the SVG marks animate in */
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1s cubic-bezier(.3,.7,.2,1) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.fade { animation: fade .8s ease both; }
+@keyframes fade { from { opacity: 0; } }
+.rise { transform-box: fill-box; transform-origin: 50% 100%; animation: rise-bar .7s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rise-bar { from { transform: scaleY(0); } }
+.twinkle { animation: twinkle 2.6s ease-in-out infinite alternate; }
+@keyframes twinkle { from { opacity: .35; } }
+.pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.35); opacity: .55; } }
+
+/* the bottom navigation */
+.tabs { position: fixed; z-index: 4; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); display: flex; padding: 6px; border-radius: 24px; background: color-mix(in oklab, var(--surface) 82%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: inset 0 0 0 1px var(--border), 0 10px 30px rgba(0,0,0,.18); }
+.tabs button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 0 6px; border-radius: 18px; font: var(--weight-medium) 11px/1 var(--font); color: var(--muted); transition: color .25s, background .25s; }
+.tabs svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tabs button.on { color: var(--ink); background: var(--plane); }
+
+/* the invoice screen: navigation only, the editor is #176 */
+.invoice-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--grid); }
+.invoice-row:first-of-type { border-top: 0; }
+.invoice-row .bar { flex: 1; height: 10px; border-radius: 5px; background: var(--track); overflow: hidden; }
+.invoice-row .bar i { display: block; height: 100%; border-radius: 5px; }
+.invoice-row b { font: var(--weight-semibold) 15px var(--font); min-width: 92px; }
+.soon { font: 13px/1.4 var(--font); color: var(--muted); margin-top: 10px; }
+
+/* skeletons instead of spinners */
+.sk { border-radius: 16px; background: linear-gradient(90deg, var(--surface) 0%, var(--grid) 50%, var(--surface) 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+.sk-hero { height: 64px; width: 62%; margin-top: 18px; }
+.sk-line { height: 16px; width: 45%; margin-top: 12px; }
+.sk-card { height: 300px; margin-top: 16px; border-radius: 24px; }
+.sk-card.short { height: 160px; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* when the page cannot show the numbers */
+.gate { text-align: center; padding: 72px 12px; }
+.gate .glyph { font-size: 44px; }
+.gate h2 { font: var(--weight-semibold) 20px/1.3 var(--font); margin-top: 14px; }
+.gate p { font: 15px/1.45 var(--font); color: var(--ink-2); margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .draw { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation-delay: 0s !important; } }
+
+</style>
+</head>
+<body>
+<header class="top">
+  <nav class="spans" id="spans" role="tablist">
+    <span class="spans-pill" id="spans-pill"></span>
+    <button role="tab" data-span="week">Тиждень</button>
+    <button role="tab" data-span="month">Місяць</button>
+    <button role="tab" data-span="quarter">Квартал</button>
+  </nav>
+  <div class="period">
+    <button class="step" id="older" aria-label="Попередній період">‹</button>
+    <span class="eyebrow" id="period">&nbsp;</span>
+    <button class="step" id="newer" aria-label="Наступний період">›</button>
+  </div>
+</header>
+<main id="main">
+  <section class="screen on skeleton" aria-hidden="true">
+    <div class="sk sk-hero"></div><div class="sk sk-line"></div>
+    <div class="sk sk-card"></div><div class="sk sk-card short"></div>
+  </section>
+</main>
+<nav class="tabs" id="tabs">
+  <button data-screen="overview"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg>Огляд</button>
+  <button data-screen="weeks"><svg viewBox="0 0 24 24"><path d="M3 15c3-6 5-6 7-2s4 4 6-1 3-4 5-2"/></svg>Тижні</button>
+  <button data-screen="agent"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg>Агент</button>
+  <button data-screen="repos"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2"/><circle cx="17" cy="6" r="1.5"/><circle cx="15" cy="16" r="2.5"/><circle cx="6" cy="17" r="1.2"/></svg>Репо</button>
+  <button data-screen="invoice"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Рахунок</button>
+</nav>
+<script>
+// Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
+// the data is in the URL fragment, the design tokens are CSS variables (her.design).
+"use strict";
+
+// ---- Telegram: a tiny bridge instead of telegram-web-app.js (nothing loads from outside) ----
+const launch = new URLSearchParams(location.hash.slice(1));
+const TG = {
+  data: launch.get("tgWebAppData") || "",
+  theme: json(launch.get("tgWebAppThemeParams")),
+};
+TG.inside = Boolean(TG.data || window.TelegramWebviewProxy || (window.external && "notify" in window.external));
+try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* file:// */ }
+
+function json(text) { try { return JSON.parse(text); } catch (e) { return null; } }
+function post(type, data) {
+  const body = JSON.stringify(data || {});
+  try {
+    if (window.TelegramWebviewProxy) window.TelegramWebviewProxy.postEvent(type, body);
+    else if (window.external && "notify" in window.external) window.external.notify(JSON.stringify({ eventType: type, eventData: data || {} }));
+    else if (window.parent !== window) window.parent.postMessage(JSON.stringify({ eventType: type, eventData: data || {} }), "https://web.telegram.org");
+  } catch (e) { /* outside Telegram */ }
+}
+function receive(type, data) { if (type === "theme_changed" && data && data.theme_params) theme(data.theme_params); }
+window.Telegram = window.Telegram || {};
+window.Telegram.WebView = { receiveEvent: receive };
+window.addEventListener("message", (e) => { const m = typeof e.data === "string" ? json(e.data) : null; if (m && m.eventType) receive(m.eventType, m.eventData); });
+const haptic = (kind) => post("web_app_trigger_haptic_feedback", kind === "select" ? { type: "selection_change" } : { type: "impact", impact_style: kind || "light" });
+function viewer() { const user = json(new URLSearchParams(TG.data).get("user")); return user ? user.id : null; }
+
+function theme(params) {
+  const forced = new URLSearchParams(location.search).get("theme"); // the local preview
+  if (forced === "dark" || forced === "light") document.documentElement.dataset.theme = forced;
+  const bg = params && params.bg_color;
+  if (bg && /^#[0-9a-f]{6}$/i.test(bg)) {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(bg.slice(i, i + 2), 16) / 255);
+    document.documentElement.dataset.theme = 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.5 ? "dark" : "light";
+  }
+  const plane = getComputedStyle(document.documentElement).getPropertyValue("--plane").trim();
+  post("web_app_set_header_color", { color: plane });
+  post("web_app_set_background_color", { color: plane });
+  post("web_app_set_bottom_bar_color", { color: plane });
+}
+
+// ---- small helpers ----------------------------------------------------------------------
+const NS = "http://www.w3.org/2000/svg";
+function h(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+function s(tag, attrs, parent) { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+function svg(box, w, height) { return s("svg", { viewBox: `0 0 ${w} ${height}`, width: "100%", role: "img" }, box); }
+function text(parent, x, y, value, attrs) { const n = s("text", Object.assign({ x, y, fill: "var(--ink)", "font-size": 13 }, attrs || {}), parent); n.textContent = value; return n; }
+const color = (slot) => (slot >= 0 && slot < 8 ? `var(--series-${slot + 1})` : "var(--track)");
+const sum = (a) => a.reduce((x, y) => x + y, 0);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function hrs(q) { const w = Math.floor(q / 4), p = q % 4; return p ? `${w},${["25", "5", "75"][p - 1]}` : `${w}`; }
+function amount(value, cur) {
+  const n = Number(value), whole = Math.round(n) === n;
+  const [i, f] = (whole ? n.toFixed(0) : n.toFixed(2)).split(".");
+  return i.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + (f ? "," + f : "") + (cur ? " " + cur : "");
+}
+function day(iso) { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d); }
+function dm(date) { return `${String(date.getDate()).padStart(2, "0")}.${String(date.getMonth() + 1).padStart(2, "0")}`; }
+function smooth(pts) {
+  return pts.map((p, i) => {
+    if (!i) return `M${p[0]},${p[1]}`;
+    const q = pts[i - 1], mx = (q[0] + p[0]) / 2;
+    return `C${mx},${q[1]} ${mx},${p[1]} ${p[0]},${p[1]}`;
+  }).join("");
+}
+function arc(cx, cy, r, a0, a1) {
+  a1 = Math.min(a1, a0 + Math.PI * 2 - 1e-4);
+  const p = (a) => [cx + r * Math.cos(a - Math.PI / 2), cy + r * Math.sin(a - Math.PI / 2)];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M${x0},${y0} A${r},${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1},${y1}`;
+}
+function drawn(node, delay) { node.setAttribute("pathLength", 1); node.classList.add("draw"); if (delay) node.style.animationDelay = delay + "s"; return node; }
+function glow(defs, id, c) {
+  const g = s("radialGradient", { id }, defs);
+  s("stop", { offset: 0, "stop-color": c, "stop-opacity": 0.75 }, g);
+  s("stop", { offset: 1, "stop-color": c, "stop-opacity": 0 }, g);
+  return `url(#${id})`;
+}
+function countUp(node, to, format) {
+  if (reduced) { node.textContent = format(to); return; }
+  const start = performance.now(), ms = 750;
+  const step = (now) => {
+    const t = Math.min(1, (now - start) / ms), e = 1 - Math.pow(1 - t, 3);
+    node.textContent = format(Math.round(to * e));
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const store = {
+  get(key) { try { return localStorage.getItem("her." + key); } catch (e) { return null; } },
+  set(key, value) { try { localStorage.setItem("her." + key, value); } catch (e) { /* private mode */ } },
+};
+
+// ---- state ------------------------------------------------------------------------------
+let S = null; // the snapshot
+const state = { span: "month", index: 0, screen: "overview" };
+const SCREENS = ["overview", "weeks", "agent", "repos", "invoice"];
+const SLICE_SCREEN = { clients: "overview", kinds: "overview", weeks: "weeks", agent: "agent" };
+const AGENT_KINDS = { night: "ніч", implement: "/implement", po: "/po" };
+const panel = () => S.p[state.span][state.index];
+const client = (slot) => S.c[slot] || ["", "Інше", slot, 0];
+
+// ---- a card: a tap shows its next view, the dots say which, the choice is remembered -----
+function card(id, title, views, opts) {
+  opts = opts || {};
+  const node = h("section", "card" + (views.length > 1 ? " tappable" : "") + (opts.deep ? " deep" : ""));
+  node.append(h("h3", "", title));
+  const hint = h("p", "hint");
+  const body = h("div");
+  const dots = h("div", "dots");
+  node.append(hint, body);
+  if (views.length > 1) node.append(dots);
+  let current = Math.min(Number(store.get("view." + id)) || 0, views.length - 1);
+  views.forEach((_, i) => {
+    const dot = h("i");
+    dot.addEventListener("click", (e) => { e.stopPropagation(); go(i); });
+    dots.append(dot);
+  });
+  function show(i, animate) {
+    current = i;
+    const view = views[i];
+    hint.textContent = view.hint || "";
+    const box = h("div", "view" + (animate ? " in" : ""));
+    body.replaceChildren(box);
+    view.draw(box);
+    [...dots.children].forEach((d, j) => d.classList.toggle("on", j === i));
+  }
+  function go(i) { if (i === current) return; haptic("select"); store.set("view." + id, i); show(i, true); }
+  if (views.length > 1) node.addEventListener("click", () => go((current + 1) % views.length));
+  show(current, false);
+  return node;
+}
+
+// ---- views: clients ----------------------------------------------------------------------
+function rings(box, P) {
+  const shown = P.cl.filter((c) => c[1]).slice(0, 4);
+  if (!shown.length) return box.append(h("p", "empty", "Годин за цей період немає."));
+  const g = svg(box, 318, 290), cx = 159, cy = 145;
+  shown.forEach((c, i) => {
+    const r = 128 - i * 27;
+    s("circle", { cx, cy, r, fill: "none", stroke: color(c[0]), "stroke-opacity": 0.14, "stroke-width": 20 }, g);
+    drawn(s("path", { d: arc(cx, cy, r, 0, (2 * Math.PI * c[1]) / P.w), fill: "none", stroke: color(c[0]), "stroke-width": 20, "stroke-linecap": "round" }, g), i * 0.08);
+  });
+  const big = text(g, cx, cy + 4, "", { "text-anchor": "middle", "font-size": 30, "font-weight": 700, class: "num" });
+  if (P.e) {
+    countUp(big, Math.round(Number(P.e[1]) * 100), (v) => amount((v / 100).toFixed(2)));
+    text(g, cx, cy + 24, `${P.e[0]} / год`, { "text-anchor": "middle", fill: "var(--muted)", "font-size": 12 });
+  } else {
+    big.textContent = hrs(P.w);
+    text(g, cx, cy + 24, "год", { "text-anchor": "middle", fill: "var(--muted)", "font-size": 12 });
+  }
+  const names = h("div", "names");
+  for (const c of P.cl) {
+    const item = h("div");
+    const sw = h("span", "sw"); sw.style.background = color(c[0]);
+    item.append(sw, client(c[0])[1], h("b", "", `${hrs(c[1])} год` + (c[4] ? ` · ${amount(c[4])}` : "")));
+    names.append(item);
+  }
+  box.append(names);
+}
+
+function tiles(box, P) {
+  const shown = P.cl.filter((c) => c[1]);
+  if (!shown.length) return box.append(h("p", "empty", "Годин за цей період немає."));
+  const strip = h("div", "tiles");
+  shown.forEach((c, i) => {
+    const tile = h("div");
+    tile.style.flex = c[1]; tile.style.background = color(c[0]); tile.style.animationDelay = i * 0.06 + "s";
+    if (c[1] / P.w > 0.14) tile.append(client(c[0])[1], h("span", "", `${hrs(c[1])} год`));
+    strip.append(tile);
+  });
+  const legend = h("div", "legend");
+  for (const c of shown) { const it = h("span"); const sw = h("span", "sw"); sw.style.background = color(c[0]); it.append(sw, client(c[0])[1]); legend.append(it); }
+  box.append(strip, legend);
+}
+
+function totals(P) { // hours per day of the window, every client
+  const days = Math.round((day(P.a) - day(P.f)) / 864e5), out = new Array(days).fill(0);
+  for (const [, row] of P.d) row.forEach((q, i) => { out[i] += q; });
+  return out;
+}
+
+function wave(box, P) {
+  const daily = totals(P), max = Math.max(1, ...daily), W = 318, H = 96;
+  const g = svg(box, W, H), defs = s("defs", {}, g);
+  const grad = s("linearGradient", { id: "wv", x1: 0, x2: 1 }, defs);
+  s("stop", { offset: 0, "stop-color": "var(--series-1)" }, grad); s("stop", { offset: 1, "stop-color": "var(--series-7)" }, grad);
+  const pts = daily.map((q, i) => [(i * W) / Math.max(1, daily.length - 1), H - 6 - (q / max) * (H - 16)]);
+  s("path", { d: smooth(pts) + `L${W},${H}L0,${H}Z`, fill: "url(#wv)", "fill-opacity": 0.22, class: "fade" }, g);
+  drawn(s("path", { d: smooth(pts), fill: "none", stroke: "url(#wv)", "stroke-width": 2.5 }, g));
+  const row = h("div", "split");
+  const gauge = h("div"), G = svg(gauge, 150, 84), cx = 75, cy = 78, r = 62;
+  const paid = P.c / Math.max(1, P.c + P.u);
+  const p = (a) => [cx - r * Math.cos(a), cy - r * Math.sin(a)];
+  const half = (a) => { const [x0, y0] = p(0), [x1, y1] = p(a); return `M${x0},${y0} A${r},${r} 0 0 1 ${x1},${y1}`; };
+  s("path", { d: half(Math.PI), fill: "none", stroke: "var(--track)", "stroke-width": 14, "stroke-linecap": "round" }, G);
+  if (paid > 0) drawn(s("path", { d: half(Math.PI * paid), fill: "none", stroke: "var(--series-1)", "stroke-width": 14, "stroke-linecap": "round" }, G), 0.2);
+  const pct = text(G, cx, cy - 8, "", { "text-anchor": "middle", "font-size": 24, "font-weight": 700, class: "num" });
+  countUp(pct, Math.round(paid * 100), (v) => v + "%");
+  const words = h("div");
+  words.append(h("div", "names"));
+  words.firstChild.style.gridTemplateColumns = "1fr";
+  const a = h("div", "", "оплачено"); a.append(h("b", "", `${hrs(P.c)} год`));
+  const b = h("div", "", "неоплачено"); b.append(h("b", "", `${hrs(P.u)} год`));
+  words.firstChild.append(a, b);
+  row.append(gauge, words);
+  box.append(g, row);
+}
+
+function waffle(box, P) {
+  const kinds = S.kn.map((k, i) => [k, sum(P.cl.map((c) => c[5][i] || 0))]).filter(([, q]) => q);
+  const total = sum(kinds.map(([, q]) => q));
+  if (!total) return box.append(h("p", "empty", "Годин за цей період немає."));
+  const grid = h("div", "waffle"), cells = [];
+  for (const [k, q] of kinds) for (let i = 0; i < Math.round((q / total) * 200); i++) cells.push(color(k[2]));
+  for (let i = 0; i < 200; i++) {
+    const cell = h("i");
+    if (i < cells.length) cell.style.background = cells[i];
+    cell.style.animationDelay = (i % 20) * 0.012 + Math.floor(i / 20) * 0.03 + "s";
+    grid.append(cell);
+  }
+  const legend = h("div", "legend");
+  for (const [k, q] of kinds) { const it = h("span"); const sw = h("span", "sw"); sw.style.background = color(k[2]); it.append(sw, `${k[1]} · ${hrs(q)} год`); legend.append(it); }
+  box.append(grid, legend);
+}
+
+// ---- views: weeks ------------------------------------------------------------------------
+function ribbon(box, P) {
+  const weeks = P.wk, W = 318, H = 170, mid = 74, n = weeks.length;
+  const max = Math.max(1, ...weeks.map((w) => w[1])), k = 60 / max;
+  const x = (i) => 18 + (i * (W - 36)) / Math.max(1, n - 1);
+  const g = svg(box, W, H), defs = s("defs", {}, g);
+  const grad = s("linearGradient", { id: "rb", x1: 0, x2: 1 }, defs);
+  s("stop", { offset: 0, "stop-color": "var(--series-7)" }, grad); s("stop", { offset: 1, "stop-color": "var(--series-1)" }, grad);
+  const band = (key, op, cls) => {
+    const top = weeks.map((w, i) => [x(i), mid - w[key] * k]);
+    const bottom = weeks.map((w, i) => [x(i), mid + w[key] * k]).reverse();
+    s("path", { d: smooth(top) + "L" + smooth(bottom).slice(1) + "Z", fill: "url(#rb)", "fill-opacity": op, class: cls }, g);
+  };
+  band(1, 0.28, "fade"); band(2, 0.95, "fade");
+  weeks.forEach((w, i) => s("circle", { cx: x(i), cy: mid, r: 2.5, fill: "var(--surface)" }, g));
+  text(g, x(0), H - 4, dm(day(weeks[0][0])), { fill: "var(--muted)", "font-size": 11 });
+  text(g, x(n - 1), H - 4, dm(day(weeks[n - 1][0])), { fill: "var(--muted)", "font-size": 11, "text-anchor": "end" });
+}
+
+function columns(box, P) {
+  const weeks = P.wk, W = 318, H = 176, base = 150, n = weeks.length;
+  const max = Math.max(1, ...weeks.map((w) => w[1])), bw = Math.min(24, (W - 20) / n - 6);
+  const x = (i) => 10 + (i * (W - 20 - bw)) / Math.max(1, n - 1);
+  const g = svg(box, W, H), pts = [];
+  weeks.forEach((w, i) => {
+    const hw = (w[1] / max) * 104, hp = (w[2] / max) * 104;
+    s("rect", { x: x(i), y: base - hw, width: bw, height: Math.max(0, hw), rx: bw / 2, fill: "var(--track)", class: "rise", style: `animation-delay:${i * 0.04}s` }, g);
+    s("rect", { x: x(i), y: base - hp, width: bw, height: Math.max(0, hp), rx: bw / 2, fill: "var(--series-1)", class: "rise", style: `animation-delay:${0.1 + i * 0.04}s` }, g);
+    pts.push([x(i) + bw / 2, 10 + (1 - (w[1] ? w[2] / w[1] : 0)) * 70]);
+    if (n <= 8 || i % 3 === 0) text(g, x(i) + bw / 2, H - 4, dm(day(w[0])), { fill: "var(--muted)", "font-size": 10, "text-anchor": "middle" });
+  });
+  drawn(s("path", { d: pts.map((p, i) => `${i ? "L" : "M"}${p}`).join(""), fill: "none", stroke: "var(--ink)", "stroke-width": 2 }, g), 0.3);
+  pts.forEach((p) => s("circle", { cx: p[0], cy: p[1], r: 3.5, fill: "var(--surface)", stroke: "var(--ink)", "stroke-width": 2, class: "fade" }, g));
+}
+
+function race(box, P) {
+  const days = Math.round((day(P.a) - day(P.f)) / 864e5);
+  const now = new Date(), today = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - day(P.f)) / 864e5);
+  const end = Math.max(1, Math.min(days, today + 1));
+  const rows = P.d.map(([slot, row]) => { let acc = 0; return [slot, Array.from({ length: end }, (_, i) => (acc += row[i] || 0))]; })
+    .sort((a, b) => b[1][end - 1] - a[1][end - 1]);
+  if (!rows.length) return box.append(h("p", "empty", "Годин за цей період немає."));
+  const W = 318, H = 200, right = 92, max = Math.max(1, ...rows.map((r) => r[1][end - 1]));
+  const x = (d) => (d * (W - right)) / Math.max(1, days - 1), y = (q) => H - 8 - (q / max) * (H - 24);
+  const g = svg(box, W, H);
+  [0.33, 0.66, 1].forEach((f) => s("line", { x1: 0, x2: W - right, y1: y(max * f), y2: y(max * f), stroke: "var(--grid)" }, g));
+  const labels = rows.map((r) => y(r[1][end - 1]) + 4);
+  for (let i = 1; i < labels.length; i++) if (labels[i] - labels[i - 1] < 16) labels[i] = labels[i - 1] + 16;
+  rows.forEach(([slot, cum], i) => {
+    drawn(s("path", { d: cum.map((q, d) => `${d ? "L" : "M"}${x(d)},${y(q)}`).join(""), fill: "none", stroke: color(slot), "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }, g), i * 0.1);
+    s("circle", { cx: x(end - 1), cy: y(cum[end - 1]), r: 5.5, fill: color(slot), stroke: "var(--surface)", "stroke-width": 3, class: "fade" }, g);
+    text(g, x(end - 1) + 12, labels[i], client(slot)[1], { "font-weight": 600 });
+  });
+}
+
+// ---- views: the agent and you --------------------------------------------------------------
+function agentShare(P) { // the agent's saved quarters split by its calls per client
+  const known = P.g.bc.filter((r) => r[0] >= 0), weight = sum(known.map((r) => r[1]));
+  const out = {};
+  for (const [slot, w] of known) out[slot] = weight ? (P.g.sv * w) / weight : 0;
+  return out;
+}
+
+function sankey(box, P) {
+  const mine = P.cl.filter((c) => c[1]), agent = agentShare(P);
+  if (!mine.length && !P.g.sv) return box.append(h("p", "empty", "За цей період ні годин, ні PR агента."));
+  const slots = [...new Set([...mine.map((c) => c[0]), ...Object.keys(agent).map(Number)])];
+  const you = Object.fromEntries(mine.map((c) => [c[0], c[1]]));
+  const flows = slots.map((slot) => [slot, agent[slot] || 0, you[slot] || 0]).filter((f) => f[1] + f[2] > 0)
+    .sort((a, b) => b[1] + b[2] - (a[1] + a[2]));
+  const W = 318, H = 300, gap = 10, nodeW = 10, x0 = 66, x1 = W - 96;
+  const total = sum(flows.map((f) => f[1] + f[2])), k = (H - gap * Math.max(1, flows.length - 1)) / Math.max(1, total);
+  const g = svg(box, W, H), defs = s("defs", {}, g);
+  const agentH = sum(flows.map((f) => f[1])) * k, youH = sum(flows.map((f) => f[2])) * k;
+  const left = { agent: 0, you: agentH ? agentH + 30 : 0 };
+  let ay = left.agent, yy = left.you, ry = 0;
+  const m = (x0 + x1) / 2;
+  flows.forEach(([slot, a, y], i) => {
+    const top = ry;
+    const ribbon = (sy, h0, ty, from, id) => {
+      if (h0 <= 0) return;
+      const gr = s("linearGradient", { id, x1: 0, x2: 1 }, defs);
+      s("stop", { offset: 0, "stop-color": from }, gr); s("stop", { offset: 1, "stop-color": color(slot) }, gr);
+      s("path", { d: `M${x0},${sy} C${m},${sy} ${m},${ty} ${x1},${ty} L${x1},${ty + h0} C${m},${ty + h0} ${m},${sy + h0} ${x0},${sy + h0}Z`, fill: `url(#${id})`, "fill-opacity": 0.62, class: "fade", style: `animation-delay:${i * 0.07}s` }, g);
+    };
+    ribbon(ay, a * k, ry, "var(--series-7)", "sa" + i); ay += a * k; ry += a * k;
+    ribbon(yy, y * k, ry, "var(--ink-2)", "sy" + i); yy += y * k; ry += y * k;
+    s("rect", { x: x1, y: top, width: nodeW, height: Math.max(2, ry - top), rx: 3, fill: color(slot) }, g);
+    const mid = top + (ry - top) / 2;
+    text(g, x1 + 18, mid - 1, client(slot)[1], { "font-weight": 600 });
+    text(g, x1 + 18, mid + 15, `${hrs(Math.round(a + y))} год`, { fill: "var(--ink-2)", "font-size": 12 });
+    ry += gap;
+  });
+  if (agentH) {
+    s("rect", { x: x0 - nodeW, y: left.agent, width: nodeW, height: agentH, rx: 3, fill: "var(--series-7)" }, g);
+    text(g, x0 - 16, left.agent + 13, "Агент", { "text-anchor": "end", "font-weight": 600 });
+    text(g, x0 - 16, left.agent + 29, `≈${hrs(P.g.sv)}`, { "text-anchor": "end", fill: "var(--ink-2)", "font-size": 12 });
+  }
+  if (youH) {
+    s("rect", { x: x0 - nodeW, y: left.you, width: nodeW, height: youH, rx: 3, fill: "var(--ink)" }, g);
+    text(g, x0 - 16, left.you + youH / 2 - 1, "Ти", { "text-anchor": "end", "font-weight": 600 });
+    text(g, x0 - 16, left.you + youH / 2 + 15, hrs(P.w), { "text-anchor": "end", fill: "var(--ink-2)", "font-size": 12 });
+  }
+}
+
+function orbit(box, P) {
+  const W = 318, H = 260, cx = 159, cy = 128, g = svg(box, W, H), defs = s("defs", {}, g);
+  s("circle", { cx, cy, r: 74, fill: glow(defs, "core", "var(--series-7)") }, g);
+  s("circle", { cx, cy, r: 96, fill: "none", stroke: "var(--track)", "stroke-width": 6 }, g);
+  if (P.g.sh != null) drawn(s("path", { d: arc(cx, cy, 96, 0, 2 * Math.PI * P.g.sh), fill: "none", stroke: "var(--series-7)", "stroke-width": 6, "stroke-linecap": "round" }, g), 0.1);
+  s("circle", { cx, cy, r: 114, fill: "none", stroke: "var(--grid)", "stroke-dasharray": "2 6" }, g);
+  const kinds = Object.entries(P.g.s), count = sum(kinds.map(([, n]) => n));
+  let i = 0;
+  kinds.forEach(([, n], j) => {
+    for (let t = 0; t < n; t++, i++) {
+      const a = -Math.PI / 2 + (i * 2 * Math.PI) / Math.max(count, 24);
+      s("circle", { cx: cx + 114 * Math.cos(a), cy: cy + 114 * Math.sin(a), r: 4.5, fill: color([0, 2, 4, 6][j % 4]), class: "fade", style: `animation-delay:${i * 0.03}s` }, g);
+    }
+  });
+  const big = text(g, cx, cy + 6, "", { "text-anchor": "middle", "font-size": 34, "font-weight": 700, class: "num" });
+  countUp(big, P.g.sv, (v) => "≈" + hrs(v));
+  text(g, cx, cy + 26, "год заощаджено", { "text-anchor": "middle", fill: "var(--ink-2)", "font-size": 12 });
+  const legend = h("div", "legend");
+  kinds.forEach(([kind, n], j) => { const it = h("span"); const sw = h("span", "sw"); sw.style.background = color([0, 2, 4, 6][j % 4]); it.append(sw, `${AGENT_KINDS[kind] || kind} · ${n}`); legend.append(it); });
+  if (P.g.sh != null) { const it = h("span"); const sw = h("span", "sw"); sw.style.background = "var(--series-7)"; it.append(sw, `частка claude ${Math.round(P.g.sh * 100)}%`); legend.append(it); }
+  if (P.g.f) legend.append(h("span", "", `збоїв ${P.g.f}`));
+  box.append(legend);
+}
+
+function bars(box, P) {
+  const W = 318, g = svg(box, W, 170), most = Math.max(1, P.g.sv, P.g.rv, P.g.tp);
+  const rows = [
+    ["Заощадив", P.g.sv / most, `≈${hrs(P.g.sv)} год`, "var(--series-7)"],
+    ["Твоє рев'ю", P.g.rv / most, `${hrs(P.g.rv)} год`, "var(--series-4)"],
+    ["Частка claude", P.g.sh || 0, P.g.sh == null ? "—" : `${Math.round(P.g.sh * 100)}%`, "var(--series-5)"],
+    ["Бюджет Her", Math.min(1, P.g.ob || 0), P.g.ob == null ? "—" : `${Math.round(P.g.ob * 100)}%`, "var(--series-3)"],
+  ];
+  rows.forEach(([label, f, value, c], i) => {
+    const y = i * 34;
+    text(g, 0, y + 13, label, { fill: "var(--ink-2)" });
+    text(g, W, y + 13, value, { "text-anchor": "end", "font-weight": 600, class: "num" });
+    s("rect", { x: 0, y: y + 20, width: W, height: 8, rx: 4, fill: "var(--track)" }, g);
+    const bar = s("rect", { x: 0, y: y + 20, width: Math.max(0, W * f), height: 8, rx: 4, fill: c }, g);
+    bar.style.transformOrigin = "0 0"; bar.style.transformBox = "fill-box";
+    bar.animate && !reduced && bar.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 700, delay: i * 70, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" });
+  });
+  let x = 0;
+  Object.entries(P.g.s).forEach(([, n], j) => { for (let t = 0; t < n; t++) { s("rect", { x, y: 150, width: 10, height: 10, rx: 3, fill: color([0, 2, 4, 6][j % 4]), class: "fade" }, g); x += 13; } x += 8; });
+  const gh = P.g.gh;
+  box.append(h("p", "soon", `PR агента: ${gh[0]} відкрито, ${gh[1]} змерджено · типовий твій PR ≈ ${hrs(P.g.tp)} год`));
+}
+
+// ---- views: the repos, as shapes only: no words, no numbers -------------------------------
+function repoDays(R, i) { const out = new Array(R.n).fill(0); for (const [d, c, o, m, x] of R.days[i]) out[d] = c + o + m + x; return out; }
+function spots(n) {
+  const fixed = [[[159, 170]], [[96, 120], [222, 230]], [[92, 100], [232, 130], [150, 262]],
+    [[90, 96], [234, 112], [100, 258], [230, 268]], [[78, 84], [222, 76], [250, 206], [86, 226], [172, 306]]];
+  if (n <= fixed.length) return fixed[n - 1];
+  return Array.from({ length: n }, (_, i) => { const r = 40 + 18 * Math.sqrt(i), a = i * 2.39996; return [159 + r * Math.cos(a) * 1.15, 180 + r * Math.sin(a)]; });
+}
+
+function sky(box, R) {
+  const W = 318, H = 360, g = svg(box, W, H), defs = s("defs", {}, g), n = R.repos.length;
+  if (!n) return box.replaceChildren(h("p", "empty", "Репозиторії клієнтів ще не прочитано."));
+  let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 60; i++) s("circle", { cx: rnd() * W, cy: rnd() * H, r: rnd() * 0.9 + 0.2, fill: "var(--muted)", opacity: 0.45, class: i % 4 ? "" : "twinkle", style: `animation-delay:${rnd() * 2}s` }, g);
+  const places = spots(n), activity = R.repos.map((_, i) => sum(repoDays(R, i)));
+  const most = Math.max(1, ...activity);
+  // repos of one client: a faint thread between them
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (R.slots[i] === R.slots[j] && R.slots[i] < 8)
+    s("line", { x1: places[i][0], y1: places[i][1], x2: places[j][0], y2: places[j][1], stroke: color(R.slots[i]), "stroke-opacity": 0.3, "stroke-dasharray": "1 5" }, g);
+  R.repos.forEach((_, i) => {
+    const [cx, cy] = places[i], c = color(R.slots[i]), size = 22 + 30 * Math.sqrt(activity[i] / most);
+    const days = repoDays(R, i), turn = (2 * Math.PI * 4.5) / R.n;
+    s("circle", { cx, cy, r: size * 0.55, fill: glow(defs, "b" + i, c), class: "fade" }, g);
+    days.forEach((v, d) => {
+      const a = d * turn, r = 5 + (d / R.n) * size, x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+      if (!v) { if (d % 2) s("circle", { cx: x, cy: y, r: 0.9, fill: "var(--track)" }, g); return; }
+      s("circle", { cx: x, cy: y, r: 1.3 + Math.sqrt(v) * 1.4, fill: c, opacity: 0.3 + 0.7 * (d / R.n), class: "fade", style: `animation-delay:${(d / R.n) * 0.6}s` }, g);
+    });
+    R.prs.filter((p) => p[0] === i && p[2] == null).forEach((p, j) => {
+      const a = -0.7 + j * 0.85, x = cx + (size + 18) * Math.cos(a), y = cy + (size + 18) * Math.sin(a);
+      const stuck = p[4] === 4, old = p[4] === 3;
+      s("line", { x1: cx, y1: cy, x2: x, y2: y, stroke: stuck ? "var(--muted)" : c, "stroke-opacity": 0.55, "stroke-dasharray": stuck ? "2 3" : "" }, g);
+      if (old) s("circle", { cx: x, cy: y, r: 12, fill: glow(defs, `o${i}_${j}`, "var(--ink)"), class: "pulse" }, g);
+      s("circle", { cx: x, cy: y, r: old ? 4.5 : 3, fill: stuck ? "var(--surface)" : old ? "var(--ink)" : "var(--ink-2)", stroke: stuck ? "var(--muted)" : "none", "stroke-width": 1.5 }, g);
+    });
+  });
+}
+
+function rivers(box, R) {
+  const n = R.repos.length;
+  if (!n) return box.append(h("p", "empty", "Репозиторії клієнтів ще не прочитано."));
+  const W = 338, lane = 66, H = n * lane + 16, pad = 12, g = svg(box, W, H), defs = s("defs", {}, g);
+  box.style.margin = "14px -10px 0";
+  const x = (d) => pad + (Math.max(0, d) * (W - 2 * pad)) / Math.max(1, R.n - 1);
+  s("line", { x1: x(R.n - 1), x2: x(R.n - 1), y1: 4, y2: H - 4, stroke: "var(--ink)", "stroke-opacity": 0.22, "stroke-dasharray": "2 4" }, g);
+  R.repos.forEach((_, i) => {
+    const base = i * lane + 48, c = color(R.slots[i]), days = repoDays(R, i);
+    const amp = (v) => Math.min(13, v * 2.2);
+    const top = days.map((v, d) => [x(d), base - amp(v)]), bottom = days.map((v, d) => [x(d), base + amp(v) * 0.45]).reverse();
+    s("path", { d: smooth(top) + "L" + smooth(bottom).slice(1) + "Z", fill: c, "fill-opacity": 0.2, class: "fade" }, g);
+    s("line", { x1: pad, x2: W - pad, y1: base, y2: base, stroke: c, "stroke-opacity": 0.45 }, g);
+    R.prs.filter((p) => p[0] === i).forEach((p, j) => {
+      const [, o, end, agent, st] = p, a = x(o);
+      if (end != null) {
+        const b = Math.max(x(end), a + 4), hgt = Math.min(36, 6 + (end - o) * 3.2);
+        drawn(s("path", { d: `M${a},${base} Q${(a + b) / 2},${base - hgt * 2} ${b},${base}`, fill: "none", stroke: agent ? c : "var(--ink-2)", "stroke-width": st === 1 ? 1 : 1.8, "stroke-dasharray": st === 1 ? "1 3" : "", "stroke-linecap": "round", "stroke-opacity": st === 1 ? 0.6 : 1 }, g), (o / R.n) * 0.5);
+        if (st === 0) s("circle", { cx: b, cy: base, r: 2.5, fill: agent ? c : "var(--ink-2)" }, g);
+      } else {
+        const stuck = st === 4, old = st === 3, yy = base - 20 - (j % 2) * 6, b = x(R.n - 1);
+        const col = stuck ? "var(--muted)" : old ? "var(--ink)" : "var(--ink-2)";
+        const d = o < 0 ? `M${pad},${yy} L${b},${yy}` : `M${a},${base} Q${a},${yy} ${a + 12},${yy} L${b},${yy}`;
+        if (old) s("path", { d, fill: "none", stroke: col, "stroke-width": 7, "stroke-opacity": 0.25, "stroke-linecap": "round", class: "pulse" }, g);
+        drawn(s("path", { d, fill: "none", stroke: col, "stroke-width": 2, "stroke-dasharray": stuck ? "3 4" : "", "stroke-linecap": "round" }, g), 0.3);
+        if (old) s("circle", { cx: b, cy: yy, r: 10, fill: glow(defs, `r${i}_${j}`, col), class: "pulse" }, g);
+        s("circle", { cx: b, cy: yy, r: 4.5, fill: stuck ? "var(--surface)" : col, stroke: stuck ? col : "none", "stroke-width": 2 }, g);
+      }
+    });
+  });
+}
+
+function pulse(box, R) {
+  const n = R.repos.length;
+  if (!n) return box.append(h("p", "empty", "Репозиторії клієнтів ще не прочитано."));
+  const first = day(R.first), offset = (first.getDay() + 6) % 7; // Monday on the top row
+  const cols = Math.ceil((R.n + offset) / 7), cell = Math.min(8.5, 140 / cols - 2), gap = 2;
+  const gw = cols * (cell + gap), block = 132, W = 318, perRow = 2, H = Math.ceil(n / perRow) * block, g = svg(box, W, H);
+  R.repos.forEach((_, i) => {
+    const x0 = (i % perRow) * (W / perRow) + (W / perRow - gw) / 2, y0 = Math.floor(i / perRow) * block;
+    const c = color(R.slots[i]), days = repoDays(R, i);
+    days.forEach((v, d) => {
+      const k = d + offset, col = Math.floor(k / 7), row = k % 7;
+      s("rect", { x: x0 + col * (cell + gap), y: y0 + row * (cell + gap), width: cell, height: cell, rx: 2, fill: v ? c : "var(--track)", "fill-opacity": v ? Math.min(1, 0.28 + v * 0.14) : 0.55, class: "fade", style: `animation-delay:${col * 0.03}s` }, g);
+    });
+    R.prs.filter((p) => p[0] === i && p[4] === 4).forEach((p, j) =>
+      s("circle", { cx: x0 + gw + 8, cy: y0 + 5 + j * 13, r: 4.5, fill: "none", stroke: "var(--muted)", "stroke-width": 1.8, "stroke-dasharray": "2 2", class: "pulse" }, g));
+    // the backlog: a stream whose thickness is the open issues, melting (or swelling) left to right
+    const b = R.backlog[i], most = Math.max(1, ...R.backlog.flat()), mid = y0 + 7 * (cell + gap) + 24, half = 16;
+    const xs = (j) => x0 + (j * gw) / Math.max(1, b.length - 1);
+    const top = b.map((v, j) => [xs(j), mid - (v / most) * half]), bottom = b.map((v, j) => [xs(j), mid + (v / most) * half]).reverse();
+    const grad = s("linearGradient", { id: "bl" + i, x1: 0, x2: 1 }, g);
+    s("stop", { offset: 0, "stop-color": c, "stop-opacity": 0.3 }, grad); s("stop", { offset: 1, "stop-color": c, "stop-opacity": 0.95 }, grad);
+    s("path", { d: smooth(top) + "L" + smooth(bottom).slice(1) + "Z", fill: `url(#bl${i})`, class: "fade" }, g);
+  });
+}
+
+// ---- screens -----------------------------------------------------------------------------
+function hero(screen, quarters, sub, delta) {
+  const big = h("div", "hero num");
+  const value = h("span"); big.append(value, h("small", "", "год"));
+  countUp(value, quarters, hrs);
+  screen.append(big);
+  if (sub) screen.append(h("p", "sub", sub));
+  if (delta != null) screen.append(delta);
+}
+
+const BEFORE = { week: "до минулого тижня", month: "до минулого місяця", quarter: "до минулого кварталу" };
+function overview(screen, P) {
+  const money = P.m.map(([c, a]) => amount(a, c)).join(" · ");
+  const rate = P.e ? `${amount(P.e[1], P.e[0])}/год` : "";
+  const diff = P.w - P.b, chip = h("span", "delta" + (diff > 0 ? " up" : ""), `${diff > 0 ? "▲" : diff < 0 ? "▼" : "±"} ${hrs(Math.abs(diff))} год ${BEFORE[state.span]}`);
+  hero(screen, P.w, [money, rate].filter(Boolean).join(" · "), chip);
+  screen.append(card("clients", "Хто забрав час", [
+    { hint: "кільце — частка часу, у центрі — ефективна ставка", draw: (b) => rings(b, P) },
+    { hint: "плитка — години клієнта", draw: (b) => tiles(b, P) },
+    { hint: "хвиля — години по днях, дуга — оплачене", draw: (b) => wave(b, P) },
+  ]));
+  screen.append(card("kinds", "Типи роботи", [{ hint: "одна клітинка — 1/200 часу", draw: (b) => waffle(b, P) }]));
+}
+
+function weeks(screen, P) {
+  screen.append(card("rhythm", "Ритм тижнів", [
+    { hint: "товщина — години, заливка — оплачене", draw: (b) => ribbon(b, P) },
+    { hint: "колона — години, синє — оплачене, лінія — частка оплаченого", draw: (b) => columns(b, P) },
+  ]));
+  screen.append(card("race", "Гонка", [{ hint: "накопичені години клієнтів по днях", draw: (b) => race(b, P) }]));
+}
+
+function agent(screen, P) {
+  hero(screen, P.g.sv, "заощадив агент, оцінка: PR агента × твій типовий PR − твоє рев'ю");
+  screen.append(card("agent", "Агент і ти", [
+    { hint: "потік годин: агент і ти → клієнти", draw: (b) => sankey(b, P) },
+    { hint: "орбіта — частка claude у Her, супутники — сесії", draw: (b) => orbit(b, P) },
+    { hint: "агент, твоє рев'ю і підписка", draw: (b) => bars(b, P) },
+  ], { deep: true }));
+}
+
+function repos(screen) {
+  const R = S.r;
+  screen.append(card("sky", "Сузір'я репо", [
+    { hint: "спіраль — дні, яскравіше — свіжіше; світиться — чекає, сірий — застряг", draw: (b) => sky(b, R) },
+    { hint: "клітинка — день; стрічка — відкриті issues, тонша — тане", draw: (b) => pulse(b, R) },
+  ], { deep: true }));
+  screen.append(card("rivers", "Річки PR", [{ hint: "арка — PR від відкриття до мержу; світиться — чекає, сірий — застряг", draw: (b) => rivers(b, R) }]));
+  const legend = h("div", "legend");
+  const seen = new Set();
+  R.slots.forEach((slot) => { if (seen.has(slot)) return; seen.add(slot); const it = h("span"); const sw = h("span", "sw"); sw.style.background = color(slot); it.append(sw, client(slot)[1]); legend.append(it); });
+  legend.style.justifyContent = "center";
+  screen.append(legend);
+}
+
+function invoice(screen, P) {
+  // #176 builds the editor here; this screen is its place and its navigation.
+  const box = card("invoice", "Рахунки періоду", [{ hint: "оплачене з відпрацьованого", draw: (b) => {
+    const paid = P.cl.filter((c) => client(c[0])[3]);
+    if (!paid.length) return b.append(h("p", "empty", "За цей період рахунків немає."));
+    for (const c of paid) {
+      const row = h("div", "invoice-row"), bar = h("div", "bar"), fill = h("i");
+      fill.style.width = `${Math.round((100 * c[2]) / Math.max(1, c[1]))}%`; fill.style.background = color(c[0]);
+      bar.append(fill);
+      row.append(h("b", "", client(c[0])[1]), bar, h("span", "num", c[4] ? amount(c[4]) : ""));
+      b.append(row);
+    }
+    b.append(h("p", "soon", "Редагування рахунку жестами — наступний крок."));
+  } }]);
+  screen.append(box);
+}
+
+const DRAW = { overview, weeks, agent, repos, invoice };
+
+// ---- the frame ---------------------------------------------------------------------------
+const main = document.getElementById("main");
+const header = document.querySelector(".top");
+function render(motion) {
+  const P = panel();
+  const screen = h("section", "screen on" + (motion ? " " + motion : ""));
+  DRAW[state.screen](screen, P);
+  main.replaceChildren(screen);
+  header.hidden = state.screen === "repos";
+  document.getElementById("period").textContent = state.screen === "repos" ? "" : P.t;
+  document.getElementById("older").disabled = state.index >= S.p[state.span].length - 1;
+  document.getElementById("newer").disabled = state.index === 0;
+  const spans = [...document.querySelectorAll("#spans button")].filter((b) => { b.hidden = !S.p[b.dataset.span]; return !b.hidden; });
+  spans.forEach((b, i) => {
+    const on = b.dataset.span === state.span;
+    b.classList.toggle("on", on);
+    if (on) { const pill = document.getElementById("spans-pill"); pill.style.width = `calc((100% - 8px) / ${spans.length})`; pill.style.transform = `translateX(${i * 100}%)`; }
+  });
+  document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.screen === state.screen));
+}
+function step(by) {
+  const next = state.index + by;
+  if (next < 0 || next >= S.p[state.span].length) return;
+  state.index = next; haptic("light"); render(by > 0 ? "slide-r" : "slide-l");
+}
+
+function wire() {
+  document.querySelectorAll("#spans button").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.span === state.span) return;
+    state.span = b.dataset.span; state.index = 0; haptic("light"); render("slide-l");
+  }));
+  document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.screen === state.screen) return;
+    state.screen = b.dataset.screen; haptic("select"); scrollTo(0, 0); render();
+  }));
+  document.getElementById("older").addEventListener("click", () => step(1));
+  document.getElementById("newer").addEventListener("click", () => step(-1));
+  let x0 = null, y0 = null;
+  main.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  main.addEventListener("touchend", (e) => {
+    if (x0 == null || state.screen === "repos") return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 60 && Math.abs(dy) < 40) step(dx > 0 ? 1 : -1); // swipe right: the window before
+  }, { passive: true });
+}
+
+function gate(glyph, title, body) {
+  document.querySelector(".top").hidden = true;
+  document.getElementById("tabs").hidden = true;
+  const box = h("section", "screen on gate");
+  box.append(h("div", "glyph", glyph), h("h2", "", title), h("p", "", body));
+  main.replaceChildren(box);
+}
+
+async function unpack(text) {
+  const b64 = text.replace(/-/g, "+").replace(/_/g, "/");
+  const bytes = Uint8Array.from(atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4)), (c) => c.charCodeAt(0));
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+async function start() {
+  theme(TG.theme);
+  post("web_app_ready");
+  post("web_app_expand");
+  const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
+  if (!TG.inside && !local) return gate("✨", "Відкрий з Telegram", "Дашборд відкривається кнопкою «✨ Дашборд» у /stats у Vector.");
+  const data = launch.get("d");
+  if (!data) return gate("✨", "Немає знімка", "Натисни «✨ Дашборд» у /stats — я покладу в посилання свіжі цифри.");
+  if (typeof DecompressionStream === "undefined") return gate("⬆️", "Онови Telegram", "Цьому дашборду потрібен новіший вбудований браузер.");
+  try { S = await unpack(data); } catch (e) { return gate("⚠️", "Знімок пошкоджено", "Відкрий дашборд ще раз із /stats."); }
+  if (S.v !== 1) return gate("⬆️", "Нова версія", "Відкрий дашборд ще раз із /stats.");
+  if (TG.inside && viewer() !== S.o) return gate("🔒", "Лише для власника", "Цей дашборд показує цифри тільки тому, для кого його зроблено.");
+  if (Date.now() / 1000 > S.exp) return gate("⌛", "Знімок застарів", "Натисни «✨ Дашборд» у /stats ще раз — покажу свіжі цифри.");
+  const span = launch.get("s");
+  state.span = S.p[span] ? span : Object.keys(S.p)[0];
+  const view = launch.get("v");
+  state.screen = SCREENS.includes(view) ? view : SLICE_SCREEN[view] || "overview";
+  wire();
+  render();
+}
+start();
+
+</script>
+</body>
+</html>
