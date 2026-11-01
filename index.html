@@ -187,6 +187,102 @@ main { position: relative; }
 .invoice-row b { font: var(--weight-semibold) 15px var(--font); min-width: 92px; }
 .soon { font: 13px/1.4 var(--font); color: var(--muted); margin-top: 10px; }
 
+/* the invoice editor (#176): a dial for the total, a split bar for the shares, no keyboard */
+.editor { padding-bottom: 8px; }
+.ed-head { padding-top: 6px; }
+.ed-head .eyebrow { text-align: left; }
+.ed-client { font: var(--weight-bold) var(--text-title)/1.15 var(--font); letter-spacing: -.01em; margin-top: 8px; }
+.ed-client .sw { width: 12px; height: 12px; border-radius: 6px; margin-right: 10px; vertical-align: 2px; }
+.dial { position: relative; width: min(100%, 300px); margin: 6px auto 0; touch-action: none; cursor: grab; }
+.dial:active { cursor: grabbing; }
+.dial.off { opacity: .45; cursor: not-allowed; }
+.dial-ring { transform-box: view-box; transform-origin: 150px 150px; transition: transform .38s cubic-bezier(.3,1.3,.5,1); }
+.dragging .dial-ring { transition: none; }
+.dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.dial-num { font: var(--weight-bold) var(--text-hero)/1 var(--font); letter-spacing: -.03em; }
+.dial-unit { font: var(--weight-medium) 15px/1 var(--font); color: var(--ink-2); margin-top: 4px; }
+.dial-money { font: var(--weight-medium) 14px/1 var(--font); color: var(--muted); margin-top: 10px; min-height: 14px; }
+.nudge { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+.nudge .delta { margin-top: 0; }
+.round { width: 54px; height: 40px; border-radius: 20px; background: var(--plane); box-shadow: inset 0 0 0 1px var(--border); font: var(--weight-semibold) 14px/1 var(--font); font-variant-numeric: tabular-nums; transition: transform .15s, opacity .2s; }
+.round:active { transform: scale(.94); }
+.round:disabled, .ed-bar button:disabled { opacity: .35; }
+
+.ghost-legend { display: flex; justify-content: space-between; font: var(--weight-medium) 11px/1 var(--font); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
+.ghost { display: flex; gap: 2px; height: 6px; margin-top: 6px; border-radius: 3px; overflow: hidden; opacity: .5; }
+.ghost i { min-width: 0; }
+.split-bar { position: relative; height: 64px; margin-top: 8px; touch-action: none; }
+.seg { position: absolute; top: 0; bottom: 0; border-radius: 14px; background: var(--c); overflow: hidden; transition: left .3s cubic-bezier(.2,.8,.2,1), width .3s cubic-bezier(.2,.8,.2,1); }
+.dragging .seg { transition: none; }
+.seg span { position: absolute; left: 10px; top: 9px; font: var(--weight-semibold) 13px/1 var(--font); color: #fff; opacity: .9; }
+.seg.narrow span { display: none; }
+.seg.locked { background: repeating-linear-gradient(135deg, var(--c) 0 6px, color-mix(in oklab, var(--c) 62%, var(--surface)) 6px 12px); }
+.handle { position: absolute; top: -8px; bottom: -8px; width: 44px; margin-left: -23px; display: flex; align-items: center; justify-content: center; cursor: ew-resize; z-index: 1; transition: left .3s cubic-bezier(.2,.8,.2,1); }
+.dragging .handle { transition: none; }
+.handle i { width: 6px; height: 40px; border-radius: 3px; background: var(--surface); box-shadow: 0 1px 6px rgba(0,0,0,.28), inset 0 0 0 1px var(--border); transition: transform .2s cubic-bezier(.3,1.3,.5,1), height .2s; }
+.handle.on i { transform: scaleX(1.5); height: 52px; }
+.handle.fixed { cursor: not-allowed; }
+.handle.fixed i { width: 2px; height: 64px; border-radius: 0; background: var(--surface); box-shadow: none; }
+
+.ed-rows { margin-top: 16px; }
+.ed-row { border-top: 1px solid var(--grid); }
+.ed-line { display: flex; align-items: center; gap: 10px; padding: 12px 0; }
+.ed-row.more .ed-line { cursor: pointer; }
+.ed-words { flex: 1; min-width: 0; }
+.ed-words b { display: block; font: var(--weight-semibold) 15px/1.25 var(--font); overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.ed-words small { font: 12px/1.3 var(--font); color: var(--muted); font-variant-numeric: tabular-nums; }
+.ed-row.more .ed-words small::after { content: " · звідки ›"; }
+.ed-row.open .ed-words small::after { content: " · сховати"; }
+.ed-hours { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; min-width: 52px; }
+.ed-q { font: var(--weight-semibold) 20px/1 var(--font); }
+.chip { font: var(--weight-semibold) 11px/1 var(--font); font-variant-numeric: tabular-nums; padding: 3px 7px; border-radius: 99px; color: var(--muted); }
+.chip:empty { display: none; }
+.chip.up { color: var(--good); background: color-mix(in oklab, var(--good) 12%, transparent); }
+.chip.down { color: var(--ink-2); background: var(--plane); box-shadow: inset 0 0 0 1px var(--border); }
+.lock { width: 40px; height: 40px; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background .2s, color .2s, transform .15s; }
+.lock:active { transform: scale(.9); }
+.lock svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; }
+.lock .shackle { transition: transform .3s cubic-bezier(.3,1.3,.5,1); transform-origin: 16px 11px; transform: rotate(28deg) translateY(-1px); }
+.lock.on { color: var(--plane); background: var(--ink); }
+.lock.on .shackle { transform: none; }
+.ed-row.locked .ed-q { color: var(--ink-2); }
+
+/* owner-only provenance: threads from a line to its tasks, their repos' days, the agent */
+.prov { padding: 2px 0 16px; animation: view-in .38s cubic-bezier(.2,.8,.2,1) both; }
+.prov-note { font: var(--weight-medium) 11px/1.3 var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.threads { position: relative; margin-top: 10px; padding-left: 34px; min-height: 40px; }
+.thread-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.thread-node { position: absolute; left: 4px; top: 8px; width: 14px; height: 14px; border-radius: 7px; box-shadow: 0 0 0 4px color-mix(in oklab, var(--surface) 70%, transparent); }
+.thread { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; padding: 6px 0; }
+.task { grid-column: 1 / -1; justify-self: start; max-width: 100%; font: 13px/1.3 var(--font); padding: 6px 10px; border-radius: 10px; background: var(--plane); box-shadow: inset 0 0 0 1px var(--border); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.task em { font-style: normal; font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums; }
+.thread small { font: 11px/1 var(--font); color: var(--muted); padding-left: 10px; }
+.heat { display: flex; gap: 2px; justify-self: end; }
+.heat i { width: 9px; height: 9px; border-radius: 2px; background: var(--track); position: relative; overflow: hidden; animation: pop .35s both; }
+.heat i::after { content: ""; position: absolute; inset: 0; background: var(--c); opacity: var(--a); }
+.agent-use { display: flex; gap: 14px; align-items: center; margin-top: 12px; }
+.agent-use svg { width: 104px; flex: none; }
+.agent-words h4 { font: var(--weight-semibold) 14px/1.2 var(--font); }
+.agent-words b { display: block; font: var(--weight-semibold) 13px/1.3 var(--font); margin-top: 8px; font-variant-numeric: tabular-nums; }
+.agent-words .legend { margin-top: 4px; font-size: 12px; gap: 4px 10px; }
+
+.src-strip { display: flex; gap: 2px; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 14px; }
+.src-strip i { min-width: 3px; transform-origin: left; animation: grow .6s cubic-bezier(.2,.8,.2,1) both; }
+
+/* the action bar replaces the tabs in the editor */
+.ed-bar { position: fixed; z-index: 4; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); display: flex; gap: 6px; padding: 6px; border-radius: 24px; background: color-mix(in oklab, var(--surface) 82%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: inset 0 0 0 1px var(--border), 0 10px 30px rgba(0,0,0,.18); }
+.ed-bar button { height: 48px; border-radius: 18px; font: var(--weight-semibold) 15px/1 var(--font); white-space: nowrap; transition: transform .15s, opacity .2s, background .2s; }
+.ed-bar button:active { transform: scale(.96); }
+.ed-undo { display: flex; align-items: center; justify-content: center; width: 52px; color: var(--ink-2); }
+.ed-undo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ed-reset { padding: 0 14px; color: var(--ink-2); }
+.ed-ok { flex: 1; background: var(--ink); color: var(--plane); font-variant-numeric: tabular-nums; }
+.ed-ok::before { content: "✓"; margin-right: 8px; font-weight: var(--weight-bold); }
+.ed-ok.sent { animation: sent .5s cubic-bezier(.3,1.3,.5,1); }
+@keyframes sent { 40% { transform: scale(1.04); } }
+.toast { position: fixed; z-index: 5; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); transform: translate(-50%, 12px); max-width: calc(100% - 32px); padding: 10px 14px; border-radius: 14px; background: var(--ink); color: var(--plane); font: var(--weight-medium) 13px/1.35 var(--font); opacity: 0; pointer-events: none; transition: opacity .25s, transform .3s cubic-bezier(.2,.8,.2,1); }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
 /* skeletons instead of spinners */
 .sk { border-radius: 16px; background: linear-gradient(90deg, var(--surface) 0%, var(--grid) 50%, var(--surface) 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
 .sk-hero { height: 64px; width: 62%; margin-top: 18px; }
@@ -237,6 +333,472 @@ main { position: relative; }
   <button data-screen="invoice"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Рахунок</button>
 </nav>
 <script>
+// Her invoice editor (#176): the draft of one client's week (or month) edited by gestures.
+// The total turns on a dial, the borders of the split bar move time between lines, a lock keeps
+// a line. Every gesture is one of #179's operations; ✅ sends them to the bot with sendData.
+// This file only declares: the model below runs under node in the tests (tests/test_editor.py),
+// the screen uses app.js's helpers when it is called.
+"use strict";
+
+// ---- the model: the same arithmetic as her.worktime.apply --------------------------------
+// A line is {q, lock}; an op is ["s", total] (SCALE), ["m", from, to, quarters] (MOVE) or
+// ["l", line, 0|1] (LOCK). applyOp returns new lines, or null when the op does not fit.
+function splitQ(total, weights) {
+  if (!weights.length) return [];
+  if (!weights.some(Boolean)) weights = weights.map(() => 1);
+  const whole = weights.reduce((a, b) => a + b, 0);
+  const shares = weights.map((w) => Math.floor((total * w) / whole));
+  const rest = (i) => (total * weights[i]) % whole;
+  const order = weights.map((_, i) => i).sort((a, b) => rest(b) - rest(a) || a - b);
+  const left = total - shares.reduce((a, b) => a + b, 0);
+  for (const i of order.slice(0, left)) shares[i] += 1;
+  return shares;
+}
+
+function applyOp(lines, op) {
+  const out = lines.map((x) => ({ q: x.q, lock: x.lock }));
+  if (op[0] === "l") {
+    if (!out[op[1]]) return null;
+    out[op[1]].lock = Boolean(op[2]);
+    return out;
+  }
+  if (op[0] === "m") {
+    const [, i, j, v] = op;
+    if (!out[i] || !out[j] || i === j || v <= 0 || out[i].lock || out[j].lock || out[i].q < v) return null;
+    out[i].q -= v; out[j].q += v;
+    return out;
+  }
+  if (op[0] === "s") {
+    const fixed = out.filter((x) => x.lock).reduce((a, x) => a + x.q, 0);
+    const loose = out.map((x, i) => i).filter((i) => !out[i].lock);
+    if (op[1] < fixed || !loose.length) return null;
+    splitQ(op[1] - fixed, loose.map((i) => out[i].q)).forEach((share, k) => { out[loose[k]].q = share; });
+    return out;
+  }
+  return null;
+}
+
+function replayOps(start, ops) {
+  let lines = start;
+  for (const op of ops) { lines = applyOp(lines, op); if (!lines) return null; }
+  return lines;
+}
+
+// The shortest ops from `start` to `final`: unlock, one SCALE, the MOVEs, lock. Used when the
+// literal history would not fit sendData's 4096 bytes; the bot checks the result the same way.
+function canonicalOps(start, final) {
+  const ops = [];
+  let cur = start.map((x) => ({ q: x.q, lock: x.lock }));
+  cur.forEach((x, i) => { if (x.lock) { ops.push(["l", i, 0]); x.lock = false; } });
+  const total = final.reduce((a, x) => a + x.q, 0);
+  if (cur.length && total !== cur.reduce((a, x) => a + x.q, 0)) { ops.push(["s", total]); cur = applyOp(cur, ["s", total]); }
+  const give = [], take = [];
+  cur.forEach((x, i) => { const d = x.q - final[i].q; if (d > 0) give.push([i, d]); else if (d < 0) take.push([i, -d]); });
+  let g = 0, t = 0;
+  while (g < give.length && t < take.length) {
+    const v = Math.min(give[g][1], take[t][1]);
+    ops.push(["m", give[g][0], take[t][0], v]);
+    give[g][1] -= v; take[t][1] -= v;
+    if (!give[g][1]) g++;
+    if (!take[t][1]) t++;
+  }
+  final.forEach((x, i) => { if (x.lock) ops.push(["l", i, 1]); });
+  return ops;
+}
+
+const SEND_LIMIT = 4096; // bytes: Telegram's sendData
+function approvalText(snap, reset, start, ops, lines) {
+  const body = (o) => JSON.stringify({ v: 1, c: snap.c[0], k: snap.k, m: snap.m, r: reset ? 1 : 0, o, q: lines.map((x) => x.q), l: lines.map((x) => (x.lock ? 1 : 0)) });
+  const literal = body(ops);
+  if (new TextEncoder().encode(literal).length <= SEND_LIMIT - 96 && ops.length <= 250) return literal;
+  return body(canonicalOps(start, lines));
+}
+
+// ---- the screen ----------------------------------------------------------------------------
+const QPR = 32; // quarters per turn of the dial: 8 hours
+function editor(snap) {
+  const draft = snap.l.map((l) => ({ q: l[1], lock: Boolean(l[3]) }));
+  const synth = snap.l.map((l) => ({ q: l[2], lock: false }));
+  const synthTotal = synth.reduce((a, x) => a + x.q, 0);
+  const E = { reset: false, ops: [], lines: draft, history: [] };
+  const start = () => (E.reset ? synth : draft);
+  const total = () => E.lines.reduce((a, x) => a + x.q, 0);
+  const maxTotal = snap.n * 16 * 4;
+  const rate = snap.c[4] != null ? Number(snap.c[4]) : null;
+  const money = (q) => (rate == null ? "" : amount(((q / 4) * rate).toFixed(2), snap.c[3]));
+  const sign = (d) => (d > 0 ? "+" : "−") + hrs(Math.abs(d));
+
+  document.querySelector(".top").hidden = true;
+  document.getElementById("tabs").hidden = true;
+  const screen = h("section", "screen on editor");
+  const head = h("header", "ed-head");
+  head.append(h("p", "eyebrow", "Рахунок · " + snap.t));
+  const name = h("h2", "ed-client");
+  const dot = h("span", "sw"); dot.style.background = color(snap.c[2]);
+  name.append(dot, snap.c[1]);
+  head.append(name);
+  screen.append(head);
+
+  // -- the dial: the total in 15-min detents -------------------------------------------------
+  const dialCard = h("section", "card ed-dial");
+  const dialBox = h("div", "dial");
+  const D = 300, cx = 150, cy = 150, R = 128, RT = 104;
+  const g = svg(dialBox, D, D), defs = s("defs", {}, g);
+  const grad = s("linearGradient", { id: "dg", x1: 0, y1: 0, x2: 1, y2: 1 }, defs);
+  s("stop", { offset: 0, "stop-color": "var(--series-1)" }, grad); s("stop", { offset: 1, "stop-color": "var(--series-7)" }, grad);
+  s("circle", { cx, cy, r: R, fill: "none", stroke: "var(--track)", "stroke-width": 12, "stroke-opacity": 0.6 }, g);
+  const gauge = s("path", { fill: "none", stroke: "url(#dg)", "stroke-width": 12, "stroke-linecap": "round" }, g);
+  const scaleOf = Math.max(8, synthTotal * 2); // the gauge: 0 … twice the draft, the draft at the bottom
+  const at = (q) => (2 * Math.PI * Math.min(q, scaleOf)) / scaleOf;
+  const mark = (q) => [cx + R * Math.sin(at(q)), cy - R * Math.cos(at(q))];
+  const [mx, my] = mark(synthTotal);
+  s("circle", { cx: mx, cy: my, r: 5, fill: "var(--surface)", stroke: "var(--ink-2)", "stroke-width": 2 }, g);
+  s("circle", { cx, cy, r: RT + 16, fill: glow(defs, "dglow", "var(--series-7)"), opacity: 0.18 }, g);
+  const ring = s("g", { class: "dial-ring" }, g);
+  for (let i = 0; i < QPR; i++) {
+    const a = (2 * Math.PI * i) / QPR, major = i % 4 === 0, r0 = major ? RT - 14 : RT - 8;
+    s("line", { x1: cx + r0 * Math.sin(a), y1: cy - r0 * Math.cos(a), x2: cx + RT * Math.sin(a), y2: cy - RT * Math.cos(a), stroke: major ? "var(--ink-2)" : "var(--muted)", "stroke-width": major ? 2.2 : 1.2, "stroke-linecap": "round" }, ring);
+  }
+  s("circle", { cx, cy: cy - RT + 1, r: 9, fill: "var(--ink)" }, ring);
+  s("circle", { cx, cy: cy - RT + 1, r: 3, fill: "var(--plane)" }, ring);
+  s("path", { d: `M${cx - 6},${cy - RT - 22} L${cx + 6},${cy - RT - 22} L${cx},${cy - RT - 13}Z`, fill: "var(--ink)" }, g);
+  const center = h("div", "dial-center");
+  const big = h("div", "dial-num num"), unit = h("div", "dial-unit", "год"), cash = h("div", "dial-money num");
+  center.append(big, unit, cash);
+  dialBox.append(center);
+  const nudge = h("div", "nudge");
+  const minus = h("button", "round", "−15"), plus = h("button", "round", "+15");
+  const vs = h("span", "delta");
+  nudge.append(minus, vs, plus);
+  dialCard.append(h("h3", "", "Разом за період"), h("p", "hint", "крути диск — крок 15 хв; чернетка — точка внизу"), dialBox, nudge);
+  screen.append(dialCard);
+
+  // -- the split: borders move time between lines, the total stays ----------------------------
+  const splitCard = h("section", "card ed-split");
+  splitCard.append(h("h3", "", "Частки рядків"), h("p", "hint", "тягни межу — час переходить між сусідами, разом не змінюється"));
+  const ghost = h("div", "ghost"), bar = h("div", "split-bar");
+  const segs = E.lines.map((_, i) => {
+    const seg = h("div", "seg"); seg.style.setProperty("--c", color(i % 8));
+    seg.append(h("span", "", String(i + 1)));
+    bar.append(seg); return seg;
+  });
+  synth.forEach((x, i) => { const gseg = h("i"); gseg.style.flex = x.q; gseg.style.background = color(i % 8); ghost.append(gseg); });
+  const handles = E.lines.slice(1).map((_, k) => { const hd = h("div", "handle"); hd.append(h("i")); bar.append(hd); return hd; });
+  const legend = h("div", "ghost-legend");
+  legend.append(h("span", "", "чернетка"), h("span", "", "↓ зараз"));
+  splitCard.append(legend, ghost, bar);
+  const rows = h("div", "ed-rows");
+  const rowNodes = snap.l.map((l, i) => lineRow(snap, i, l, () => toggleLock(i)));
+  rowNodes.forEach((r) => rows.append(r.node));
+  splitCard.append(rows);
+  screen.append(splitCard);
+
+  // -- where the hours came from (#128) and what waits ------------------------------------
+  if (snap.src.length || snap.cd) screen.append(sourcesCard(snap));
+
+  const barNode = h("footer", "ed-bar");
+  const undo = h("button", "ed-undo"); undo.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 7H4V2"/><path d="M4.6 7A8 8 0 1 1 4 13"/></svg>';
+  undo.setAttribute("aria-label", "Скасувати крок");
+  const back = h("button", "ed-reset", "До чернетки");
+  const ok = h("button", "ed-ok");
+  barNode.append(undo, back, ok);
+  const toast = h("div", "toast");
+  main.replaceChildren(screen);
+  document.body.append(barNode, toast);
+
+  // -- drawing -------------------------------------------------------------------------------
+  let frame = 0;
+  function paint() {
+    frame = 0;
+    const T = total(), lines = E.lines;
+    big.textContent = hrs(T);
+    cash.textContent = money(T);
+    const d = T - synthTotal;
+    vs.textContent = d ? `чернетка ${hrs(synthTotal)} · ${sign(d)}` : `як у чернетці · ${hrs(synthTotal)}`;
+    vs.classList.toggle("up", d > 0);
+    ring.style.transform = `rotate(${T * (360 / QPR)}deg)`; // never modulo: no spin back at a full turn
+    gauge.setAttribute("d", T ? arc(cx, cy, R, 0, at(T)) : "");
+    let cum = 0;
+    lines.forEach((x, i) => {
+      const left = T ? (cum / T) * 100 : (i / lines.length) * 100, width = T ? (x.q / T) * 100 : 0;
+      segs[i].style.left = left + "%";
+      segs[i].style.width = `max(0px, calc(${width}% - 2px))`;
+      segs[i].classList.toggle("locked", x.lock);
+      segs[i].classList.toggle("narrow", width < 9);
+      cum += x.q;
+      if (i) {
+        const hd = handles[i - 1];
+        hd.style.left = left + "%";
+        hd.classList.toggle("fixed", lines[i - 1].lock || x.lock);
+      }
+      rowNodes[i].paint(x, snap.l[i][2]);
+    });
+    const allLocked = lines.every((x) => x.lock);
+    dialBox.classList.toggle("off", allLocked);
+    minus.disabled = allLocked || T <= floor(); plus.disabled = allLocked || T >= maxTotal;
+    undo.disabled = !E.history.length;
+    back.disabled = E.reset && !E.ops.length;
+    const changed = E.ops.length + (E.reset ? 1 : 0);
+    ok.textContent = changed ? `Затвердити · ${changed}` : "Затвердити";
+    ok.disabled = !T;
+    post("web_app_setup_closing_behavior", { need_confirmation: changed > 0 });
+  }
+  const repaint = () => { if (!frame) frame = requestAnimationFrame(paint); };
+  const floor = () => Math.max(1, E.lines.filter((x) => x.lock).reduce((a, x) => a + x.q, 0));
+
+  // A gesture: from the lines when it began, one op; the history keeps the state before it.
+  let gesture = null;
+  function begin() { gesture = { lines: E.lines, warned: false, op: null }; screen.classList.add("dragging"); }
+  function preview(op) {
+    const next = op && applyOp(gesture.lines, op);
+    if (!next) return false;
+    const was = total() + "," + E.lines.map((x) => x.q).join();
+    E.lines = next; gesture.op = op;
+    if (was !== total() + "," + next.map((x) => x.q).join()) haptic("select");
+    repaint(); return true;
+  }
+  function end() {
+    screen.classList.remove("dragging");
+    if (!gesture) return;
+    const { lines, op } = gesture;
+    gesture = null;
+    if (!op || lines.every((x, i) => x.q === E.lines[i].q && x.lock === E.lines[i].lock)) { E.lines = lines; repaint(); return; }
+    E.history.push({ reset: E.reset, ops: E.ops, lines });
+    E.ops = [...E.ops, op]; // a new array: the history keeps the old one whole
+    repaint();
+  }
+  function limit() { if (gesture && !gesture.warned) { gesture.warned = true; post("web_app_trigger_haptic_feedback", { type: "notification", notification_type: "warning" }); } }
+  function step(dq) {
+    begin();
+    const T = total(), want = Math.min(maxTotal, Math.max(floor(), T + dq));
+    if (want === T) limit(); else preview(["s", want]);
+    end();
+  }
+  minus.addEventListener("click", () => step(-1));
+  plus.addEventListener("click", () => step(1));
+
+  // the dial: the angle the finger turned, in detents
+  let turn = null;
+  const angle = (e) => { const r = dialBox.getBoundingClientRect(); return Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))); };
+  dialBox.addEventListener("pointerdown", (e) => {
+    if (dialBox.classList.contains("off")) return;
+    dialBox.setPointerCapture(e.pointerId);
+    begin();
+    turn = { last: angle(e), sum: 0, from: total() };
+  });
+  dialBox.addEventListener("pointermove", (e) => {
+    if (!turn) return;
+    const a = angle(e);
+    let da = a - turn.last;
+    if (da > Math.PI) da -= 2 * Math.PI; else if (da < -Math.PI) da += 2 * Math.PI;
+    turn.last = a; turn.sum += da;
+    const raw = turn.from + Math.round(turn.sum / ((2 * Math.PI) / QPR));
+    const want = Math.min(maxTotal, Math.max(floor(), raw));
+    if (want !== raw) limit();
+    if (want !== total()) preview(["s", want]);
+  });
+  const stopTurn = () => { if (turn) { turn = null; end(); } };
+  dialBox.addEventListener("pointerup", stopTurn);
+  dialBox.addEventListener("pointercancel", stopTurn);
+
+  // a border: dragged right, the left line takes quarters from the right one
+  handles.forEach((hd, k) => {
+    let drag = null;
+    hd.addEventListener("pointerdown", (e) => {
+      if (hd.classList.contains("fixed")) { post("web_app_trigger_haptic_feedback", { type: "notification", notification_type: "warning" }); return; }
+      e.stopPropagation();
+      hd.setPointerCapture(e.pointerId);
+      begin();
+      const W = bar.getBoundingClientRect().width;
+      drag = { x: e.clientX, px: Math.max(W / Math.max(1, total()), 6) };
+      hd.classList.add("on");
+    });
+    hd.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const L = gesture.lines, dq = Math.round((e.clientX - drag.x) / drag.px);
+      const room = dq > 0 ? L[k + 1].q : L[k].q, v = Math.min(Math.abs(dq), room);
+      if (Math.abs(dq) > room) limit();
+      if (!v) { E.lines = L; gesture.op = null; repaint(); return; }
+      preview(dq > 0 ? ["m", k + 1, k, v] : ["m", k, k + 1, v]);
+    });
+    const stop = () => { if (drag) { drag = null; hd.classList.remove("on"); end(); } };
+    hd.addEventListener("pointerup", stop);
+    hd.addEventListener("pointercancel", stop);
+  });
+
+  function toggleLock(i) {
+    begin();
+    preview(["l", i, E.lines[i].lock ? 0 : 1]);
+    haptic("light");
+    end();
+  }
+  undo.addEventListener("click", () => {
+    const last = E.history.pop();
+    if (!last) return;
+    E.reset = last.reset; E.ops = last.ops; E.lines = last.lines;
+    haptic("light"); repaint();
+    say("↺ Скасовано");
+  });
+  back.addEventListener("click", () => {
+    if (E.reset && !E.ops.length) return;
+    E.history.push({ reset: E.reset, ops: E.ops, lines: E.lines });
+    E.reset = true; E.ops = []; E.lines = synth;
+    haptic("medium"); repaint();
+    say("Повернув синтезовану чернетку: збережені правки підуть після ✅");
+  });
+  let sent = false;
+  ok.addEventListener("click", () => {
+    if (sent) return; // one ✅: Telegram closes the page after the first send
+    const text = approvalText(snap, E.reset, start(), E.ops, E.lines);
+    window.__herApproval = text; // the local preview and the measurements read it
+    post("web_app_trigger_haptic_feedback", { type: "notification", notification_type: "success" });
+    post("web_app_setup_closing_behavior", { need_confirmation: false });
+    ok.classList.add("sent");
+    if (TG.inside) sent = true;
+    if (TG.inside) setTimeout(() => post("web_app_data_send", { data: text }), reduced ? 0 : 280);
+    else say(`Боту пішло б ${new TextEncoder().encode(text).length} байт: ${E.ops.length} кроків`);
+  });
+  let toastTimer = 0;
+  function say(message) {
+    toast.textContent = message; toast.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("on"), 2600);
+  }
+  paint();
+  return E;
+}
+
+function lineRow(snap, i, l, onLock) {
+  const node = h("div", "ed-row");
+  const top = h("div", "ed-line");
+  const sw = h("span", "sw"); sw.style.background = color(i % 8);
+  const words = h("div", "ed-words");
+  words.append(h("b", "", l[0]), h("small", "", `чернетка ${hrs(l[2])} год`));
+  const hours = h("div", "ed-hours"), q = h("div", "ed-q num"), chip = h("span", "chip");
+  hours.append(q, chip);
+  const lock = h("button", "lock");
+  lock.setAttribute("aria-label", "Замок рядка");
+  lock.innerHTML = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  lock.addEventListener("click", (e) => { e.stopPropagation(); onLock(); });
+  top.append(sw, words, hours, lock);
+  node.append(top);
+  const tasks = (snap.tk[i] || []), use = (snap.ag[i] || []);
+  let open = null;
+  if (tasks.length || use.length) {
+    node.classList.add("more");
+    top.addEventListener("click", () => {
+      if (open) { open.remove(); open = null; node.classList.remove("open"); return; }
+      open = provenance(snap, i, tasks, use); node.append(open); node.classList.add("open"); haptic("select");
+    });
+  }
+  return {
+    node,
+    paint(x, base) {
+      q.textContent = hrs(x.q);
+      const d = x.q - base;
+      chip.textContent = d ? (d > 0 ? "+" : "−") + hrs(Math.abs(d)) : "";
+      chip.className = "chip" + (d > 0 ? " up" : d < 0 ? " down" : "");
+      lock.classList.toggle("on", x.lock);
+      node.classList.toggle("locked", x.lock);
+    },
+  };
+}
+
+// Owner-only: the line's tasks, threads from them to their repos' days, the agent's share.
+function provenance(snap, i, tasks, use) {
+  const box = h("div", "prov");
+  box.append(h("p", "prov-note", "лише тобі: клієнт цього не бачить ні в PDF, ні у звіті"));
+  if (tasks.length) {
+    const web = h("div", "threads");
+    const lines = svg(web, 100, 100); lines.setAttribute("class", "thread-lines"); lines.setAttribute("preserveAspectRatio", "none");
+    const node = h("span", "thread-node"); node.style.background = color(i % 8);
+    web.append(node);
+    const list = h("div", "thread-list");
+    const most = Math.max(1, ...snap.rh.flat());
+    tasks.forEach((t) => {
+      const row = h("div", "thread");
+      const pill = h("span", "task");
+      pill.append(h("em", "", (t[0] === "p" ? "PR #" : "issue #") + t[2]));
+      if (t[3]) pill.append(" " + t[3]);
+      const repo = h("small", "", snap.rp[t[1]] || "");
+      const strip = h("span", "heat");
+      (snap.rh[t[1]] || []).forEach((v, d) => {
+        const cell = h("i"); cell.style.setProperty("--a", v ? 0.25 + (0.75 * v) / most : 0);
+        cell.style.setProperty("--c", color(i % 8)); cell.style.animationDelay = d * 0.025 + "s"; strip.append(cell);
+      });
+      row.append(pill, repo, strip);
+      list.append(row);
+    });
+    web.append(list);
+    box.append(web);
+    requestAnimationFrame(() => threads(web, lines, node, list, color(i % 8)));
+    if (snap.rh.length) box.append(h("p", "hint", `клітинка — день періоду: коміти, PR і закриті issues репо`));
+  } else {
+    box.append(h("p", "hint", snap.md ? "Без задач GitHub: ручні записи, дзвінки, Signal." : "Без задач GitHub: таймер, ручні записи, дзвінки."));
+  }
+  box.append(agentRings(snap, use));
+  return box;
+}
+
+function threads(web, g, node, list, c) {
+  const W = web.clientWidth, H = web.clientHeight;
+  if (!W || !H) return;
+  g.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  // `web` is the offset parent of the node and of every pill
+  const x0 = node.offsetLeft + node.offsetWidth / 2, y0 = node.offsetTop + node.offsetHeight / 2;
+  [...list.children].forEach((row, k) => {
+    const pill = row.firstChild, x1 = pill.offsetLeft, y1 = pill.offsetTop + pill.offsetHeight / 2;
+    drawn(s("path", { d: `M${x0},${y0} C${x0},${y1} ${(x0 + x1) / 2},${y1} ${x1},${y1}`, fill: "none", stroke: c, "stroke-width": 2, "stroke-opacity": 0.7, "stroke-linecap": "round" }, g), k * 0.08);
+  });
+}
+
+function agentRings(snap, use) {
+  const box = h("div", "agent-use");
+  if (!use.length) { box.append(h("p", "hint", "Агент над задачами цього рядка не працював.")); return box; }
+  const engines = Object.keys(snap.et).filter((e) => use.some((u) => u[0] === e)).slice(0, 3);
+  const size = 104, g = svg(box, size, size), c0 = size / 2, shades = [1, 0.62, 0.38, 0.22];
+  const words = h("div", "agent-words");
+  words.append(h("h4", "", "Частка підписки"));
+  engines.forEach((engine, k) => {
+    // all === null: the period starts before the ledger tagged calls, the share is unknown
+    const r = 44 - k * 13, known = snap.et[engine] !== null, all = snap.et[engine] || 0, slot = [6, 0, 2][k];
+    const mine = use.filter((u) => u[0] === engine);
+    s("circle", { cx: c0, cy: c0, r, fill: "none", stroke: "var(--track)", "stroke-width": 9, "stroke-opacity": 0.55 }, g);
+    const legend = h("div", "legend");
+    let a = 0;
+    mine.forEach((u, m) => {
+      const f = all ? Math.min(1, u[2] / all) : 0;
+      if (f > 0) drawn(s("path", { d: arc(c0, c0, r, a, a + 2 * Math.PI * f), fill: "none", stroke: color(slot), "stroke-opacity": shades[m % 4], "stroke-width": 9 }, g), 0.1 + m * 0.08);
+      a += 2 * Math.PI * f;
+      const it = h("span"); const sw = h("span", "sw"); sw.style.background = color(slot); sw.style.opacity = shades[m % 4];
+      it.append(sw, `${u[1]} ${known ? pct(f) : "—"}`); legend.append(it);
+    });
+    const share = all ? mine.reduce((x, u) => x + u[2], 0) / all : 0;
+    words.append(h("b", "", `${engine} · ${known ? pct(share) : "—"} за період`), legend);
+  });
+  box.append(words);
+  return box;
+}
+function pct(f) { return f >= 0.1 ? Math.round(f * 100) + "%" : f > 0 ? (f * 100).toFixed(1).replace(".", ",") + "%" : "0%"; }
+
+function sourcesCard(snap) {
+  const card = h("section", "card ed-sources");
+  card.append(h("h3", "", "Звідки години"), h("p", "hint", "джерела синтезованої чернетки"));
+  const all = snap.src.reduce((a, x) => a + x[1], 0) || 1;
+  const strip = h("div", "src-strip"), legend = h("div", "legend");
+  const slots = { "таймер": 0, "вручну": 3, "GitHub": 6, "рев'ю агента": 4, "Signal": 2, "проміжки": -1 };
+  snap.src.forEach(([label, minutes], k) => {
+    const part = h("i"), slot = label in slots ? slots[label] : k;
+    part.style.flex = minutes; part.style.background = color(slot); strip.append(part);
+    const it = h("span"); const sw = h("span", "sw"); sw.style.background = color(slot);
+    it.append(sw, `${label} · ${Math.round((100 * minutes) / all)}%`); legend.append(it);
+  });
+  card.append(strip, legend);
+  if (snap.cd) card.append(h("p", "hint", `${snap.cd} ${snap.md ? "непідтверджених кандидатів" : "кандидатів без таймера"} чекають у картці /invoice — тут їх не враховано`));
+  return card;
+}
+
+if (typeof module !== "undefined") module.exports = { splitQ, applyOp, replayOps, canonicalOps, approvalText };
+
 // Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
 // the data is in the URL fragment, the design tokens are CSS variables (her.design).
 "use strict";
@@ -247,7 +809,8 @@ const TG = {
   data: launch.get("tgWebAppData") || "",
   theme: json(launch.get("tgWebAppThemeParams")),
 };
-TG.inside = Boolean(TG.data || window.TelegramWebviewProxy || (window.external && "notify" in window.external));
+// A reply-keyboard launch (the invoice editor, #176) carries no tgWebAppData, only the platform.
+TG.inside = Boolean(TG.data || launch.get("tgWebAppPlatform") || window.TelegramWebviewProxy || (window.external && "notify" in window.external));
 try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* file:// */ }
 
 function json(text) { try { return JSON.parse(text); } catch (e) { return null; } }
@@ -779,7 +1342,7 @@ function invoice(screen, P) {
       row.append(h("b", "", client(c[0])[1]), bar, h("span", "num", c[4] ? amount(c[4]) : ""));
       b.append(row);
     }
-    b.append(h("p", "soon", "Редагування рахунку жестами — наступний крок."));
+    b.append(h("p", "soon", "Правити жестами: /invoice <клієнт> → 🎛 Жестами."));
   } }]);
   screen.append(box);
 }
@@ -854,11 +1417,14 @@ async function start() {
   post("web_app_expand");
   const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
   if (!TG.inside && !local) return gate("✨", "Відкрий з Telegram", "Дашборд відкривається кнопкою «✨ Дашборд» у /stats у Vector.");
+  if (launch.get("i")) return openEditor(launch.get("i"));
   const data = launch.get("d");
   if (!data) return gate("✨", "Немає знімка", "Натисни «✨ Дашборд» у /stats — я покладу в посилання свіжі цифри.");
   if (typeof DecompressionStream === "undefined") return gate("⬆️", "Онови Telegram", "Цьому дашборду потрібен новіший вбудований браузер.");
   try { S = await unpack(data); } catch (e) { return gate("⚠️", "Знімок пошкоджено", "Відкрий дашборд ще раз із /stats."); }
   if (S.v !== 1) return gate("⬆️", "Нова версія", "Відкрий дашборд ще раз із /stats.");
+  // A display check, not a lock (#192 F10): launch data is unsigned here and the snapshot is
+  // only deflated, so whoever holds the URL can read it. The link itself is the key.
   if (TG.inside && viewer() !== S.o) return gate("🔒", "Лише для власника", "Цей дашборд показує цифри тільки тому, для кого його зроблено.");
   if (Date.now() / 1000 > S.exp) return gate("⌛", "Знімок застарів", "Натисни «✨ Дашборд» у /stats ще раз — покажу свіжі цифри.");
   const span = launch.get("s");
@@ -868,6 +1434,21 @@ async function start() {
   wire();
   render();
 }
+// The invoice editor (#176): its own snapshot, from the 🎛 keyboard button of /invoice.
+async function openEditor(data) {
+  const again = "Натисни «🎛 Жестами» у картці /invoice ще раз.";
+  if (typeof DecompressionStream === "undefined") return gate("⬆️", "Онови Telegram", "Редактору потрібен новіший вбудований браузер.");
+  let E;
+  try { E = await unpack(data); } catch (e) { return gate("⚠️", "Посилання пошкоджено", again); }
+  if (E.v !== 1) return gate("⬆️", "Нова версія", again);
+  // A keyboard button's launch names no user: only the owner's private chat has that button,
+  // and the bot checks who sent the edits. A launch that names someone else is refused.
+  const who = viewer();
+  if (TG.inside && who != null && who !== E.o) return gate("🔒", "Лише для власника", "Цей рахунок показую тільки тому, для кого його зроблено.");
+  if (Date.now() / 1000 > E.exp) return gate("⌛", "Редактор застарів", "Чернетка могла змінитися. " + again);
+  editor(E);
+}
+
 start();
 
 </script>
