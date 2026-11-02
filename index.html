@@ -1345,6 +1345,17 @@ function invoice(screen, P) {
     b.append(h("p", "soon", "Правити жестами: /invoice <клієнт> → 🎛 Жестами."));
   } }]);
   screen.append(box);
+  if (P.iv) screen.append(card("paid", "Оплата рахунків", [{ hint: "оплачене за період · чекає і прострочене — зараз", draw: (b) => {
+    const grid = h("div", "names");
+    grid.style.gridTemplateColumns = "1fr 1fr 1fr";
+    for (const [k, word] of [["paid", "оплачено"], ["waiting", "чекає"], ["overdue", "прострочено"]]) {
+      const it = h("div", "", word), sums = P.iv[k].money.map(([c, a]) => amount(a, c)).join(" + ");
+      it.append(h("b", "", String(P.iv[k].n)));
+      if (sums) it.append(h("span", "num", sums));
+      grid.append(it);
+    }
+    b.append(grid);
+  } }]));
 }
 
 const DRAW = { overview, weeks, agent, repos, invoice };

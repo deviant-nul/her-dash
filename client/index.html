@@ -151,6 +151,46 @@ svg { display: block; overflow: visible; }
 .lanes div div span:last-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .lanes .sw { width: 8px; height: 8px; }
 
+/* the home (#231): the launch ring, the road of features, this week */
+.launch { display: flex; align-items: center; gap: 18px; }
+.launch .ring { flex: none; }
+.ringnum { font: var(--weight-bold) 22px/1 var(--font); letter-spacing: -.03em; fill: var(--ink); font-variant-numeric: tabular-nums; }
+.launch .when { font: var(--weight-bold) 26px/1.05 var(--font); letter-spacing: -.03em; margin-top: 6px; }
+.launch .hint { font-size: 14px; margin-top: 4px; }
+.path { position: relative; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--grid); }
+.path .road { position: absolute; left: 0; top: 0; }
+.path .lane { font-size: 11px; padding-left: 36px; margin: 14px 0 6px; }
+.path .lane:first-of-type { margin-top: 0; }
+.stop { position: relative; padding: 2px 0 0 36px; min-height: 24px; margin-bottom: 8px; animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.stop b { font: var(--weight-semibold) 15.5px/20px var(--font); display: block; }
+.stop.next b, .stop.rest span { color: var(--ink-2); font-weight: var(--weight-medium); }
+.stop.rest span { font: 14px/20px var(--font); }
+.stop .node { position: absolute; z-index: 1; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 9px; background: var(--surface); box-shadow: inset 0 0 0 2px var(--c, var(--track)); display: grid; place-items: center; }
+.stop.done .node { background: var(--c); box-shadow: none; }
+.stop.done .node svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.stop.now .node { background: conic-gradient(var(--c) var(--p), var(--surface) 0); box-shadow: inset 0 0 0 2px var(--c), 0 0 0 4px color-mix(in oklab, var(--c) 18%, transparent); }
+.stop.rest .node { width: 8px; height: 8px; left: 8px; top: 8px; box-shadow: none; background: var(--track); }
+.stop.end .node { left: 0; top: 0; width: 24px; height: 24px; border-radius: 12px; background: var(--ink); box-shadow: 0 0 0 5px var(--surface), 0 0 0 6.5px color-mix(in oklab, var(--ink) 35%, transparent); }
+.stop.end .node::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1.5px solid var(--ink); opacity: .4; animation: pulse 1.8s ease-in-out infinite; }
+.stop.end b { line-height: 24px; padding-top: 0; }
+.stop.end { padding-top: 0; margin: 14px 0 0; }
+.meter { height: 6px; border-radius: 3px; background: var(--track); margin-top: 7px; overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 3px; }
+.path > :nth-child(2) { animation-delay: .04s; } .path > :nth-child(3) { animation-delay: .08s; } .path > :nth-child(4) { animation-delay: .12s; }
+.path > :nth-child(5) { animation-delay: .16s; } .path > :nth-child(6) { animation-delay: .2s; } .path > :nth-child(n+7) { animation-delay: .24s; }
+.arc { animation: arc 1.1s cubic-bezier(.3,.7,.2,1) both; }
+@keyframes arc { from { stroke-dasharray: 0 100; } }
+.calm { display: flex; align-items: center; gap: 10px; margin-top: 12px; font: var(--weight-medium) 16px/1.3 var(--font); }
+.calm i { width: 26px; height: 26px; border-radius: 13px; flex: none; display: grid; place-items: center; background: color-mix(in oklab, var(--status-good) 16%, var(--surface)); }
+.calm svg { width: 15px; height: 15px; fill: none; stroke: var(--status-good); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.gains > div { display: flex; gap: 12px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--grid); }
+.gains > div:first-child { border-top: 0; margin-top: 8px; }
+.gains .sw { width: 10px; height: 10px; transform: translateY(1px); }
+.gains b { display: block; font: var(--weight-semibold) 16px/1.25 var(--font); }
+.gains small { display: block; font: 14px/1.35 var(--font); color: var(--ink-2); margin-top: 3px; }
+.more { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px; font: var(--weight-semibold) 14px/1 var(--font); color: var(--ink); }
+.more svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
 /* value: what we built flows into what it gives and the risk it takes away */
 .flow { position: relative; margin-top: 16px; padding-left: 40px; }
 .flow svg { position: absolute; left: 0; top: 0; }
@@ -233,10 +273,12 @@ html.still .tabs { position: absolute; }
 html.still *, html.still *::before, html.still *::after { animation: none !important; transition: none !important; }
 html.still .draw { stroke-dashoffset: 0; }
 html.still .pour { clip-path: none; }
+html.still .stop.end .node::after { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .draw { stroke-dashoffset: 0; }
   .pour { clip-path: none; }
+  .stop.end .node::after { display: none; }
 }
 
 </style>
@@ -246,9 +288,11 @@ html.still .pour { clip-path: none; }
   <section class="skeleton" aria-hidden="true"><div class="sk sk-bar"></div><div class="sk sk-hero"></div><div class="sk sk-card"></div></section>
 </main>
 <script>
-// The client's app (#210): the week's report and invoice, «B · Flow» (docs/design/client/README.md).
+// The client's app (#210): the week's report and invoice, «B · Flow» (docs/design/client/README.md),
+// and the client's home (#231): status, the road to launch, this week, the invoice at a glance.
 // Vanilla JS, no library, no network. The fragment holds either the sealed snapshot (#s=) or the
-// viewer's key (#k=), never both: the key lives in the viewer's Telegram CloudStorage (her.seal).
+// viewer's key (#k=), never both: the key lives in the viewer's Telegram CloudStorage (her.seal),
+// next to the newest home this viewer opened (an old button still shows the newest one).
 "use strict";
 
 // ---- Telegram: a tiny bridge instead of telegram-web-app.js (nothing loads from outside) ----
@@ -303,12 +347,14 @@ function invoke(method, params) { // Telegram's CloudStorage, as telegram-web-ap
     setTimeout(() => { if (pending[id]) { delete pending[id]; fail(new Error("timeout")); } }, 2500);
   });
 }
-const SLOT = "her_client_key";
+const SLOT = "her_client_key", HOME = "her_client_home";
 const local = { get() { try { return localStorage.getItem(SLOT); } catch (e) { return null; } }, set(v) { try { localStorage.setItem(SLOT, v); } catch (e) { /* private mode */ } } };
-async function loadKey() {
-  try { const r = await invoke("getStorageValues", { keys: [SLOT] }); if (r && r[SLOT]) return r[SLOT]; } catch (e) { /* old client, or a browser */ }
-  return local.get();
+async function loadStore() { // the key and the newest home in one round trip
+  let r = null;
+  try { r = await invoke("getStorageValues", { keys: [SLOT, HOME] }); } catch (e) { /* old client, or a browser */ }
+  return { key: (r && r[SLOT]) || local.get(), home: (r && r[HOME]) || "" };
 }
+function keepHome(sealed) { invoke("saveStorageValue", { key: HOME, value: sealed }).catch(() => { /* a browser */ }); }
 async function saveKey(key) {
   local.set(key);
   try { await invoke("saveStorageValue", { key: SLOT, value: key }); return true; } catch (e) { return !TG.inside; }
@@ -344,13 +390,21 @@ async function unseal(text, keyText) {
 // ---- words: the client's language ------------------------------------------------------------
 const WORDS = {
   en: {
-    week: "Week", invoice: "Invoice", ask: "Ask",
+    home: "Project", week: "Week", invoice: "Invoice", ask: "Ask",
+    myProject: "My project", updated: (d) => `Updated ${d}`,
+    builtPct: "built", launchOn: "Launch", daysLeft: (n) => (n === 0 ? "Today" : n === 1 ? "1 day left" : `${n} days left`),
+    features: "Your features", featuresHint: "Done, now and next", more: (n) => `+${n} more`,
+    thisWeek: "This week", lastWeek: "Last week", thisMonth: "This month", lastMonth: "Last month",
+    latest: "Latest report", seeWeek: "See the week",
+    waiting: "Waiting on you", nothing: "Nothing needs you right now", answer: "Answer in our chat",
+    first: "Your first weekly report lands here", firstText: "What we built and why it matters, every week.",
     daysTo: (n, w) => (n === 0 ? `${w} is today` : n === 1 ? `1 day to ${w}` : `${n} days to ${w}`),
     road: (d) => `The road to ${d}`, roadHint: "What we built each day, and what's left", weekFlow: "Your week", weekHint: "What we built each day",
     today: "Today", done: "Done", now: "Now", next: "Next",
     value: "Value this week", built: "We built", so: "So", less: "Less risk",
     whatsNext: "What's next",
     invoiceOf: "Invoice", due: (d) => `Due ${d}`, issued: (d) => `Issued ${d}`, view: "View",
+    paid: "Paid ✓ Thank you", paidOn: (d) => `Paid ${d} · Thank you`,
     paying: "What you're paying for", payingHint: "Every line flows into the total", total: "Total",
     payBy: "Pay by bank transfer", copy: "Copy details", copied: "Payment details copied", pdf: "PDF",
     pdfHint: "The PDF is in our chat, right under the card", from: "From", to: "To",
@@ -363,13 +417,21 @@ const WORDS = {
     back: "Back to the chat",
   },
   uk: {
-    week: "Тиждень", invoice: "Рахунок", ask: "Питання",
+    home: "Проєкт", week: "Тиждень", invoice: "Рахунок", ask: "Питання",
+    myProject: "Мій проєкт", updated: (d) => `Оновлено ${d}`,
+    builtPct: "готово", launchOn: "Запуск", daysLeft: (n) => (n === 0 ? "Сьогодні" : `${n} ${n % 10 === 1 && n % 100 !== 11 ? "день" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "дні" : "днів"} лишилось`),
+    features: "Ваші фічі", featuresHint: "Готово, зараз і далі", more: (n) => `ще ${n}`,
+    thisWeek: "Цей тиждень", lastWeek: "Минулий тиждень", thisMonth: "Цей місяць", lastMonth: "Минулий місяць",
+    latest: "Останній звіт", seeWeek: "Весь тиждень",
+    waiting: "Чекає на вас", nothing: "Від вас зараз нічого не треба", answer: "Відповісти в чаті",
+    first: "Тут з'явиться ваш перший тижневий звіт", firstText: "Що ми зробили і навіщо — щотижня.",
     daysTo: (n, w) => (n === 0 ? `${w} — сьогодні` : `${w}: ${n} ${n % 10 === 1 && n % 100 !== 11 ? "день" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "дні" : "днів"}`),
     road: (d) => `Шлях до ${d}`, roadHint: "Що ми зробили щодня і що лишилось", weekFlow: "Ваш тиждень", weekHint: "Що ми зробили щодня",
     today: "Сьогодні", done: "Готово", now: "Зараз", next: "Далі",
     value: "Цінність тижня", built: "Ми зробили", so: "Тож", less: "Менше ризику",
     whatsNext: "Що далі",
     invoiceOf: "Рахунок", due: (d) => `Сплатити до ${d}`, issued: (d) => `Виставлено ${d}`, view: "Відкрити",
+    paid: "Оплачено ✓ Дякуємо", paidOn: (d) => `Оплачено ${d} · Дякуємо`,
     paying: "За що ви платите", payingHint: "Кожен рядок впадає в суму", total: "Разом",
     payBy: "Оплата переказом", copy: "Скопіювати реквізити", copied: "Реквізити скопійовано", pdf: "PDF",
     pdfHint: "PDF у нашому чаті, одразу під карткою", from: "Від", to: "Кому",
@@ -394,6 +456,8 @@ const color = (i) => (i >= 0 && i < 8 ? `var(--series-${i + 1})` : "var(--track)
 const sum = (a) => a.reduce((x, y) => x + y, 0);
 const icon = (path) => `<svg viewBox="0 0 24 24">${path}</svg>`;
 const ICON = {
+  home: '<path d="M4 11.5L12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   week: '<path d="M3 15c3-6 5-6 7-2s4 4 6-1 3-4 5-2"/>',
   invoice: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   ask: '<path d="M5 18l-1 3 4-1.5A8 8 0 1 0 5 18z"/><path d="M9.8 9.5a2.3 2.3 0 0 1 4.4.8c0 1.6-2.2 1.9-2.2 3.2M12 16.3v.2"/>',
@@ -404,6 +468,8 @@ const ICON = {
   down: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
 };
 function day(iso) { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d); }
+// Today on the viewer's calendar; the still preview pins it (?still=1&today=2026-11-01).
+const TODAY = QS.get("still") && /^\d{4}-\d{2}-\d{2}$/.test(QS.get("today") || "") ? day(QS.get("today")) : (() => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); })();
 function dateText(iso, weekday) {
   const opts = weekday ? { weekday: "short", day: "numeric", month: "short" } : { day: "numeric", month: "short" };
   return new Intl.DateTimeFormat(LANG === "uk" ? "uk-UA" : "en-GB", opts).format(day(iso));
@@ -433,7 +499,7 @@ function curve(points, reverse) {
 }
 
 // ---- the frame ----------------------------------------------------------------------------
-let D = null, current = QS.get("tab") === "invoice" ? "invoice" : "week";
+let D = null, current = "week";
 function bar(right) {
   const n = h("header", "bar"), logo = h("span", "logo");
   if (D.logo && D.logo.startsWith("data:image/svg+xml;base64,")) { const img = h("img"); img.src = D.logo; img.alt = ""; logo.append(img); }
@@ -443,7 +509,9 @@ function bar(right) {
 }
 function tabs() {
   const n = h("nav", "tabs");
-  for (const k of ["week", "invoice", "ask"]) {
+  // A report opens on its week; the home holds the latest week and invoice, when there is one.
+  const keys = !D.home ? ["week", "invoice", "ask"] : D.invoice ? ["home", "week", "invoice", "ask"] : ["home", "ask"];
+  for (const k of keys) {
     const b = h("button", k === current ? "on" : "");
     b.innerHTML = icon(ICON[k]);
     b.append(h("span", "", W[k]));
@@ -460,10 +528,28 @@ function render() {
   app.replaceChildren();
   const screen = h("section", "screen");
   app.append(screen);
-  (current === "invoice" ? invoiceScreen : weekScreen)(screen);
+  ({ home: homeScreen, invoice: invoiceScreen }[current] || weekScreen)(screen);
   app.append(tabs());
 }
+// The report's age against TODAY (#253): «This week» only for this week, a month as a month.
+function ageLabel() {
+  const week = D.period.key.match(/^(\d{4})-W(\d+)$/), month = D.period.key.match(/^(\d{4})-(\d{2})$/);
+  if (week) {
+    const jan4 = new Date(Number(week[1]), 0, 4), mon = new Date(jan4);
+    mon.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (Number(week[2]) - 1) * 7);
+    const now = new Date(TODAY);
+    now.setDate(TODAY.getDate() - ((TODAY.getDay() + 6) % 7));
+    const back = Math.round((now - mon) / (7 * 864e5));
+    return back === 0 ? W.thisWeek : back === 1 ? W.lastWeek : W.latest;
+  }
+  if (month) {
+    const back = TODAY.getFullYear() * 12 + TODAY.getMonth() - (Number(month[1]) * 12 + Number(month[2]) - 1);
+    return back === 0 ? W.thisMonth : back === 1 ? W.lastMonth : W.latest;
+  }
+  return W.latest;
+}
 function weekLabel() { const k = D.period.key.match(/W(\d+)$/); return k ? `${W.week} ${Number(k[1])}` : D.period.title; }
+function go(tab) { haptic("select"); current = tab; render(); window.scrollTo(0, 0); }
 
 // ---- the week: status, the road, the value, what's next ---------------------------------------
 function weekScreen(root) {
@@ -497,17 +583,7 @@ function roadCard() {
     const past = deadline ? Math.max(Wd * 0.62, Math.min(Wd - 44, Wd * (D.days.length - 1) / (D.days.length - 1 + ahead))) : Wd;
     const svg = s("svg", { viewBox: `0 0 ${Wd} ${H + 26}`, width: "100%", role: "img" }, card);
     svg.style.marginTop = "12px";
-    const g = s("g", { class: "pour" }, svg), n = D.days.length;
-    const max = Math.max(...D.days.map(sum)), k = (H * 0.9) / max, mid = H / 2;
-    const x = (i) => (i * past) / (n - 1);
-    let base = D.days.map((row) => mid - (sum(row) * k) / 2);
-    const top0 = base.slice();
-    D.lines.forEach((l, li) => {
-      const next = base.map((b, i) => b + D.days[i][li] * k);
-      const pts = (arr) => arr.map((y, i) => [x(i), y]);
-      s("path", { d: curve(pts(base)) + curve(pts(next), true) + "Z", fill: color(li), opacity: 0.92 }, g);
-      base = next.map((b) => b + (D.days.some((r) => r[li] > 0) ? 1 : 0));
-    });
+    const n = D.days.length, [top0, base] = bands(svg, H, past);
     const ny = (top0[n - 1] + base[n - 1]) / 2, ty = top0[n - 1], by = base[n - 1];
     if (deadline) {
       const lx = Wd - 6;
@@ -542,6 +618,21 @@ function roadCard() {
     card.append(box);
   }
   return card;
+}
+// The week's stream: one band per invoice line, as thick as that day's hours; its edges back.
+function bands(svg, H, width) {
+  const g = s("g", { class: "pour" }, svg), n = D.days.length;
+  const max = Math.max(...D.days.map(sum)), k = (H * 0.9) / max, mid = H / 2;
+  const x = (i) => (i * width) / (n - 1);
+  let base = D.days.map((row) => mid - (sum(row) * k) / 2);
+  const top0 = base.slice();
+  D.lines.forEach((l, li) => {
+    const next = base.map((b, i) => b + D.days[i][li] * k);
+    const pts = (arr) => arr.map((y, i) => [x(i), y]);
+    s("path", { d: curve(pts(base)) + curve(pts(next), true) + "Z", fill: color(li), opacity: 0.92 }, g);
+    base = next.map((b) => b + (D.days.some((r) => r[li] > 0) ? 1 : 0));
+  });
+  return [top0, base];
 }
 function isoOf(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`; }
 function lanesOf() {
@@ -603,8 +694,10 @@ function nextCard() {
   return card;
 }
 
+// Paid: the good dot. Waiting, even past the date: the calm grey one, never red (#232).
 function dueChip() {
   const inv = D.invoice;
+  if (inv.paid) return chip(W.paid);
   return chip(inv.due ? W.due(dateText(inv.due, true)) : W.issued(dateText(inv.issued, true)), true);
 }
 function invoiceTeaser() {
@@ -620,7 +713,158 @@ function invoiceTeaser() {
   strip.style.cssText = "display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin-top:16px";
   D.lines.forEach((l, i) => { const seg = h("i", "grow"); seg.style.cssText = `flex:${l.q};min-width:3px;background:${color(i)}`; strip.append(seg); });
   card.append(head, row, strip);
-  card.onclick = () => { haptic("select"); current = "invoice"; render(); window.scrollTo(0, 0); };
+  card.onclick = () => go("invoice");
+  return card;
+}
+
+// ---- the home (#231): status, the road to launch, this week, the invoice ---------------------
+function homeScreen(root) {
+  root.append(bar(D.at ? W.updated(dateText(isoOf(new Date(D.at * 1000)))) : W.myProject));
+  const top = h("div", "");
+  top.style.marginTop = "20px";
+  const left = D.deadline ? Math.round((day(D.deadline.date) - TODAY) / 864e5) : -1;
+  if (left >= 0) { const chips = h("div", "chips"); chips.append(chip(W.daysTo(left, D.deadline.what))); top.append(chips); }
+  top.append(h("div", "statement", D.status || (left >= 0 ? `${D.deadline.what}: ${dateText(D.deadline.date, true)}.` : D.client)));
+  root.append(top);
+  const road = launchCard(left);
+  if (road) root.append(road);
+  if (Array.isArray(D.asks)) root.append(asksCard()); // #216 fills it; without the key, no claim
+  root.append(D.invoice ? thisWeekCard() : firstCard());
+  if (D.invoice) root.append(invoiceTeaser());
+}
+
+// The features as stations on one road: done (filled, ✓), now (filled as far as it got), next
+// (hollow), and the launch at the end. The ring: every feature's built share in its colour.
+function stationsOf() {
+  const slotOf = (title, fallback) => { const i = D.lines.findIndex((l) => l.t.toLowerCase() === title.toLowerCase()); return i >= 0 ? i : fallback; };
+  const done = [], now = [], next = [];
+  D.goals.forEach(([t, closed, total], i) => (total && closed >= total ? done : now).push({ t, slot: slotOf(t, D.lines.length + i), closed, total }));
+  D.next.forEach(([t], i) => { if (!D.goals.some((g) => g[0].toLowerCase() === t.toLowerCase())) next.push({ t, slot: slotOf(t, D.lines.length + D.goals.length + i), closed: 0, total: 0 }); });
+  return [done, now, next];
+}
+function launchCard(left) {
+  const [done, now, next] = stationsOf(), deadline = left >= 0 ? D.deadline : null;
+  if (!deadline && !done.length && !now.length && !next.length) return null;
+  const card = h("section", "card deep"), head = h("div", "launch");
+  const goals = [...done, ...now], total = sum(goals.map((g) => g.total));
+  if (total) {
+    const ring = s("svg", { viewBox: "0 0 96 96", width: 96, height: 96, role: "img", class: "ring" });
+    s("circle", { cx: 48, cy: 48, r: 40, fill: "none", stroke: "var(--track)", "stroke-width": 10 }, ring);
+    let at = 0;
+    goals.forEach((g, i) => {
+      const len = (g.closed / total) * 100;
+      if (len <= 0) return;
+      const arc = s("circle", { cx: 48, cy: 48, r: 40, fill: "none", stroke: color(g.slot), "stroke-width": 10, pathLength: 100, "stroke-dasharray": `${Math.max(0, len - 0.8)} ${100 - len + 0.8}`, "stroke-dashoffset": -at, class: "arc", transform: "rotate(-90 48 48)" }, ring);
+      arc.style.animationDelay = `${i * 0.08}s`;
+      at += len;
+    });
+    const pct = Math.round((sum(goals.map((g) => g.closed)) / total) * 100);
+    txt(ring, 48, 50, `${pct}%`, { class: "ringnum", "text-anchor": "middle" });
+    txt(ring, 48, 66, W.builtPct, { class: "lbl2", "text-anchor": "middle" });
+    head.append(ring);
+  }
+  const words = h("div", "");
+  if (deadline) words.append(h("div", "eyebrow", deadline.what || W.launchOn), h("div", "when", dateText(deadline.date, true)), h("div", "hint", W.daysLeft(left)));
+  else words.append(h("h3", "", W.features), h("div", "hint", W.featuresHint));
+  head.append(words);
+  card.append(head);
+  const path = h("div", "path"), stops = [];
+  const lane = (name, items, kind, cap) => {
+    if (!items.length) return;
+    path.append(h("div", "eyebrow lane", name));
+    const shown = items.length > cap ? items.slice(0, cap - 1) : items;
+    shown.forEach((g) => {
+      const stop = h("div", `stop ${kind}`), node = h("i", "node");
+      node.style.setProperty("--c", color(g.slot));
+      if (kind === "now") node.style.setProperty("--p", `${Math.round((g.closed / (g.total || 1)) * 100)}%`);
+      if (kind === "done") node.innerHTML = icon(ICON.ok);
+      stop.append(node, h("b", "", g.t));
+      if (kind === "now" && g.total) {
+        const meter = h("div", "meter"), fill = h("i", "grow");
+        fill.style.cssText = `width:${Math.max(4, (g.closed / g.total) * 100)}%;background:${color(g.slot)}`;
+        meter.append(fill);
+        stop.append(meter);
+      }
+      path.append(stop); stops.push([stop, kind]);
+    });
+    if (shown.length < items.length) { const more = h("div", `stop ${kind} rest`); more.append(h("i", "node"), h("span", "", W.more(items.length - shown.length))); path.append(more); stops.push([more, kind]); }
+  };
+  lane(W.done, done, "done", 3);
+  lane(W.now, now, "now", 4);
+  lane(W.next, next, "next", 3);
+  if (deadline && stops.length) { // with no feature on the road, the date above says it all
+    const end = h("div", "stop end"), node = h("i", "node");
+    end.append(node, h("b", "", `${deadline.what} · ${dateText(deadline.date)}`));
+    path.append(end); stops.push([end, "next"]);
+  }
+  if (stops.length) card.append(path);
+  requestAnimationFrame(() => { // the road through every station: solid up to now, dashed ahead
+    if (stops.length < 2) return;
+    const ys = stops.map(([n]) => n.offsetTop + 12), cut = stops.map(([, k]) => k).lastIndexOf("now");
+    const split = cut >= 0 ? ys[cut] : stops[0][1] === "next" ? ys[0] : ys[stops.map(([, k]) => k).lastIndexOf("done")];
+    const road = s("svg", { width: 24, height: ys[ys.length - 1] + 2, class: "road" });
+    if (split > ys[0]) s("path", { d: `M12,${ys[0]} V${split}`, stroke: "var(--ink)", "stroke-width": 2, opacity: 0.28, pathLength: 1, class: "draw" }, road);
+    s("path", { d: `M12,${split} V${ys[ys.length - 1]}`, stroke: "var(--ink)", "stroke-width": 1.5, opacity: 0.32, "stroke-dasharray": "3 4" }, road);
+    path.prepend(road);
+  });
+  return card;
+}
+
+function asksCard() {
+  const card = h("section", "card");
+  card.append(h("span", "eyebrow", W.waiting));
+  if (!D.asks.length) {
+    const row = h("div", "calm"), ok = h("i", "");
+    ok.innerHTML = icon(ICON.ok);
+    row.append(ok, h("span", "", W.nothing));
+    card.append(row);
+    return card;
+  }
+  const list = h("div", "");
+  list.style.marginTop = "6px";
+  D.asks.slice(0, 3).forEach((q, i) => { const row = h("div", "step"); row.append(h("i", "", String(i + 1)), h("b", "", q)); list.append(row); });
+  const btn = h("button", "btn ink", W.answer);
+  btn.style.cssText = "margin-top:12px;width:100%";
+  btn.onclick = () => { haptic("select"); post("web_app_close"); };
+  card.append(list, btn);
+  return card;
+}
+
+// The latest report in a picture and three lines: what we built → what it gives the client.
+function thisWeekCard() {
+  const card = h("section", "card tap"), head = h("div", "head");
+  head.append(h("span", "eyebrow", `${ageLabel()} · ${weekLabel()}`));
+  card.append(head);
+  if (D.days.length > 1 && sum(D.days.map(sum)) > 0) {
+    const svg = s("svg", { viewBox: "0 0 318 72", width: "100%", role: "img" }, card);
+    svg.style.marginTop = "14px";
+    bands(svg, 72, 318);
+  }
+  const gains = D.lines.map((l, i) => Object.assign({ slot: i }, l)).filter((l) => l.v).sort((a, b) => b.q - a.q).slice(0, 3);
+  const rows = gains.length ? gains : D.lines.map((l, i) => Object.assign({ slot: i }, l)).sort((a, b) => b.q - a.q).slice(0, 3);
+  const list = h("div", "gains");
+  for (const l of rows) {
+    const row = h("div", ""), sw = h("span", "sw"), words = h("div", "");
+    sw.style.background = color(l.slot);
+    words.append(h("b", "", l.t));
+    if (l.v) words.append(h("small", "", l.v));
+    row.append(sw, words);
+    list.append(row);
+  }
+  const more = h("div", "more");
+  more.append(document.createTextNode(W.seeWeek));
+  more.insertAdjacentHTML("beforeend", icon(ICON.arrow));
+  card.append(list, more);
+  card.onclick = () => go("week");
+  return card;
+}
+
+function firstCard() {
+  const card = h("section", "card deep");
+  const svg = s("svg", { viewBox: "0 0 318 64", width: "100%", role: "img" }, card);
+  s("path", { d: "M2,32 C40,10 70,12 100,26 S160,52 200,30 S270,14 316,32 C270,50 240,52 200,40 S130,10 100,38 S40,54 2,32Z", fill: "var(--ink)", opacity: 0.05, stroke: "var(--ink)", "stroke-opacity": 0.35, "stroke-width": 1.2, "stroke-dasharray": "3 4" }, svg);
+  card.append(h("h3", "", W.first), h("div", "hint", W.firstText));
+  card.querySelector("h3").style.marginTop = "14px";
   return card;
 }
 
@@ -700,7 +944,7 @@ function sankeyCard() {
 const spaced = (line) => line.replace(/\b([A-Z]{2}\d{2}[A-Z0-9]{10,30})\b/, (iban) => iban.match(/.{1,4}/g).join(" "));
 function payCard() {
   const inv = D.invoice, card = h("section", "card");
-  card.append(h("span", "eyebrow", W.payBy));
+  card.append(h("span", "eyebrow", inv.paid ? W.paidOn(dateText(inv.paid)) : W.payBy));
   const pay = h("div", "pay");
   for (const line of inv.from.lines) pay.append(h("b", "", spaced(line)));
   pay.append(h("small", "", [inv.from.name, inv.terms].filter(Boolean).join(" · ")));
@@ -764,13 +1008,28 @@ async function start() {
     haptic(kept ? "medium" : "light");
     return kept ? gate("ok", W.unlocked, W.unlockedText) : gate("key", W.unlockFail, W.unlockFailText);
   }
-  if (!sealed) return gate("chat", W.nodata, W.nodataText);
-  const stored = await loadKey();
-  if (!stored) return gate("key", W.unlockTitle, W.unlockText);
-  try { D = await unseal(sealed, stored); } catch (e) { return gate("key", W.broken, W.brokenText); }
+  const store = await loadStore();
+  async function kept() { // the newest home this viewer opened, if this key still opens it
+    if (!store.key || !store.home || store.home === sealed) return null;
+    try { const k = await unseal(store.home, store.key); return k && k.home ? k : null; } catch (e) { return null; } // a new key
+  }
+  if (!sealed) { // the tour's «Open my week», a bare link: the newest home kept here
+    D = await kept();
+    if (!D) return gate("chat", W.nodata, W.nodataText);
+  } else {
+    if (!store.key) return gate("key", W.unlockTitle, W.unlockText);
+    try { D = await unseal(sealed, store.key); } catch (e) { return gate("key", W.broken, W.brokenText); }
+    if (D.home) { // an old «My project» button: the newest home wins, and a newer one is kept
+      const newest = await kept();
+      if (newest && newest.at > D.at) D = newest;
+      else if (store.home !== sealed) keepHome(sealed);
+    }
+  }
   if (WORDS[D.lang]) { W = WORDS[D.lang]; LANG = D.lang; } // the client's language wins
   document.documentElement.lang = LANG;
-  document.title = `${D.client} · ${weekLabel()}`;
+  const tab = QS.get("tab");
+  current = D.home ? (D.invoice && (tab === "week" || tab === "invoice") ? tab : "home") : tab === "invoice" ? "invoice" : "week";
+  document.title = D.home ? `${D.client} · ${W.myProject}` : `${D.client} · ${weekLabel()}`;
   render();
 }
 start();
