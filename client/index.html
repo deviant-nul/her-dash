@@ -224,6 +224,8 @@ svg { display: block; overflow: visible; }
 .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .btns { display: flex; gap: 8px; margin-top: 16px; }
 .btns .ink { flex: 1; }
+.acts { display: flex; gap: 8px; flex-shrink: 0; }
+.btn.pdf { width: 42px; height: 42px; padding: 0; border-radius: 16px; }
 .pay { margin-top: 14px; display: grid; gap: 4px; }
 .pay b { font: var(--weight-semibold) 15.5px/1.3 var(--font); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .pay small { font: 13px/1.4 var(--font); color: var(--muted); }
@@ -236,7 +238,7 @@ svg { display: block; overflow: visible; }
 .tabs button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 0 6px; border-radius: 18px; font: var(--weight-medium) 11px/1 var(--font); color: var(--muted); transition: color .25s, background .25s; }
 .tabs svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tabs button.on { color: var(--ink); background: var(--plane); }
-.toast { position: fixed; z-index: 5; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); transform: translate(-50%, 12px); max-width: calc(100% - 32px); padding: 10px 14px; border-radius: 14px; background: var(--ink); color: var(--plane); font: var(--weight-medium) 13px/1.35 var(--font); opacity: 0; pointer-events: none; transition: opacity .25s, transform .3s cubic-bezier(.2,.8,.2,1); }
+.toast { position: fixed; z-index: 5; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); transform: translate(-50%, 12px); width: max-content; max-width: calc(100% - 32px); padding: 10px 14px; border-radius: 14px; background: var(--ink); color: var(--plane); font: var(--weight-medium) 13px/1.35 var(--font); opacity: 0; pointer-events: none; transition: opacity .25s, transform .3s cubic-bezier(.2,.8,.2,1); }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
 /* gates: unlock, unlocked, no data */
@@ -407,7 +409,7 @@ const WORDS = {
     paid: "Paid ✓ Thank you", paidOn: (d) => `Paid ${d} · Thank you`,
     paying: "What you're paying for", payingHint: "Every line flows into the total", total: "Total",
     payBy: "Pay by bank transfer", copy: "Copy details", copied: "Payment details copied", pdf: "PDF",
-    pdfHint: "The PDF is in our chat, right under the card", from: "From", to: "To",
+    pdfHint: "The PDF is in our chat, right under the card", pdfSending: "Sending the PDF to our chat…", from: "From", to: "To",
     unlockTitle: "One tap to unlock", unlockText: "For your privacy, this link carries no key. Tap 🔑 Unlock under the report card in our chat. Once is enough, on every device.",
     unlocked: "Unlocked", unlockedText: "This Telegram account can now open your reports. Go back to the chat and open the report.",
     unlockFail: "Telegram did not keep the key", unlockFailText: "Update Telegram and tap 🔑 Unlock once more.",
@@ -434,7 +436,7 @@ const WORDS = {
     paid: "Оплачено ✓ Дякуємо", paidOn: (d) => `Оплачено ${d} · Дякуємо`,
     paying: "За що ви платите", payingHint: "Кожен рядок впадає в суму", total: "Разом",
     payBy: "Оплата переказом", copy: "Скопіювати реквізити", copied: "Реквізити скопійовано", pdf: "PDF",
-    pdfHint: "PDF у нашому чаті, одразу під карткою", from: "Від", to: "Кому",
+    pdfHint: "PDF у нашому чаті, одразу під карткою", pdfSending: "Надсилаю PDF у наш чат…", from: "Від", to: "Кому",
     unlockTitle: "Один дотик, щоб відкрити", unlockText: "Задля приватності в цьому посиланні немає ключа. Торкніться 🔑 під карткою звіту в нашому чаті — один раз, на всіх пристроях.",
     unlocked: "Відкрито", unlockedText: "Цей акаунт Telegram тепер відкриває ваші звіти. Поверніться в чат і відкрийте звіт.",
     unlockFail: "Telegram не зберіг ключ", unlockFailText: "Оновіть Telegram і торкніться 🔑 ще раз.",
@@ -700,15 +702,40 @@ function dueChip() {
   if (inv.paid) return chip(W.paid);
   return chip(inv.due ? W.due(dateText(inv.due, true)) : W.issued(dateText(inv.issued, true)), true);
 }
+// «↓ PDF» (#268): Signal's deep link, and Signal sends the PDF it sent with the card, by file_id.
+// No server and no download: Telegram shows the file natively. An older snapshot without the
+// bot's name: the hint where the PDF already is.
+function pdfLink() {
+  const key = D.period ? D.period.key.replace(/-/g, "") : "";
+  if (!/^[A-Za-z0-9_]{5,32}$/.test(D.bot || "") || !/^[A-Za-z0-9]{1,32}$/.test(key)) return "";
+  return `/${D.bot}?start=pdf_${key}`;
+}
+function getPdf(e) {
+  if (e) e.stopPropagation(); // the teaser's own tap opens the invoice
+  haptic();
+  const path = pdfLink();
+  toast(path ? W.pdfSending : W.pdfHint);
+  if (path && TG.inside) post("web_app_open_tg_link", { path_full: path });
+  else if (path) window.open(`https://t.me${path}`, "_blank"); // a browser: the same link
+  setTimeout(() => post("web_app_close"), 900);
+}
+function pdfButton(soft) {
+  const b = h("button", soft ? "btn soft" : "btn soft pdf");
+  b.innerHTML = icon(ICON.down);
+  if (soft) b.append(document.createTextNode(W.pdf)); else b.setAttribute("aria-label", W.pdf);
+  b.onclick = getPdf;
+  return b;
+}
 function invoiceTeaser() {
   const card = h("section", "card tap"), head = h("div", "head"), row = h("div", "head");
   head.append(h("span", "eyebrow", `${W.invoiceOf} · ${weekLabel()}`), dueChip());
   row.style.cssText = "margin-top:14px;align-items:flex-end";
   const total = h("div", "num", D.invoice.total ? moneyText(D.invoice.total, D.invoice.currency) : hours(sum(D.lines.map((l) => l.q))));
   total.style.cssText = "font:var(--weight-bold) 40px/1 var(--font);letter-spacing:-.04em";
-  const view = h("button", "btn ink", W.view);
+  const view = h("button", "btn ink", W.view), acts = h("div", "acts");
   view.style.height = "42px";
-  row.append(total, view);
+  acts.append(pdfButton(false), view);
+  row.append(total, acts);
   const strip = h("div", "");
   strip.style.cssText = "display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin-top:16px";
   D.lines.forEach((l, i) => { const seg = h("i", "grow"); seg.style.cssText = `flex:${l.q};min-width:3px;background:${color(i)}`; strip.append(seg); });
@@ -949,9 +976,8 @@ function payCard() {
   for (const line of inv.from.lines) pay.append(h("b", "", spaced(line)));
   pay.append(h("small", "", [inv.from.name, inv.terms].filter(Boolean).join(" · ")));
   card.append(pay);
-  const btns = h("div", "btns"), copy = h("button", "btn ink"), pdf = h("button", "btn soft");
+  const btns = h("div", "btns"), copy = h("button", "btn ink"), pdf = pdfButton(true);
   copy.innerHTML = icon(ICON.copy); copy.append(document.createTextNode(W.copy));
-  pdf.innerHTML = icon(ICON.down); pdf.append(document.createTextNode(W.pdf));
   copy.onclick = async () => {
     const text = [...inv.from.lines, inv.total ? `${W.total}: ${moneyText(inv.total, inv.currency)}` : "", inv.number].filter(Boolean).join("\n");
     let ok = false;
@@ -962,7 +988,6 @@ function payCard() {
     haptic(ok ? "medium" : "light");
     toast(ok ? W.copied : text.split("\n")[0]);
   };
-  pdf.onclick = () => { haptic(); toast(W.pdfHint); setTimeout(() => post("web_app_close"), 900); };
   btns.append(copy, pdf);
   card.append(btns);
   const parties = h("div", "parties");
