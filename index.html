@@ -103,6 +103,7 @@ html, body { background: var(--plane); color: var(--ink); font-family: var(--fon
 body { min-height: 100vh; padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px calc(env(safe-area-inset-bottom, 0px) + 96px); overscroll-behavior-y: none; user-select: none; -webkit-user-select: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 svg { display: block; overflow: visible; }
+[hidden] { display: none !important; } /* a gate hides the tabs: .tabs' flex would win */
 
 /* the period: segmented control and the window, swipe to step */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 3; background: var(--plane); padding-bottom: 6px; margin: 0 -16px; padding-inline: 16px; }
@@ -303,6 +304,135 @@ main { position: relative; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation-delay: 0s !important; } }
 
+/* The week's analytics (#274): concept B «Одне полотно». Tokens from her.design. */
+.wk { margin: 0 -16px; padding-bottom: 24px; }
+.wk-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 4px 20px 0; }
+.wk-head .eyebrow { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wk-t { font: 12px/1 var(--font); color: var(--muted); white-space: nowrap; }
+.wk-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 0 20px; margin-top: 14px; }
+.wk-hero { font: var(--weight-bold) clamp(56px, 18vw, 76px)/0.95 var(--font); letter-spacing: -.055em; white-space: nowrap; }
+.wk-hero small { font-size: 20px; letter-spacing: 0; font-weight: var(--weight-medium); color: var(--ink-2); margin-left: 6px; }
+.wk-money { font: var(--weight-semibold) 18px/1 var(--font); color: var(--ink-2); white-space: nowrap; }
+.wk-rng { padding: 0 20px; margin-top: 16px; }
+.wk-rng .tr { position: relative; height: 4px; border-radius: 2px; background: var(--track); }
+.wk-rng .band { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: color-mix(in oklab, var(--status-good) 60%, var(--track)); }
+.wk-rng .past { position: absolute; top: -3px; width: 10px; height: 10px; margin-left: -5px; border-radius: 5px; background: var(--plane); box-shadow: inset 0 0 0 1.5px var(--muted); }
+.wk-rng .me { position: absolute; top: -8px; width: 4px; height: 20px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 3px var(--plane); transition: left .45s cubic-bezier(.3,1.3,.5,1); }
+.wk-rng .lbl { position: relative; height: 14px; margin-top: 8px; font: 11px/14px var(--font); color: var(--muted); }
+.wk-rng .lbl span { position: absolute; transform: translateX(-50%); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wk-rng .cap { margin-top: 4px; font: 11px/1.3 var(--font); color: var(--muted); }
+.wk-canvas { margin-top: 18px; padding: 14px 0 12px; background: radial-gradient(120% 70% at 50% 30%, color-mix(in oklab, var(--series-7) 10%, var(--plane)), var(--plane)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.wk-lens { display: flex; gap: 4px; padding: 0 20px 8px; }
+.wk-lens button { font: var(--weight-medium) 12px/1 var(--font); padding: 7px 11px; border-radius: 99px; color: var(--muted); transition: background .25s, color .25s; }
+.wk-lens button.on { background: var(--ink); color: var(--plane); }
+.wk-stage { position: relative; margin: 0 12px; height: 352px; transition: height .35s; }
+.wk-stage canvas { position: absolute; top: 18px; left: 0; width: 100%; display: block; }
+.wk-refl { position: absolute; left: 0; right: 0; top: 226px; height: 100px; pointer-events: none; }
+.wk-refl .rb { position: absolute; top: 0; height: 100px; transition: opacity .3s; }
+.wk-refl .rb i { position: absolute; left: 0; right: 0; border-radius: 3px 3px 6px 6px; }
+.wk-refl .rb i.rp { opacity: .8; }
+.wk-refl .rb i.hs { background-image: repeating-linear-gradient(135deg, transparent 0 2px, color-mix(in oklab, var(--plane) 45%, transparent) 2px 3.5px) !important; }
+.wk-refl .rt { position: absolute; left: 50%; transform: translateX(-50%); font: var(--weight-semibold) 12px/1 var(--font); color: var(--ink); white-space: nowrap; }
+.wk-refl .rt em { font-style: normal; margin-left: 3px; display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 8px; background: var(--status-warning); color: #3a2a00; font: 800 10px/1 var(--font); vertical-align: 1px; }
+.wk-feel { position: absolute; left: 0; right: 0; top: 0; height: 18px; pointer-events: none; }
+.wk-feel span { position: absolute; transform: translateX(-50%); font: 13px/18px var(--font); color: var(--muted); }
+.wk-cols { position: absolute; inset: 0; }
+.wk-cols button { position: absolute; top: 0; bottom: 0; border-radius: 16px; transition: background .25s; }
+.wk-cols button span { position: absolute; bottom: -2px; left: 0; right: 0; text-align: center; font: 11px/1.15 var(--font); color: var(--muted); }
+.wk-cols button span b { display: block; font-weight: var(--weight-semibold); color: var(--ink-2); }
+.wk-cols button.sel { background: color-mix(in oklab, var(--ink) 8%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--ink) 25%, transparent); }
+.wk-cols button.sel span b { color: var(--ink); }
+/* the picked column is a slider (#288): the finger owns it, the page neither scrolls nor closes */
+.wk-stage { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.wk-cols button.sel { touch-action: none; cursor: ns-resize; }
+.wk-refl .rb .kn { position: absolute; left: -6px; right: -6px; height: 4px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--plane); }
+.wk-refl .rb.sel .rt { font-size: 15px; }
+.wk-stage.picked .rb:not(.sel) { opacity: .35; }
+.wk-stage .wk-refl, .wk-stage .wk-feel, .wk-stage .wk-cols { transition: opacity .3s; }
+.wk-stage.client { height: 246px; }
+.wk-stage.client .wk-refl, .wk-stage.client .wk-feel, .wk-stage.client .wk-cols { opacity: 0; pointer-events: none; }
+.wk-legend { padding: 18px 20px 0; margin-top: 0; font-size: 12px; gap: 5px 12px; }
+.sw.hatch, .wk .sw.hatch { background-image: repeating-linear-gradient(135deg, transparent 0 2px, color-mix(in oklab, var(--surface) 45%, transparent) 2px 3.5px) !important; }
+.wk-panel { padding: 18px 20px 0; }
+.wk-panel.in > * { animation: wk-in .4s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes wk-in { from { opacity: 0; transform: translateY(8px); } }
+.wk-sgs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.wk-sgs b { display: block; font: var(--weight-bold) 30px/1 var(--font); letter-spacing: -.035em; }
+.wk-sgs b span, .wk-plw b + span { font-size: 14px; margin-left: 2px; vertical-align: 10px; }
+.wk-sgs > div > span { display: block; font: 11px/1.2 var(--font); color: var(--muted); margin-top: 5px; }
+.wk .up { color: var(--good); font-weight: var(--weight-bold); }
+.wk .down { color: var(--status-serious); font-weight: var(--weight-bold); }
+.wk-planes { display: flex; gap: 2px; height: 10px; margin: 20px 0 8px; }
+.wk-planes i { border-radius: 4px; }
+.wk-plw { display: flex; flex-wrap: wrap; gap: 4px 14px; font: 12px/1.3 var(--font); color: var(--ink-2); }
+.wk-plw b { color: var(--ink); }
+.wk-plw b + span { font-size: 11px; vertical-align: 0; }
+.wk-cov { display: flex; gap: 14px; align-items: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+.wk-cov > div:last-child { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; font: 13px/1.3 var(--font); color: var(--ink-2); }
+.wk-cov b { color: var(--ink); font-weight: var(--weight-semibold); }
+.wk-cov .muted { color: var(--muted); font-size: 12px; }
+.wk-blind { font: 13px/1.3 var(--font); color: var(--ink-2); text-align: left; padding: 2px 0; }
+.wk .ring { width: 66px; height: 66px; flex: none; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--ink) calc(var(--p) * 1%), var(--track) 0); position: relative; }
+.wk .ring::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--plane); }
+.wk .ring b { position: relative; z-index: 1; font: var(--weight-bold) 19px/1 var(--font); letter-spacing: -.03em; }
+.wk .ring small { font-size: 11px; }
+.wk-deeper { display: block; margin: 18px auto 0; padding: 8px 12px; font: var(--weight-medium) 13px/1 var(--font); color: var(--muted); }
+
+/* the day, opened in place */
+.wk-dh { display: flex; justify-content: space-between; align-items: flex-end; }
+.wk-dh .eyebrow { text-align: left; }
+.wk-dt { font: var(--weight-bold) 40px/1 var(--font); letter-spacing: -.03em; margin-top: 8px; }
+.wk-dt small { font-size: 17px; color: var(--ink-2); font-weight: var(--weight-medium); letter-spacing: 0; }
+.wk .flag { display: inline-block; margin-left: 8px; padding: 3px 7px; border-radius: 6px; font: var(--weight-semibold) 11px/1.2 var(--font); color: #3a2a00; background: var(--status-warning); vertical-align: 8px; letter-spacing: 0; }
+.wk-git { text-align: right; font: 12px/1.3 var(--font); color: var(--muted); }
+.wk-git b { font: var(--weight-semibold) 17px/1.2 var(--font); color: var(--ink-2); }
+.wk-sig { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 14px; border-radius: 16px; overflow: hidden; background: var(--border); box-shadow: 0 0 0 1px var(--border); }
+.wk-sig div { background: var(--surface); padding: 10px 10px 9px; }
+.wk-sig b { display: block; font: var(--weight-semibold) 20px/1.1 var(--font); letter-spacing: -.02em; }
+.wk-sig b i { font-style: normal; color: var(--muted); font-weight: 400; margin: 0 2px; }
+.wk-sig span { font: 11px/1.2 var(--font); color: var(--muted); }
+.wk .eyebrow.l { text-align: left; margin: 16px 0 8px; }
+.wk .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wk .chip { display: inline-flex; align-items: center; gap: 4px; padding: 9px 12px; border-radius: 99px; font: var(--weight-medium) 13px/1 var(--font); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--border); background: var(--surface); transition: transform .15s, background .2s, color .2s; }
+.wk .chip:active { transform: scale(.94); }
+.wk .chip.on { background: var(--ink); color: var(--plane); box-shadow: none; }
+.wk .chip.less { padding: 9px 13px; font-weight: var(--weight-semibold); }
+.wk .chip.reset { padding: 9px 12px; color: var(--ink); }
+/* an activity outside git: a slider 0–16 h (#288) — name and hours over the track, «−» after it */
+.wk-acts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.wk-acts:empty { display: none; }
+.wk-act { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; }
+.wk-an { justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; font: var(--weight-medium) 13px/1.2 var(--font); color: var(--ink); }
+.wk-an span { color: var(--muted); font-size: 11px; }
+.wk-av { font: var(--weight-semibold) 15px/1 var(--font); }
+.wk-tr { position: relative; height: 40px; touch-action: pan-y; cursor: ew-resize; outline: none; }
+.wk-tr i { position: absolute; left: 0; right: 0; top: 50%; height: 6px; margin-top: -3px; border-radius: 3px; background: linear-gradient(to right, var(--c) var(--p), var(--track) var(--p)); }
+.wk-tr b { position: absolute; top: 50%; left: var(--p); width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.22), inset 0 0 0 1.5px var(--ink); transition: transform .15s; }
+.wk-tr:active b, .wk-tr[data-busy] b { transform: scale(1.18); }
+.wk-tr:focus-visible b { box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 30%, transparent), inset 0 0 0 1.5px var(--ink); }
+.wk .chip .sw { margin-right: 2px; }
+.wk-lines { margin-top: 14px; font: 13px/1.4 var(--font); color: var(--ink-2); }
+.wk-lines summary { list-style: none; cursor: pointer; color: var(--muted); font-weight: var(--weight-medium); padding: 6px 0; }
+.wk-lines summary::-webkit-details-marker { display: none; }
+.wk-lines .row-t { display: flex; gap: 6px; align-items: center; padding: 7px 0; border-top: 1px solid var(--border); }
+.wk-lines .row-t em { margin-left: auto; font-style: normal; color: var(--muted); font-size: 12px; }
+
+/* the dock: the proposal under the thumb */
+.wk-dock { position: fixed; max-width: 560px; margin: 0 auto; z-index: 4; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px); background: linear-gradient(to top, var(--plane) 62%, transparent); }
+.wk-step { flex: 1; display: flex; align-items: center; border-radius: 26px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border), 0 6px 20px rgba(0,0,0,.08); }
+.wk-step button { width: 56px; height: 56px; font: 300 28px/1 var(--font); color: var(--ink-2); transition: transform .15s, opacity .2s; }
+.wk-step button:active { transform: scale(.9); }
+.wk-step button:disabled { opacity: .25; }
+.wk-sv { flex: 1; text-align: center; }
+.wk-sv b { display: block; font: var(--weight-semibold) 15px/1.1 var(--font); }
+.wk-sv span { font: 11px/1 var(--font); color: var(--muted); }
+.wk-ok { width: 56px; height: 56px; border-radius: 28px; flex: none; background: var(--status-good); color: #fff; font: var(--weight-bold) 26px/1 var(--font); box-shadow: 0 6px 20px rgba(0,0,0,.18); transition: transform .15s; }
+.wk-ok:active { transform: scale(.92); }
+.wk-ok:disabled { opacity: .3; }
+.wk-ok.sent { animation: sent .5s cubic-bezier(.3,1.3,.5,1); }
+.wk-toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); }
+body:has(.wk) { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 110px); }
+
 </style>
 </head>
 <body>
@@ -333,6 +463,75 @@ main { position: relative; }
   <button data-screen="invoice"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Рахунок</button>
 </nav>
 <script>
+// The sealed snapshot (her.seal): AES-GCM with the viewer's key, signed by Her (#191 F14), and
+// Telegram's CloudStorage that keeps the key. Shared by the owner's pages (app.js) and the
+// client's (client.js): each defines TG (TG.inside) and post() and hands its bridge events to
+// sealEvent(). Vanilla JS, no library, no network.
+"use strict";
+
+const WEB = "https://web.telegram.org";
+const SEAL_PUB = "BLayuElZ6dmnCOYFYxBR5eDkLJrUjesDaxqyMg4smN6mUTBd7WpdO51X5OZWOJRhFUQ8YcHpFl3VDg6UQ4X-B6Q"; // Her's public key, pinned at the build (her.seal.Signer.public)
+const SEAL_CONTEXT = new TextEncoder().encode("her-seal/1\n");
+
+function unb64(text) {
+  const s = atob(text.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((text.length + 3) % 4));
+  return Uint8Array.from(s, (c) => c.charCodeAt(0));
+}
+
+// «unsigned»: a link from before the signature (#191), «forged»: a signature that is not Her's —
+// both show nothing; «key»: Her's, but this key does not open it.
+class SealError extends Error { constructor(kind) { super(kind); this.kind = kind; } }
+
+async function openSealed(text, keyText) {
+  const dot = text.indexOf(".");
+  if (dot < 0) throw new SealError("unsigned");
+  let raw, sig, pub;
+  try {
+    raw = unb64(text.slice(0, dot));
+    sig = unb64(text.slice(dot + 1));
+    pub = await crypto.subtle.importKey("raw", unb64(SEAL_PUB), { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+  } catch (e) { throw new SealError("forged"); }
+  const signed = new Uint8Array(SEAL_CONTEXT.length + raw.length);
+  signed.set(SEAL_CONTEXT);
+  signed.set(raw, SEAL_CONTEXT.length);
+  if (!(await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, pub, sig, signed))) throw new SealError("forged");
+  let plain;
+  try {
+    const key = await crypto.subtle.importKey("raw", unb64(keyText), "AES-GCM", false, ["decrypt"]);
+    plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
+  } catch (e) { throw new SealError("key"); }
+  const stream = new Blob([plain]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+// ---- Telegram's CloudStorage, as telegram-web-app.js calls it --------------------------------
+const pending = {};
+let calls = 0;
+function nonce() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+function invoke(method, params) {
+  if (!TG.inside) return Promise.reject(new Error("outside Telegram"));
+  return new Promise((ok, fail) => {
+    const id = `her${++calls}_${nonce()}`; // unguessable: a framing page cannot answer for Telegram
+    pending[id] = [ok, fail];
+    post("web_app_invoke_custom_method", { req_id: id, method, params });
+    setTimeout(() => { if (pending[id]) { delete pending[id]; fail(new Error("timeout")); } }, 2500);
+  });
+}
+function sealEvent(type, data) { // CloudStorage's answers, from the page's receive()
+  if (type !== "custom_method_invoked" || !data || !pending[data.req_id]) return;
+  const [ok, fail] = pending[data.req_id];
+  delete pending[data.req_id];
+  if (data.error) fail(new Error(data.error)); else ok(data.result);
+}
+// This webview's own copy: a client that cannot keep the key in CloudStorage, a local preview.
+const localKey = {
+  get(slot) { try { return localStorage.getItem(slot); } catch (e) { return null; } },
+  set(slot, v) { try { localStorage.setItem(slot, v); } catch (e) { /* private mode */ } },
+};
+
 // Her invoice editor (#176): the draft of one client's week (or month) edited by gestures.
 // The total turns on a dial, the borders of the split bar move time between lines, a lock keeps
 // a line. Every gesture is one of #179's operations; ✅ sends them to the bot with sendData.
@@ -799,9 +998,896 @@ function sourcesCard(snap) {
 
 if (typeof module !== "undefined") module.exports = { splitQ, applyOp, replayOps, canonicalOps, approvalText };
 
-// Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
-// the data is in the URL fragment, the design tokens are CSS variables (her.design).
+// The living river (#273): a silhouette streamgraph whose bands breathe and flow, on Canvas 2D.
+// One module for every page that draws it: the client's home and week (concept B, the owner's
+// pick 2026-11-05), the owner's week (#274: hours over the days, a day by touch) and the tour's
+// first step (#230). Built into the page like the tokens; no library, no network.
+//
+// The data stays the picture; physics only makes it breathe (docs/learn, «жива ріка»):
+// 1. Shape: a monotone cubic between days (harmonic slopes, Fritsch–Butland), so a band never
+//    overshoots or dips below zero between two days.
+// 2. Breathing: thickness × (1 + A·Σ a_m sin(κ_m x − ω_m t + φ)), three waves with the
+//    deep-water dispersion ω = √(gκ): the longest crosses the river in ~9 s, long waves run
+//    faster than short ones, the frequencies are incommensurate, the pattern never repeats.
+// 3. Meander: the centre line rides the two longest waves, 2.2 % of the height.
+// 4. Surface: the damped wave equation u_tt = c² u_xx − γ u_t on the river's section, explicit
+//    finite differences, CFL C = c·Δt/Δx ≈ 0.45 at any width, fixed 1/120 s steps, sponges at
+//    the ends; a touch kicks u_t with a gaussian, two ripples run away and fade.
+// 5. Entry: a damped spring per band (ω0 = 7 rad/s, ζ = 0.72: one soft overshoot), 70 ms
+//    apart; the front pours in from the left.
+// Only the lines move: no particles (owner, 2026-11-04). Reduced motion or `still`: one frame.
+// `at` (seconds): a deterministic frame for screenshots and tests, `tap` (0..1) and `after`.
 "use strict";
+
+const River = (() => {
+  const TAU = Math.PI * 2;
+  const STEP = 1 / 120; // the surface's fixed step, whatever the display's rate
+  const N = 120; // points on every edge
+  const AMP = 0.07, QUIET = 0.4; // the breathing; with the days shown it is this much of it
+  const LAMBDA = [0.92, 0.47, 0.26], WAVE = [0.55, 0.3, 0.15], CROSS = 9; // of the width; s
+  const GAMMA = 1.6, SPONGE = 6, EDGE = 10, SPEED = 2.2; // the surface: damping, ends, c = L/2.2 s
+  const KICK = 3.2, BULGE = [-0.15, 0.25]; // a touch, and how far the section may swell
+
+  function monotone(xs, ys, x) { // Fritsch–Carlson monotone cubic at x (xs ascending)
+    const n = xs.length;
+    if (n === 1 || x <= xs[0]) return ys[0];
+    if (x >= xs[n - 1]) return ys[n - 1];
+    let i = 0;
+    while (x > xs[i + 1]) i++;
+    const h = xs[i + 1] - xs[i], t = (x - xs[i]) / h;
+    const d = (k) => (ys[k + 1] - ys[k]) / (xs[k + 1] - xs[k]);
+    const m = (k) => {
+      if (k === 0) return d(0);
+      if (k === n - 1) return d(n - 2);
+      const a = d(k - 1), b = d(k);
+      return a * b <= 0 ? 0 : (2 * a * b) / (a + b); // harmonic mean: monotone on equal steps
+    };
+    const m0 = m(i) * h, m1 = m(i + 1) * h, t2 = t * t, t3 = t2 * t;
+    return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * m0 + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * m1;
+  }
+
+  // ---- the physics: no DOM, so node runs it in the tests -------------------------------------
+  // data: {days: [iso], bands: [{name, color, manual, done, v: [level a day]}], from, to,
+  //        ahead?: {frac, label}, focus?: [first, last] day indexes, numbers?: [text a day],
+  //        week?: [7 short weekday names, Monday first]}
+  class Flow {
+    constructor(data, o) {
+      this.d = data;
+      this.o = Object.assign({ amp: AMP, meander: 1, days: false, height: 150 }, o || {});
+      this.t = 0; this.acc = 0;
+      this.dayAlpha = this.o.days ? 1 : 0;
+      this.spring = data.bands.map(() => ({ x: 0, v: 0 }));
+      this.front = { x: 0, v: 0 };
+    }
+
+    layout(width) {
+      const n = this.d.days.length, pad = 6, H = this.o.height, S = this.d.bands.length;
+      const ahead = this.d.ahead ? Math.max(0.1, Math.min(0.4, this.d.ahead.frac)) : 0;
+      this.W = width; this.H = H;
+      this.x0 = pad; this.xr = pad + (width - 2 * pad) * (1 - ahead); this.xe = width - pad - 6;
+      this.xs = Float32Array.from({ length: N }, (_, j) => this.x0 + (j * (this.xr - this.x0)) / (N - 1));
+      this.dx = (this.xr - this.x0) / (N - 1);
+      this.dayX = this.d.days.map((_, i) => this.x0 + (i * (this.xr - this.x0)) / Math.max(1, n - 1));
+      this.th0 = this.d.bands.map((b) => Float32Array.from(this.xs, (x) => Math.max(0, monotone(this.dayX, b.v, x))));
+      let peak = 1e-6;
+      for (let j = 0; j < N; j++) { let s = 0; for (const row of this.th0) s += row[j]; peak = Math.max(peak, s); }
+      this.k = (H * 0.86) / peak;
+      const L = this.xr - this.x0, k1 = TAU / (LAMBDA[0] * L), c1 = L / CROSS, g = c1 * c1 * k1;
+      this.waves = LAMBDA.map((l, m) => { const k = TAU / (l * L); return { k, w: Math.sqrt(g * k), a: WAVE[m] }; });
+      let seed = 7;
+      const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+      this.phase = this.d.bands.map(() => this.waves.map(() => rnd() * TAU));
+      this.c = L / SPEED;
+      this.u = new Float32Array(N); this.uOld = new Float32Array(N); this.uNew = new Float32Array(N);
+      this.th = this.d.bands.map(() => new Float32Array(N)); // reused every frame: no garbage
+      this.edges = Array.from({ length: S + 1 }, () => new Float32Array(N));
+      this.stars = this.d.bands.map((b) => { // ✦ where a closed feature's band last runs strong
+        if (!b.done) return -1;
+        const top = Math.max(...b.v);
+        for (let i = b.v.length - 1; i >= 0; i--) if (top > 0 && b.v[i] >= top * 0.5) return Math.round((this.dayX[i] - this.x0) / this.dx);
+        return -1;
+      });
+    }
+
+    cfl() { return (this.c * STEP) / this.dx; }
+    amplitude() { return this.o.amp * (1 - (1 - QUIET) * this.dayAlpha); }
+
+    kick(f) { // a gaussian push on u_t at a fraction of the river
+      const j0 = f * (N - 1);
+      for (let j = 0; j < N; j++) this.uOld[j] -= (KICK * Math.exp(-((j - j0) ** 2) / 18)) / 120;
+    }
+
+    step(dt) { // the damped wave equation, explicit, CFL-safe, sponges at the ends
+      const C2 = ((this.c * dt) / this.dx) ** 2, { u, uOld, uNew } = this;
+      for (let j = 1; j < N - 1; j++) {
+        const damp = ((GAMMA + (j < EDGE || j > N - 1 - EDGE ? SPONGE : 0)) * dt) / 2;
+        uNew[j] = (2 * u[j] - uOld[j] * (1 - damp) + C2 * (u[j + 1] - 2 * u[j] + u[j - 1])) / (1 + damp);
+      }
+      uNew[0] = uNew[1]; uNew[N - 1] = uNew[N - 2];
+      this.uOld = u; this.u = uNew; this.uNew = uOld;
+    }
+
+    advance(dt) {
+      this.t += dt;
+      const w0 = 7, z = 0.72;
+      this.spring.forEach((sp, s) => {
+        if (this.t < s * 0.07) return;
+        sp.v += (-w0 * w0 * (sp.x - 1) - 2 * z * w0 * sp.v) * dt; sp.x += sp.v * dt;
+      });
+      this.front.v += (-36 * (this.front.x - 1.02) - 2 * 0.9 * 6 * this.front.v) * dt;
+      this.front.x += this.front.v * dt;
+      this.acc += dt;
+      while (this.acc >= STEP) { this.step(STEP); this.acc -= STEP; }
+      this.dayAlpha += ((this.o.days ? 1 : 0) - this.dayAlpha) * Math.min(1, dt * 9);
+    }
+
+    settle() { this.spring.forEach((sp) => { sp.x = 1; sp.v = 0; }); this.front.x = 1; this.front.v = 0; this.dayAlpha = this.o.days ? 1 : 0; }
+
+    // The edges of every band at time t: band s lies between edges[s] and edges[s + 1].
+    geometry(still) {
+      const { H, xs, th, edges, t } = this, S = th.length;
+      const A = still ? 0 : this.amplitude();
+      const B = still ? 0 : 0.022 * H * this.o.meander * (1 - (1 - QUIET) * this.dayAlpha);
+      for (let s = 0; s < S; s++) {
+        const row = th[s], base = this.th0[s], ph = this.phase[s], grow = still ? 1 : Math.max(0, this.spring[s].x);
+        for (let j = 0; j < N; j++) {
+          let e = 0;
+          for (let m = 0; m < 3; m++) { const w = this.waves[m]; e += w.a * Math.sin(w.k * xs[j] - w.w * t + ph[m]); }
+          row[j] = base[j] * this.k * (1 + A * e) * grow;
+        }
+      }
+      const w1 = this.waves[0], w2 = this.waves[1];
+      for (let j = 0; j < N; j++) {
+        const mid = H / 2 + B * (0.7 * Math.sin(w1.k * xs[j] - w1.w * t + 1.3) + 0.3 * Math.sin(w2.k * xs[j] - w2.w * t + 0.4));
+        let tot = 0;
+        for (let s = 0; s < S; s++) tot += th[s][j];
+        // the ripple swells the whole section alike: a bulge, never a tear
+        const f = tot > 1 && !still ? 1 + Math.max(BULGE[0], Math.min(BULGE[1], (this.u[j] * H) / tot)) : 1;
+        let y = mid - (tot * f) / 2;
+        edges[0][j] = y;
+        for (let s = 0; s < S; s++) { y += th[s][j] * f; edges[s + 1][j] = y; }
+      }
+      return edges;
+    }
+
+    band(x, y) { // the band under a point of the last geometry, or -1
+      const j = Math.max(0, Math.min(N - 1, Math.round((x - this.x0) / this.dx))), e = this.edges;
+      for (let s = 0; s + 1 < e.length; s++) if (y >= e[s][j] - 2 && y <= e[s + 1][j] + 2 && e[s + 1][j] - e[s][j] > 0.5) return s;
+      return -1;
+    }
+
+    day(x) { // the nearest day to x
+      let best = 0;
+      this.dayX.forEach((dx, i) => { if (Math.abs(dx - x) < Math.abs(this.dayX[best] - x)) best = i; });
+      return best;
+    }
+  }
+
+  // ---- the view: a canvas, the page's tokens, a frame loop that sleeps when nobody looks ------
+  // opts: {amp, meander, days, still, at, tap, after, height, foot, onTap(band, day, x, y)}
+  class River {
+    constructor(canvas, data, opts) {
+      this.c = canvas;
+      this.g = canvas.getContext("2d");
+      this.d = data;
+      this.o = Object.assign({ still: false, height: 150, foot: 26 }, opts || {});
+      this.f = new Flow(data, this.o);
+      this.frames = []; this.draws = 0;
+      this.running = false; this.seen = true;
+      this.retheme(false);
+      this.resize();
+      // a tap, not the start of a scroll: up within 8 px and 400 ms of down
+      this.onDown = (e) => { this.down = [e.clientX, e.clientY, performance.now()]; };
+      this.onUp = (e) => {
+        const d = this.down; this.down = null;
+        if (d && Math.hypot(e.clientX - d[0], e.clientY - d[1]) < 8 && performance.now() - d[2] < 400) this.touch(e);
+      };
+      canvas.addEventListener("pointerdown", this.onDown);
+      canvas.addEventListener("pointerup", this.onUp);
+      this.observers = [];
+      if (typeof IntersectionObserver !== "undefined") this.observers.push(new IntersectionObserver((es) => es.forEach((en) => { this.seen = en.isIntersecting; if (this.seen) this.play(); else this.pause(); })));
+      if (typeof ResizeObserver !== "undefined") this.observers.push(new ResizeObserver(() => { if (Math.abs(this.width() - this.f.W) > 1) { this.resize(); if (!this.running) this.frame(); } }));
+      this.observers.forEach((o) => o.observe(canvas));
+      this.onVisible = () => (document.hidden ? this.pause() : this.play());
+      document.addEventListener("visibilitychange", this.onVisible);
+      if (this.o.still) { this.f.settle(); this.frame(); }
+      else if (this.o.at) {
+        this.simulate(this.o.at);
+        if (this.o.tap) { this.f.kick(this.o.tap); this.simulate(this.o.after || 0); }
+      } else this.play();
+    }
+
+    width() { return Math.max(200, this.c.getBoundingClientRect().width || 0); }
+
+    retheme(draw) { // the page's tokens; a Telegram theme change calls it again
+      const css = getComputedStyle(this.c), v = (n) => css.getPropertyValue(n).trim();
+      this.T = { surface: v("--surface"), ink: v("--ink"), ink2: v("--ink-2"), muted: v("--muted"), font: v("--font") || "system-ui, sans-serif" };
+      this.colors = this.d.bands.map((b) => (b.color.startsWith("var(") ? v(b.color.slice(4, -1)) : b.color));
+      this.hatch = null;
+      if (draw !== false && !this.running) this.frame();
+    }
+
+    resize() {
+      this.dpr = Math.min(2, (typeof window !== "undefined" && window.devicePixelRatio) || 1);
+      const W = this.width(), H = this.o.height;
+      this.c.width = Math.round(W * this.dpr);
+      this.c.height = Math.round((H + this.o.foot) * this.dpr);
+      this.c.style.height = H + this.o.foot + "px";
+      this.hatch = null; // the device pixel ratio may have changed
+      this.f.layout(W);
+    }
+
+    pattern() { // the hatch of the work outside git: drawn once, anchored to the canvas, still
+      const p = document.createElement("canvas"), q = p.getContext("2d"), size = Math.round(7 * this.dpr);
+      p.width = p.height = size;
+      q.strokeStyle = this.T.surface; q.globalAlpha = 0.42; q.lineWidth = 1.7 * this.dpr;
+      q.beginPath(); q.moveTo(0, size); q.lineTo(size, 0); q.moveTo(-size / 2, size / 2); q.lineTo(size / 2, -size / 2); q.moveTo(size / 2, size * 1.5); q.lineTo(size * 1.5, size / 2); q.stroke();
+      const pattern = this.g.createPattern(p, "repeat"); // drawn in device pixels: back to CSS pixels
+      if (pattern && pattern.setTransform && typeof DOMMatrix !== "undefined") pattern.setTransform(new DOMMatrix().scale(1 / this.dpr));
+      return pattern;
+    }
+
+    touch(e) {
+      if (this.dead) return;
+      const r = this.c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, f = this.f;
+      if (x > f.xr + 4) return;
+      if (!this.o.still) { f.kick((x - f.x0) / (f.xr - f.x0)); this.play(); }
+      if (this.o.onTap) this.o.onTap(f.band(x, y), f.day(x), x, y);
+    }
+
+    draw(still) {
+      const g = this.g, f = this.f, T = this.T, { W, H, xs } = f, foot = this.o.foot, n = xs.length;
+      if (!this.hatch) this.hatch = this.pattern();
+      this.draws++;
+      g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      g.clearRect(0, 0, W, H + foot);
+      const e = f.geometry(still), S = this.d.bands.length;
+      const front = still ? W : Math.max(0, Math.min(W, f.front.x * W));
+      g.save();
+      g.beginPath(); g.rect(0, 0, front, H + foot); g.clip();
+      for (let s = 0; s < S; s++) {
+        const a = e[s], z = e[s + 1];
+        g.beginPath();
+        g.moveTo(xs[0], a[0]);
+        for (let j = 1; j < n; j++) g.lineTo(xs[j], a[j]);
+        for (let j = n - 1; j >= 0; j--) g.lineTo(xs[j], z[j]);
+        g.closePath();
+        g.globalAlpha = 0.95; g.fillStyle = this.colors[s]; g.fill();
+        if (this.d.bands[s].manual) { g.fillStyle = this.hatch; g.fill(); }
+        g.globalAlpha = 1; g.strokeStyle = T.surface; g.lineWidth = 0.9;
+        g.beginPath(); g.moveTo(xs[0], z[0]); for (let j = 1; j < n; j++) g.lineTo(xs[j], z[j]); g.stroke();
+      }
+      if (this.d.focus) { // the report's week in focus: the days before it fade into the card
+        const step = f.dayX.length > 1 ? f.dayX[1] - f.dayX[0] : 0, fx = f.dayX[this.d.focus[0]] - step / 2;
+        if (fx > f.x0) {
+          const fade = g.createLinearGradient(fx - 14, 0, fx + 4, 0);
+          fade.addColorStop(0, "rgba(0,0,0,0.62)"); fade.addColorStop(1, "rgba(0,0,0,0)");
+          g.globalCompositeOperation = "destination-out"; g.fillStyle = fade; g.fillRect(0, 0, fx + 4, H); g.globalCompositeOperation = "source-over";
+        }
+      }
+      f.stars.forEach((j, s) => { if (j >= 0) star(g, xs[j], (e[s][j] + e[s + 1][j]) / 2, 6, T.ink, T.surface); });
+      g.restore();
+      const top = e[0], bottom = e[S], endY = (top[n - 1] + bottom[n - 1]) / 2, done = front >= f.xr - 1;
+      const ph = still ? 0.35 : (f.t % 1.8) / 1.8;
+      if (this.d.ahead && done) { // the channel to the deadline: ink, dashed, the date pulses
+        const lx = f.xe, ly = H / 2, xr = f.xr, ty = top[n - 1], by = bottom[n - 1];
+        const edge = (y0, dy) => { g.moveTo(xr, y0); g.bezierCurveTo(xr + 40, y0, lx - 30, ly + dy, lx, ly); };
+        g.beginPath(); edge(ty, -8); g.bezierCurveTo(lx - 30, ly + 8, xr + 40, by, xr, by); g.closePath();
+        g.globalAlpha = 0.07; g.fillStyle = T.ink; g.fill();
+        g.globalAlpha = 0.45; g.strokeStyle = T.ink; g.lineWidth = 1.2; g.setLineDash([3, 3]);
+        g.beginPath(); edge(ty, -8); edge(by, 8); g.stroke(); g.setLineDash([]);
+        if (!still) { g.globalAlpha = 0.5 * (1 - ph); g.lineWidth = 1.5; g.beginPath(); g.arc(lx, ly, 6 + 9 * ph, 0, TAU); g.stroke(); }
+        g.globalAlpha = 1; g.fillStyle = T.ink; g.beginPath(); g.arc(lx, ly, 5.5, 0, TAU); g.fill();
+      }
+      if (done) { // today pulses at the river's end
+        if (!still) { g.beginPath(); g.arc(f.xr, endY, 5 + 11 * ph, 0, TAU); g.globalAlpha = 0.24 * (1 - ph); g.fillStyle = T.ink; g.fill(); }
+        g.globalAlpha = 1; g.beginPath(); g.arc(f.xr, endY, 4, 0, TAU); g.fillStyle = T.ink; g.fill();
+        g.strokeStyle = T.surface; g.lineWidth = 1.5; g.stroke();
+      }
+      this.labels();
+      g.globalAlpha = 1;
+    }
+
+    labels() { // the ends quietly; with the days: a dotted line, the weekday and the date each
+      const g = this.g, f = this.f, T = this.T, H = f.H, da = f.dayAlpha, n = this.d.days.length, ahead = this.d.ahead;
+      const wk = this.d.week || ["M", "T", "W", "T", "F", "S", "S"];
+      let room = f.W;
+      if (ahead && da < 0.5) { g.font = `600 12px ${T.font}`; room = f.W - 2 - g.measureText(ahead.label).width - 10; }
+      g.font = `10px ${T.font}`;
+      if (da > 0.01) {
+        const every = n <= 16 ? 1 : 7; // a long river: Mondays only, by their date
+        this.d.days.forEach((iso, i) => {
+          const dd = new Date(iso + "T12:00:00"), dow = (dd.getDay() + 6) % 7, x = f.dayX[i], mark = every === 1 || dow === 0;
+          g.globalAlpha = (mark ? 0.18 : 0.08) * da; g.strokeStyle = T.ink; g.lineWidth = 1; g.setLineDash([1, 3]);
+          g.beginPath(); g.moveTo(x, 2); g.lineTo(x, H); g.stroke(); g.setLineDash([]);
+          if (!mark || x + 6 > room) return;
+          g.textAlign = i === 0 ? "left" : i === n - 1 && !ahead ? "right" : "center";
+          g.globalAlpha = 0.8 * da; g.fillStyle = T.muted;
+          g.fillText(every === 1 ? wk[dow] : String(dd.getDate()), x, H + 11);
+          if (every === 1) { g.globalAlpha = 0.5 * da; g.fillText(String(dd.getDate()), x, H + 23); }
+          if (this.d.numbers && this.d.numbers[i]) { g.globalAlpha = 0.9 * da; g.fillStyle = T.ink2; g.font = `600 9.5px ${T.font}`; g.fillText(this.d.numbers[i], x, 10); g.font = `10px ${T.font}`; }
+        });
+      }
+      g.globalAlpha = 1 - da; g.fillStyle = T.muted; g.font = `12px ${T.font}`;
+      g.textAlign = "left"; g.fillText(this.d.from, f.x0, H + 17);
+      if (!ahead) { g.textAlign = "right"; g.fillText(this.d.to, f.xr, H + 17); return; }
+      g.save(); g.fillStyle = T.ink; g.font = `600 12px ${T.font}`; g.textAlign = "right";
+      g.globalAlpha = 1 - da; g.fillText(ahead.label, f.W - 2, H + 17);
+      g.globalAlpha = da; g.fillText(ahead.label, f.W - 2, H / 2 - 16); // with the days: over the dot
+      g.restore();
+      const half = g.measureText(this.d.to).width / 2; // «Today» under the river's end, clear of the date
+      g.textAlign = "center"; g.fillText(this.d.to, Math.min(f.xr, room - half), H + 17);
+    }
+
+    frame() { this.draw(Boolean(this.o.still)); }
+
+    tick(now) {
+      if (!this.running) return;
+      const dt = Math.min(0.05, (now - (this.prev || now)) / 1000);
+      this.prev = now;
+      const t0 = performance.now();
+      this.f.advance(dt);
+      this.draw(false);
+      this.frames.push(performance.now() - t0);
+      if (this.frames.length > 240) this.frames.shift();
+      this.raf = requestAnimationFrame((n) => this.tick(n));
+    }
+
+    simulate(seconds) { // deterministic: fixed 1/60 s steps (screenshots, tests: ?at=<s>)
+      for (let k = 0; k < Math.round(seconds * 60); k++) this.f.advance(1 / 60);
+      this.draw(false);
+    }
+
+    play() {
+      if (this.dead || this.o.still || this.o.at || this.running || !this.seen || document.hidden) return;
+      this.running = true; this.prev = 0;
+      this.raf = requestAnimationFrame((n) => this.tick(n));
+    }
+    pause() { // one loop at most: a resume never finds the old frame still queued
+      this.running = false;
+      if (this.raf) cancelAnimationFrame(this.raf);
+      this.raf = 0;
+    }
+    destroy() { // the page drew a new screen (or a new river on the same canvas): nothing stays behind
+      this.dead = true;
+      this.pause();
+      if (this.c.removeEventListener) { this.c.removeEventListener("pointerdown", this.onDown); this.c.removeEventListener("pointerup", this.onUp); }
+      this.observers.forEach((o) => o.disconnect());
+      document.removeEventListener("visibilitychange", this.onVisible);
+    }
+    setData(data) { // new numbers on the same river (#291): the clock, the waves and the ripples
+      // stay, the entry is over; an edit reshapes the bands in place, nothing pours in again
+      const f = this.f, u = f.u, uOld = f.uOld;
+      this.d = data; f.d = data;
+      f.layout(f.W);
+      f.u = u; f.uOld = uOld;
+      f.spring = data.bands.map(() => ({ x: 1, v: 0 }));
+      f.front.x = Math.max(1, f.front.x); f.front.v = 0;
+      this.retheme(false);
+      if (!this.running) this.frame();
+    }
+    set(opts) { // the Days switch, the owner's sliders: a still river redraws once, a live one eases
+      Object.assign(this.o, opts); Object.assign(this.f.o, opts);
+      if (this.o.still || this.o.at) { this.f.dayAlpha = this.f.o.days ? 1 : 0; this.frame(); } else this.play();
+    }
+    cost() { const f = this.frames.slice().sort((a, b) => a - b); return f.length ? f[Math.floor(f.length / 2)] : 0; }
+  }
+
+  function star(g, x, y, r, ink, halo) { // ✦ a closed feature: ink, a thin halo of the surface
+    g.save(); g.translate(x, y); g.globalAlpha = 1;
+    g.beginPath();
+    for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4 - Math.PI / 2, rr = i % 2 ? r * 0.32 : r; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+    g.closePath(); g.lineWidth = 2; g.strokeStyle = halo; g.stroke(); g.fillStyle = ink; g.fill();
+    g.restore();
+  }
+
+  River.Flow = Flow;
+  River.monotone = monotone;
+  River.STEP = STEP;
+  return River;
+})();
+
+if (typeof module !== "undefined") module.exports = River;
+
+// The week's analytics (#274), concept B «Одне полотно» (the owner's pick, 2026-11-05): the
+// living river is the screen, each day a column through it, the day's hours hang under it; a
+// tap on a column opens the day in place. The proposal is one capsule, − 50,75 + and ✅.
+// This file only declares: the model below runs under node in the tests (tests/test_week_app.py),
+// the screen uses app.js's helpers (h, haptic, post, gate, color, hrs) and river.js when called.
+"use strict";
+
+// ---- the model: the bot's arithmetic (her.week_app.total, monitor.hours, Proposal.range) ------
+function pyRound(x) { // Python's round(): half to even
+  const f = Math.floor(x), d = x - f;
+  if (d > 0.5) return f + 1;
+  if (d < 0.5) return f;
+  return f % 2 === 0 ? f : f + 1;
+}
+function dayQ(model, feel, acts) { return (feel == null ? model : Math.max(0, feel - acts)) + acts; }
+function weekTotal(whole, held, steps, step) {
+  if (!steps || !whole || whole === held) return whole;
+  let target = pyRound((whole / 4) * (1 + step * steps) * 4);
+  if (target === whole) target += steps > 0 ? 1 : -1;
+  return Math.max(held + 1, target);
+}
+// The snapshot with the page's edits ({steps, feel: {day: q|null}, acts: {"day:code": q}}):
+// each day's quarters, the total the bot will approve and the range by activity.
+function weekState(W, E) {
+  const days = W.d.map((row, i) => {
+    const acts = Object.assign({}, row[2]);
+    for (const k in E.acts) { const [d, c] = k.split(":"); if (Number(d) === i) acts[c] = E.acts[k]; }
+    const feel = i in E.feel ? E.feel[i] : row[1];
+    const quarters = (by) => Object.values(by).reduce((x, y) => x + y, 0) + row[3];
+    const a = quarters(acts), a0 = quarters(row[2]), total = dayQ(row[0], feel, a);
+    // origRepo: the repo's quarters the snapshot's lines were split from (the river scales them)
+    return { i, model: row[0], feel, acts, own: row[3], act: a, total, repo: total - a, origRepo: dayQ(row[0], row[1], a0) - a0 };
+  });
+  const whole = days.reduce((x, d) => x + d.total, 0), held = days.reduce((x, d) => x + d.act, 0);
+  let range;
+  if (W.d.every((row) => row[7])) { // the past P50s (two or more): each day under the highest and the lowest
+    let lo = 0, hi = 0;
+    days.forEach((d) => { const r = W.d[d.i][7]; lo += d.feel != null ? d.total : r[0] + d.act; hi += d.feel != null ? d.total : r[1] + d.act; });
+    range = [pyRound(lo / 4), pyRound(hi / 4)];
+  } else range = [pyRound((whole / 4) * (1 - 0.1)), pyRound((whole / 4) * (1 + 0.1))];
+  return { days, whole, held, total: weekTotal(whole, held, E.steps, W.sp), range };
+}
+// ---- the drag (#288): a day like an equalizer's slider, 15 min a step, 16 h at most -------------
+const MAX_Q = 64; // quarters: a day and its activities (her.daywork.MAX_DAY)
+const SLOP = 6; // px before a touch becomes a drag: a tap stays a tap
+// A drag along one axis: the finger's travel → quarters within [lo, hi], `px` a quarter. Pure:
+// the screen feeds it the pointer and applies what it returns — `q` the value, `tick` a new
+// quarter (a haptic), `stop` "lo"/"hi" when it first leans on an end, `swipes` Telegram's
+// vertical swipe (off from the touch to the release: the page neither scrolls nor closes),
+// `prevent` the move is the drag's (not the page's).
+function drag(axis, from, lo, hi, px) {
+  let x0 = 0, y0 = 0, start = 0, on = false, off = false, q = from, leaning = null;
+  return {
+    get on() { return on; },
+    down(x, y) { x0 = x; y0 = y; return { swipes: false }; },
+    move(x, y) {
+      const along = axis === "y" ? y - y0 : x - x0, across = axis === "y" ? x - x0 : y - y0;
+      if (off) return {};
+      if (!on) {
+        if (Math.abs(along) < SLOP && Math.abs(across) < SLOP) return { prevent: true };
+        if (Math.abs(across) > Math.abs(along)) { off = true; return {}; } // not this slider's axis
+        on = true; start = along > 0 ? SLOP : -SLOP; // no jump: the slop is not a step
+      }
+      const raw = from + Math.round((along - start) / px), next = Math.min(hi, Math.max(lo, raw));
+      const at = raw < lo ? "lo" : raw > hi ? "hi" : null, stop = at && at !== leaning ? at : null;
+      leaning = at;
+      const tick = next !== q;
+      q = next;
+      return { q, tick, stop, prevent: true };
+    },
+    up() { return { tap: !on && !off, moved: on, q, swipes: true }; },
+  };
+}
+// Quarters an activity may grow by on its day: the activities ≤ 16 h, and a day without a feel
+// (the model plus the activities) ≤ 16 h; a day the model alone puts over it only shrinks.
+function room(model, feel, act) { return Math.max(0, feel == null ? MAX_Q - model - act : MAX_Q - act); }
+// The day dragged to `q`: a feel of any quarter, never under the day's activities (the repo would
+// go negative) and never over 16 h: a day the model alone put over it snaps into 16 h on the
+// first step (#291, as her.week_app.parse takes it); back on the snapshot's own value, no edit.
+// Returns the value kept.
+function setDay(W, E, i, q) {
+  const d = weekState(W, E).days[i], row = W.d[i];
+  if (q !== d.total) q = Math.max(d.act, Math.min(MAX_Q, q));
+  if (q === dayQ(row[0], row[1], d.act)) delete E.feel[i];
+  else E.feel[i] = q;
+  return q;
+}
+// «↺»: the model again, no feel — unless that takes the day past 16 h (the model plus the
+// activities): false, nothing changed.
+function resetDay(W, E, i) {
+  const d = weekState(W, E).days[i], t = dayQ(d.model, null, d.act);
+  if (t > MAX_Q && t > d.total) return false;
+  if (W.d[i][1] == null) delete E.feel[i]; else E.feel[i] = null;
+  return true;
+}
+// An activity's quarters on a day: 0 removes it; at most what room() leaves and 16 h (one stored
+// over 16 h before the rule snaps into it). Returns the value kept.
+function setAct(W, E, i, code, q) {
+  const d = weekState(W, E).days[i], cur = d.acts[code] || 0, base = W.d[i][2][code] || 0;
+  q = Math.max(0, Math.min(cur + room(d.model, d.feel, d.act), MAX_Q, q));
+  if (q === base) delete E.acts[`${i}:${code}`];
+  else E.acts[`${i}:${code}`] = q;
+  return q;
+}
+// The decision for sendData: the final state, not a history (the screen checks the 4096 bytes).
+function decisionText(W, E, editor) {
+  const st = weekState(W, E);
+  const feel = Object.keys(E.feel).map(Number).filter((i) => E.feel[i] !== W.d[i][1]).sort((a, b) => a - b).map((i) => [i, E.feel[i]]);
+  const acts = Object.keys(E.acts).filter((k) => { const [d, c] = k.split(":"); return E.acts[k] !== (W.d[Number(d)][2][c] || 0); })
+    .sort().map((k) => { const [d, c] = k.split(":"); return [Number(d), c, E.acts[k]]; });
+  const out = { w: 1, c: W.c[0], k: W.k, m: W.m, s: E.steps, f: feel, a: acts, q: st.total };
+  if (editor) out.e = 1;
+  return JSON.stringify(out);
+}
+
+// ---- the screen ----------------------------------------------------------------------------
+const WEEK_FEEL = [["🌤", "Легкий"], ["⛅", "Звичайний"], ["🔥", "Насичений"], ["🌋", "Жесть"]];
+const WEEK_DAYS = ["пн", "вт", "ср", "чт", "пт", "сб", "нд"];
+const LONG_DAY = 48; // quarters: the owner's «!» over 12 h
+const Q_PX = 4; // px of a finger's travel a quarter: a 16 h day in 256 px
+function week(W) {
+  const E = { steps: W.s, feel: {}, acts: {} };
+  const n = W.d.length, iso = (i) => { const d = day(W.f); d.setDate(d.getDate() + i); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  const dow = (i) => (day(iso(i)).getDay() + 6) % 7;
+  const rateCents = W.c[3] != null ? Math.round(Number(W.c[3]) * 100) : null;
+  const money = (q) => {
+    if (rateCents == null) return "";
+    const cents = Math.round((q * rateCents) / 4), sym = W.c[2];
+    const text = amount((cents / 100).toFixed(2));
+    return sym.length === 1 ? sym + text : `${text} ${sym}`;
+  };
+  const changed = () => E.steps !== W.s || Object.keys(E.feel).length + Object.keys(E.acts).length > 0;
+  // a kind's colour: its line's slot in the proposal, else the slots after the lines
+  const lineOf = {}; W.l.forEach((l, i) => { lineOf[l[0]] = i; });
+  const codes = Object.keys(W.kc);
+  const slotOf = (code) => { const k = W.kc[code][1]; return k in lineOf ? lineOf[k] : Math.min(8, W.l.length + codes.indexOf(code)); };
+  let sel = -1, lens = QS_WEEK.get("lens") === "client" && W.fw && W.fw.days ? "client" : "owner", sent = false;
+
+  document.querySelector(".top").hidden = true;
+  document.getElementById("tabs").hidden = true;
+  const screen = h("section", "screen on wk");
+  screen.innerHTML = `
+  <header class="wk-head"><span class="eyebrow">${esc(W.c[1])}</span><span class="wk-t">${esc(W.t)}</span></header>
+  <div class="wk-top"><div class="wk-hero num" id="wk-hero"></div><div class="wk-money num" id="wk-money"></div></div>
+  <div class="wk-rng" id="wk-rng"></div>
+  <div class="wk-canvas">
+    <div class="wk-lens" role="tablist"><button class="${lens === "owner" ? "on" : ""}" data-l="owner">Години</button>${W.fw && W.fw.days ? `<button class="${lens === "client" ? "on" : ""}" data-l="client">Як бачить клієнт</button>` : ""}</div>
+    <div class="wk-stage" id="wk-stage"><canvas id="wk-rv" aria-label="Тиждень за фічами"></canvas><div class="wk-refl"></div><div class="wk-feel"></div><div class="wk-cols"></div></div>
+    <div class="legend wk-legend"></div>
+  </div>
+  <section class="wk-panel" id="wk-panel"></section>`;
+  // the dock and the toast live on the body: the screen's entry animation leaves a transform,
+  // and a fixed bar inside it would scroll with the page
+  const dock = h("nav", "wk-dock");
+  dock.innerHTML = `<div class="wk-step"><button id="wk-minus" aria-label="−10 %">−</button><div class="wk-sv"><b class="num" id="wk-sv"></b><span>±10 %</span></div><button id="wk-plus" aria-label="+10 %">+</button></div><button class="wk-ok" id="wk-ok" aria-label="Затвердити">✓</button>`;
+  const toast = h("div", "toast wk-toast");
+  toast.id = "wk-toast";
+  main.replaceChildren(screen);
+  document.body.append(dock, toast);
+  const $ = (id) => screen.querySelector(id) || document.querySelector(id);
+  const stage = $("#wk-stage");
+
+  // -- the river: the owner's lens (hours as they are), or the client's (#273)
+  let river = null;
+  function riverData() {
+    if (lens === "client") {
+      const f = W.fw, first = day(f.first), ds = [];
+      for (let i = 0; i < f.days; i++) { const d = new Date(first); d.setDate(d.getDate() + i); ds.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`); }
+      return { days: ds, bands: f.lines.map((l) => ({ name: l.t, color: color(l.slot), manual: l.manual, v: l.v })), from: dm(first), to: dm(day(ds[ds.length - 1])), week: WEEK_DAYS };
+    }
+    const st = weekState(W, E), bands = [];
+    codes.forEach((c) => {
+      const v = st.days.map((d) => d.acts[c] || 0);
+      if (v.some(Boolean)) bands.push({ name: W.kc[c][0], color: color(slotOf(c)), manual: true, v });
+    });
+    W.l.forEach((l, i) => {
+      if (l[2]) return; // an activity's own line: its band is the activity's above
+      const v = st.days.map((d) => (d.origRepo ? (l[3][d.i] * d.repo) / d.origRepo : 0));
+      if (v.some(Boolean)) bands.push({ name: l[1] || `#${i + 1}`, color: color(i), v });
+    });
+    if (!bands.length) bands.push({ name: "", color: "var(--track)", v: st.days.map((d) => d.total) });
+    return { days: st.days.map((d) => iso(d.i)), bands, from: dm(day(iso(0))), to: dm(day(iso(n - 1))), week: WEEK_DAYS };
+  }
+  function drawRiver() {
+    if (river) river.destroy();
+    const owner = lens === "owner";
+    river = new River($("#wk-rv"), riverData(), { height: 200, foot: owner ? 0 : 26, days: owner, still: reduced || Boolean(QS_WEEK.get("still")), at: Number(QS_WEEK.get("at")) || 0, onTap: (_b, i) => { if (owner) pick(i); } });
+    stage.classList.toggle("client", !owner);
+  }
+  new MutationObserver(() => river && river.retheme()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  screen.querySelectorAll(".wk-lens button").forEach((b) => b.addEventListener("click", () => {
+    if (b.dataset.l === lens) return;
+    lens = b.dataset.l; haptic("select");
+    screen.querySelectorAll(".wk-lens button").forEach((x) => x.classList.toggle("on", x === b));
+    drawRiver(); layout();
+  }));
+
+  // -- the columns: the day's hours under the river, its feel over it, a tap opens it. A picked
+  // column is a slider (#288): its bar's end follows the finger, 15 min a step, 16 h at most.
+  const BAR = 76; // px: a 16 h bar, its live number clear of the dates
+  let scale = MAX_Q, X = [], bw = 30;
+  function bar(d) {
+    let y = 0, segs = "";
+    const parts = [[d.repo + d.own, "var(--ink)", false], ...codes.map((c) => [d.acts[c] || 0, color(slotOf(c)), true])];
+    for (const [v, c, hatch] of parts) {
+      if (!v) continue;
+      const hh = (v / scale) * BAR;
+      segs += `<i class="${hatch ? "hs" : "rp"}" style="top:${y.toFixed(1)}px;height:${Math.max(1, hh - 2).toFixed(1)}px;background:${c}"></i>`;
+      y += hh;
+    }
+    const knob = sel === d.i ? `<b class="kn" style="top:${Math.max(0, y - 2).toFixed(1)}px"></b>` : "";
+    return `${segs}${knob}<span class="rt num" style="top:${(y + (knob ? 10 : 4)).toFixed(1)}px">${d.total || sel === d.i ? hrs(d.total) : ""}${d.total > LONG_DAY ? "<em>!</em>" : ""}</span>`;
+  }
+  const feelMark = (d) => { const f = d.feel == null ? -1 : W.fl.indexOf(d.feel); return d.feel == null ? "·" : f >= 0 ? WEEK_FEEL[f][0] : "🎚"; };
+  let holding = 0; // fingers on a slider: nothing redraws under them (settle() does after)
+  function layout() {
+    const st = weekState(W, E);
+    if (!river || holding) return;
+    X = river.f.dayX;
+    const step = n > 1 ? X[1] - X[0] : 40;
+    bw = Math.max(6, Math.min(30, step * 0.56));
+    scale = Math.max(MAX_Q, ...st.days.map((d) => d.total)); // fixed while a finger drags
+    const refl = [], feel = [], cols = [];
+    st.days.forEach((d) => {
+      refl.push(`<div class="rb${sel === d.i ? " sel" : ""}" style="left:${(X[d.i] - bw / 2).toFixed(1)}px;width:${bw.toFixed(1)}px">${bar(d)}</div>`);
+      feel.push(`<span style="left:${X[d.i].toFixed(1)}px" class="${d.feel != null ? "on" : ""}">${feelMark(d)}</span>`);
+      const dd = day(iso(d.i));
+      const c0 = Math.max(-10, X[d.i] - step / 2), c1 = Math.min(stage.clientWidth + 10, X[d.i] + step / 2); // the edges' columns stay on the screen
+      const slider = sel === d.i ? ` role="slider" aria-valuemin="0" aria-valuemax="16" aria-valuenow="${d.total / 4}" aria-valuetext="${hrs(d.total)} год"` : "";
+      cols.push(`<button data-d="${d.i}" class="${sel === d.i ? "sel" : ""}" style="left:${c0.toFixed(1)}px;width:${(c1 - c0).toFixed(1)}px" aria-label="${WEEK_DAYS[dow(d.i)]} ${dm(dd)}"${slider}><span>${n <= 16 ? WEEK_DAYS[dow(d.i)] : ""}<b>${dd.getDate()}</b></span></button>`);
+    });
+    const focused = stage.contains(document.activeElement);
+    stage.querySelector(".wk-refl").innerHTML = refl.join("");
+    stage.querySelector(".wk-feel").innerHTML = feel.join("");
+    stage.querySelector(".wk-cols").innerHTML = cols.join("");
+    if (focused && sel >= 0) stage.querySelector(".wk-cols .sel").focus({ preventScroll: true });
+    stage.classList.toggle("picked", sel >= 0);
+    const bands = riverData().bands;
+    screen.querySelector(".wk-legend").innerHTML = bands.map((b) => `<span><i class="sw${b.manual ? " hatch" : ""}" style="background:${b.color}"></i>${esc(b.name)}</span>`).join("");
+  }
+  // While a finger drags: only the day's bar, its feel mark, the day's total and the hero — the
+  // river and the panel wait for the release (settle).
+  function live(i) {
+    const st = weekState(W, E), d = st.days[i];
+    const rb = stage.querySelector(".wk-refl").children[i], mark = stage.querySelector(".wk-feel").children[i];
+    if (rb) rb.innerHTML = bar(d);
+    if (mark) { mark.textContent = feelMark(d); mark.classList.toggle("on", d.feel != null); }
+    const col = stage.querySelector(`.wk-cols [data-d="${i}"]`);
+    if (col && sel === i) { col.setAttribute("aria-valuenow", d.total / 4); col.setAttribute("aria-valuetext", `${hrs(d.total)} год`); }
+    const dt = screen.querySelector(".wk-dt");
+    if (dt && sel === i) dt.innerHTML = `${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}`;
+    hero(true);
+  }
+  let settleTimer = 0;
+  function settle() { clearTimeout(settleTimer); settleTimer = 0; update(); }
+  const swipes = (allow) => post("web_app_setup_swipe_behavior", { allow_vertical_swipe: allow });
+  // One pointer at a time drives a drag; `on(q)` stores the value and returns the one kept.
+  function slide(el, e, model, on, after) {
+    if (e.button > 0 || el.dataset.busy) return;
+    const g = model(), id = e.pointerId;
+    let kept = null;
+    el.dataset.busy = "1"; holding++;
+    try { el.setPointerCapture(id); } catch (x) { /* a synthetic pointer */ }
+    swipes(g.down(e.clientX, e.clientY).swipes);
+    const t0 = performance.now();
+    const move = (ev) => {
+      if (ev.pointerId !== id) return;
+      const r = g.move(ev.clientX, ev.clientY);
+      if (r.prevent && ev.cancelable) ev.preventDefault();
+      if (r.q == null) return;
+      if (r.tick) { const k = on(r.q); if (k !== kept) haptic("select"); kept = k; }
+      if (r.stop === "lo") { haptic("light"); after.lo && after.lo(); }
+      if (r.stop === "hi") { haptic("light"); say("Понад 16 год за день не записую"); }
+      if (window.__herDrag) window.__herDrag.push(performance.now() - t0); // the frame meter (render_week.py)
+    };
+    const end = (ev) => {
+      if (ev.pointerId !== id) return;
+      removeEventListener("pointermove", move); removeEventListener("pointerup", end); removeEventListener("pointercancel", end);
+      delete el.dataset.busy; holding--;
+      const r = g.up();
+      swipes(r.swipes);
+      after.done(r, ev.type === "pointerup");
+    };
+    // on the window: a release reaches it even if the element was redrawn under the finger, so
+    // Telegram's swipe always comes back
+    addEventListener("pointermove", move, { passive: false }); addEventListener("pointerup", end); addEventListener("pointercancel", end);
+  }
+  let tapAt = 0, tapDay = -1, closing = 0, dragEnd = -1e9;
+  stage.querySelector(".wk-cols").addEventListener("pointerdown", (e) => {
+    const b = e.target.closest("button[data-d]");
+    if (!b || Number(b.dataset.d) !== sel) return;
+    const i = sel;
+    clearTimeout(closing); // a tap's pending close never lands under a finger
+    slide(b, e, () => { const d = weekState(W, E).days[i]; return drag("y", d.total, d.act, Math.max(MAX_Q, d.total), Q_PX); },
+      (q) => { const kept = setDay(W, E, i, q); live(i); return kept; },
+      { lo: () => { if (weekState(W, E).days[i].act) say("Спершу зменш поза репо"); },
+        done: (r) => { if (r.moved) { dragEnd = performance.now(); settle(); } } });
+  });
+  stage.querySelector(".wk-cols").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-d]");
+    if (!b) return;
+    if (performance.now() - dragEnd < 120) return; // the release of a drag is not a tap
+    const i = Number(b.dataset.d), now = performance.now();
+    if (i !== sel) { clearTimeout(closing); pick(i); tapDay = -1; return; } // a double tap counts on a picked day only
+    if (tapDay === i && now - tapAt < 320) { // a double tap: the model again
+      clearTimeout(closing); tapAt = 0; reset(i); return;
+    }
+    tapDay = i; tapAt = now;
+    clearTimeout(closing); closing = setTimeout(() => pick(i), 320); // one tap closes, a second resets
+  });
+  stage.querySelector(".wk-cols").addEventListener("keydown", (e) => {
+    const b = e.target.closest("button[data-d]"), k = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+    if (!b || !k || Number(b.dataset.d) !== sel) return;
+    e.preventDefault();
+    const d = weekState(W, E).days[sel], kept = setDay(W, E, sel, d.total + k);
+    if (kept !== d.total) haptic("select");
+    live(sel);
+    clearTimeout(settleTimer); settleTimer = setTimeout(settle, 450);
+  });
+  function pick(i) { sel = sel === i ? -1 : i; haptic("select"); layout(); panel(); }
+  function reset(i) {
+    if (!resetDay(W, E, i)) { haptic("light"); say("Без відчуття день — понад 16 год: спершу зменш поза репо"); return; }
+    haptic("select"); update();
+  }
+
+  // -- the hero and the range: the approved periods before as rings, this one the bar
+  function hero(now) { // now: under a finger, no count-up
+    const st = weekState(W, E), [lo, hi] = st.range, t = st.total;
+    const node = $("#wk-hero"), from = Number(node.dataset.q || t);
+    node.dataset.q = t;
+    const paint = (q) => { node.innerHTML = `${hrs(q)}<small>год</small>`; };
+    if (reduced || from === t || now) paint(t);
+    else { const t0 = performance.now(); const go = (now) => { const k = Math.min(1, (now - t0) / 420); paint(Math.round(from + (t - from) * (1 - (1 - k) ** 3))); if (k < 1) requestAnimationFrame(go); }; requestAnimationFrame(go); }
+    $("#wk-money").textContent = money(t);
+    const sv = E.steps ? `${E.steps > 0 ? "+" : "−"}${Math.abs(E.steps) * Math.round(W.sp * 100)} %` : "пропозиція";
+    $("#wk-sv").textContent = sv;
+    $("#wk-minus").disabled = E.steps <= W.sb[0]; $("#wk-plus").disabled = E.steps >= W.sb[1];
+    const past = W.p.map((p) => p[1] / 4), all = [lo, hi, t / 4, ...past];
+    const a = Math.min(...all) * 0.88, z = Math.max(...all) * 1.06 || 1, p = (v) => ((v - a) / (z - a)) * 100;
+    const box = $("#wk-rng");
+    box.innerHTML = `<div class="tr"><span class="band" style="left:${p(lo)}%;right:${100 - p(hi)}%"></span>${past.map((v) => `<i class="past" style="left:${p(v)}%"></i>`).join("")}<i class="me" style="left:${p(t / 4)}%"></i></div>
+      <div class="lbl"><span class="lo" style="left:${p(lo)}%">${lo}</span><span class="hi" style="left:${p(hi)}%">${hi}</span></div>
+      <div class="cap">діапазон за активністю${W.p.length ? ` · ○ ${esc(W.p[0][0])}${W.p.length > 1 ? "–" + esc(W.p[W.p.length - 1][0]).replace(/^\D+/, "") : ""}` : ""}</div>`;
+    // the ends' labels never touch: too close, one label «46–56» in the middle
+    const l1 = box.querySelector(".lo"), l2 = box.querySelector(".hi"), r1 = l1.getBoundingClientRect(), r2 = l2.getBoundingClientRect();
+    if (r2.left - r1.right < 8) { l2.remove(); l1.textContent = `${lo}–${hi}`; l1.style.left = `${(p(lo) + p(hi)) / 2}%`; }
+    const ok = $("#wk-ok");
+    ok.disabled = !t;
+    ok.classList.toggle("dirty", changed());
+    post("web_app_setup_closing_behavior", { need_confirmation: changed() });
+  }
+
+  // -- the panel under the river: the week's evidence, or the picked day
+  function panel() {
+    const box = $("#wk-panel");
+    box.replaceChildren(sel >= 0 ? dayPanel(sel) : weekPanel());
+    box.classList.remove("in"); void box.offsetWidth; box.classList.add("in");
+  }
+  const sum4 = (k) => W.d.reduce((x, row) => x + row[5][SIG.indexOf(k)], 0);
+  const SIG = ["commits", "prs_opened", "prs_merged", "issues_opened", "issues_closed", "moves", "comments", "doing"];
+  const arrow = (now, was) => (was == null ? "" : now > was ? `<span class="up">↑</span>` : now < was ? `<span class="down">↓</span>` : "");
+  function weekPanel() {
+    const st = weekState(W, E), el = h("div", "wk-week");
+    const big = [["коміти", "commits"], ["PR змердж.", "prs_merged"], ["issues закр.", "issues_closed"], ["переходи", "moves"]];
+    const pl = [["репо", "repo", 0], ["борд", "board", 2], ["поза репо", "manual", 5]].map(([name, k, slot]) => [name, W.pl[k] || 0, slot, k]).filter((x) => x[1] > 0);
+    const pt = pl.reduce((x, y) => x + y[1], 0) || 1;
+    const covered = st.days.filter((d) => d.total && (W.d[d.i][6] || d.act)).reduce((x, d) => x + d.total, 0);
+    const blind = st.days.filter((d) => d.total && !W.d[d.i][6] && !d.act);
+    const cov = st.whole ? Math.round((covered / st.whole) * 100) : 100;
+    el.innerHTML = `<div class="wk-sgs">${big.map(([name, k]) => { const v = sum4(k); return `<div><b class="num">${v}${arrow(v, W.lw[k])}</b><span>${name}</span></div>`; }).join("")}</div>
+    ${pl.length ? `<div class="wk-planes">${pl.map(([, v, slot]) => `<i style="flex:${v};background:${color(slot)}"></i>`).join("")}</div>
+    <div class="wk-plw">${pl.map(([name, v, slot, k]) => `<span><i class="sw" style="background:${color(slot)}"></i>${name} <b class="num">${Math.round((v / pt) * 100)}%</b>${arrow(v, W.lw[k])}</span>`).join("")}</div>` : ""}
+    <div class="wk-cov"><div class="ring" style="--p:${cov}"><b class="num">${cov}<small>%</small></b></div><div><b>годин із видимим сигналом</b>${blind.length ? blind.map((d) => `<button class="wk-blind" data-d="${d.i}">${WEEK_DAYS[dow(d.i)]} ${dm(day(iso(d.i)))} · ${hrs(d.total)} год без пояснення ›</button>`).join("") : `<span>кожна година має пояснення</span>`}<span class="muted">дотик на день — сигнали, відчуття, поза репо</span></div></div>
+    <button class="wk-deeper" id="wk-gest">🎛 Жестами по рядках ›</button>`;
+    el.querySelectorAll(".wk-blind").forEach((b) => b.addEventListener("click", () => pick(Number(b.dataset.d))));
+    el.querySelector("#wk-gest").addEventListener("click", () => send(true));
+    return el;
+  }
+  function dayPanel(i) {
+    const st = weekState(W, E), d = st.days[i], row = W.d[i], sg = row[5], el = h("div", "wk-day");
+    const dd = day(iso(i));
+    const lines = W.l.map((l, k) => [l[1] || `#${k + 1}`, d.origRepo ? (l[3][i] * d.repo) / d.origRepo : 0, k]).filter((x) => x[1] > 0 && !W.l[x[2]][2]).sort((a, b) => b[1] - a[1]);
+    el.innerHTML = `
+    <div class="wk-dh"><div><span class="eyebrow">${WEEK_DAYS[dow(i)]} ${dm(dd)}</span><div class="wk-dt num">${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}</div></div>
+    <div class="wk-git num">git-час<br><b>${row[4] == null ? "—" : hrs(row[4])}</b></div></div>
+    <div class="wk-sig">
+      <div><b class="num">${sg[0]}</b><span>коміти</span></div>
+      <div><b class="num">${sg[1]}<i>/</i>${sg[2]}</b><span>PR відкр. / змердж.</span></div>
+      <div><b class="num">${sg[3]}<i>/</i>${sg[4]}</b><span>issues відкр. / закр.</span></div>
+      <div><b class="num">${sg[5]}</b><span>переходи</span></div>
+      <div><b class="num">${sg[6]}</b><span>коментарі</span></div>
+      <div><b class="num">${sg[7]}</b><span>у Doing</span></div>
+    </div>
+    <div class="eyebrow l">Відчуття дня · тягни стовпчик</div>
+    <div class="chips">${W.fl.map((q, k) => `<button class="chip${d.feel === q ? " on" : ""}" data-feel="${q}">${WEEK_FEEL[k] ? WEEK_FEEL[k][0] : "🎚"} ${hrs(q)}</button>`).join("")}${d.feel != null ? `<button class="chip reset" data-reset aria-label="Повернути модель">↺</button>` : ""}</div>
+    <div class="eyebrow l">Поза репо · дотик +1 год</div>
+    <div class="wk-acts">${codes.filter((c) => d.acts[c]).map((c) => { const v = d.acts[c]; return `<div class="wk-act" data-row="${c}"><button class="wk-an" data-act="${c}"><i class="sw hatch" style="background:${color(slotOf(c))}"></i>${esc(W.kc[c][0])} <span>+1</span></button><b class="wk-av num">${hrs(v)}</b><div class="wk-tr" data-tr="${c}" tabindex="0" role="slider" aria-label="${esc(W.kc[c][0])}" aria-valuemin="0" aria-valuemax="16" aria-valuenow="${v / 4}" aria-valuetext="${hrs(v)} год" style="--c:${color(slotOf(c))};--p:${((v / MAX_Q) * 100).toFixed(2)}%"><i></i><b></b></div><button class="chip less" data-less="${c}" aria-label="−15 хв">−</button></div>`; }).join("")}</div>
+    <div class="chips">${codes.filter((c) => !d.acts[c]).map((c) => `<button class="chip act" data-act="${c}"><i class="sw hatch" style="background:${color(slotOf(c))}"></i>${esc(W.kc[c][0])}</button>`).join("")}</div>
+    ${lines.length ? `<details class="wk-lines"><summary>Фічі дня · ${lines.length} ›</summary>${lines.map(([name, q, k]) => `<div class="row-t"><i class="sw" style="background:${color(k)}"></i>${esc(name)}<em class="num">${hrs(Math.round(q))}</em></div>`).join("")}</details>` : ""}`;
+    el.querySelectorAll("[data-feel]").forEach((b) => b.addEventListener("click", () => {
+      const q = Number(b.dataset.feel), now = i in E.feel ? E.feel[i] : row[1];
+      if (now === q) { reset(i); return; } // the chip again: the model, as «↺»
+      E.feel[i] = q;
+      if (q === row[1]) delete E.feel[i];
+      haptic("select"); update();
+    }));
+    el.querySelector("[data-reset]")?.addEventListener("click", () => reset(i));
+    // a tap on a name: +1 h (as far as 16 h lets it); «−» 15 min less; 0 removes it from the day
+    const step = (c, delta) => {
+      const now = weekState(W, E).days[i].acts[c] || 0;
+      // «+1» never shrinks an activity stored over 16 h before the rule
+      if ((delta > 0 && now >= MAX_Q) || setAct(W, E, i, c, now + delta) === now) { haptic("light"); if (delta > 0) say("Понад 16 год за день не записую"); return; }
+      haptic("select"); update();
+    };
+    el.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", () => step(b.dataset.act, 4)));
+    el.querySelectorAll("[data-less]").forEach((b) => b.addEventListener("click", () => step(b.dataset.less, -1)));
+    // an activity's slider: 0–16 h, the knob follows the finger (the track is the scale)
+    const paintAct = (tr, c) => {
+      const v = weekState(W, E).days[i].acts[c] || 0;
+      tr.style.setProperty("--p", `${((v / MAX_Q) * 100).toFixed(2)}%`);
+      tr.setAttribute("aria-valuenow", v / 4); tr.setAttribute("aria-valuetext", `${hrs(v)} год`);
+      tr.previousElementSibling.textContent = hrs(v);
+      live(i);
+    };
+    el.querySelectorAll("[data-tr]").forEach((tr) => {
+      const c = tr.dataset.tr;
+      tr.addEventListener("pointerdown", (e) => {
+        const w = tr.getBoundingClientRect(), x0 = e.clientX;
+        slide(tr, e, () => { const d = weekState(W, E).days[i], v = d.acts[c] || 0; return drag("x", v, 0, v + room(d.model, d.feel, d.act), w.width / MAX_Q); },
+          (q) => { const kept = setAct(W, E, i, c, q); paintAct(tr, c); return kept; },
+          { done: (r) => { // a tap on the track: the value under the finger
+            if (r.tap) { const v = weekState(W, E).days[i].acts[c] || 0; setAct(W, E, i, c, Math.round(((x0 - w.left) / w.width) * MAX_Q)); if ((weekState(W, E).days[i].acts[c] || 0) !== v) haptic("select"); }
+            settle();
+          } });
+      });
+      tr.addEventListener("keydown", (e) => {
+        const k = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+        if (!k) return;
+        e.preventDefault();
+        const now = weekState(W, E).days[i].acts[c] || 0;
+        if (setAct(W, E, i, c, now + k) !== now) haptic("select");
+        paintAct(tr, c);
+        clearTimeout(settleTimer); settleTimer = setTimeout(settle, 450);
+      });
+    });
+    return el;
+  }
+
+  // -- ✅ and «🎛 Жестами»: one sendData, the bot checks and stores it
+  function send(editor) {
+    if (sent) return;
+    const text = decisionText(W, E, editor);
+    if (new TextEncoder().encode(text).length > 4096) { haptic("light"); say("Забагато змін для Telegram: затверди частину, решту — після"); return; }
+    window.__herDecision = text; // the local preview and the tests read it
+    post("web_app_trigger_haptic_feedback", { type: "notification", notification_type: "success" });
+    post("web_app_setup_closing_behavior", { need_confirmation: false });
+    $("#wk-ok").classList.add("sent");
+    if (TG.inside) { sent = true; setTimeout(() => post("web_app_data_send", { data: text }), reduced ? 0 : 280); }
+    else say(`Боту пішло б ${new TextEncoder().encode(text).length} байт${editor ? " · відкрити жести" : ""}`);
+  }
+  $("#wk-ok").addEventListener("click", () => send(false));
+  $("#wk-minus").addEventListener("click", () => { if (E.steps > W.sb[0]) { E.steps--; haptic("select"); hero(); } });
+  $("#wk-plus").addEventListener("click", () => { if (E.steps < W.sb[1]) { E.steps++; haptic("select"); hero(); } });
+  let toastTimer = 0;
+  function say(message) {
+    const t = $("#wk-toast"); t.textContent = message; t.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2600);
+  }
+  function update() { if (holding) return; if (river && lens === "owner") river.setData(riverData()); layout(); hero(); panel(); } // in place: no re-pour (#291)
+
+  const first = QS_WEEK.get("day");
+  if (first != null && Number(first) < n) sel = Number(first);
+  requestAnimationFrame(() => { drawRiver(); layout(); hero(); panel(); performance.mark("her-week-drawn"); });
+  new ResizeObserver(() => requestAnimationFrame(layout)).observe(stage); // after the river's own
+  return E;
+}
+const QS_WEEK = new URLSearchParams(typeof location === "undefined" ? "" : location.search); // node: the tests
+function esc(text) { return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+// The page's entry: the sealed snapshot of the card's 📊 (her.week_app, field «w»).
+async function openWeek() {
+  const again = "Натисни 📊 у картці тижня ще раз.";
+  const W = await sealedSnapshot("w", again);
+  if (!W) return;
+  if (W.v !== 1) return gate("⬆️", "Нова версія", again);
+  // A keyboard button's launch names no user: only the owner's private chat has that button,
+  // and the bot checks who sent the decision. A launch that names someone else is refused.
+  const who = viewer();
+  if (TG.inside && who != null && who !== W.o) return gate("🔒", "Лише для власника", "Цей тиждень показую тільки тому, для кого його зроблено.");
+  if (Date.now() / 1000 > W.exp) return gate("⌛", "Сторінка застаріла", "Тиждень міг змінитися. " + again);
+  week(W);
+}
+
+if (typeof module !== "undefined") module.exports = { pyRound, dayQ, weekTotal, weekState, decisionText, drag, room, setDay, resetDay, setAct, MAX_Q };
+
+// Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
+// the data is in the URL fragment, sealed with the owner's key and signed by Her (seal.js,
+// #191); the key lives in the owner's Telegram CloudStorage. The design tokens are CSS
+// variables (her.design).
 
 // ---- Telegram: a tiny bridge instead of telegram-web-app.js (nothing loads from outside) ----
 const launch = new URLSearchParams(location.hash.slice(1));
@@ -819,13 +1905,20 @@ function post(type, data) {
   try {
     if (window.TelegramWebviewProxy) window.TelegramWebviewProxy.postEvent(type, body);
     else if (window.external && "notify" in window.external) window.external.notify(JSON.stringify({ eventType: type, eventData: data || {} }));
-    else if (window.parent !== window) window.parent.postMessage(JSON.stringify({ eventType: type, eventData: data || {} }), "https://web.telegram.org");
+    else if (window.parent !== window) window.parent.postMessage(JSON.stringify({ eventType: type, eventData: data || {} }), WEB);
   } catch (e) { /* outside Telegram */ }
 }
-function receive(type, data) { if (type === "theme_changed" && data && data.theme_params) theme(data.theme_params); }
+function receive(type, data) {
+  if (type === "theme_changed" && data && data.theme_params) theme(data.theme_params);
+  sealEvent(type, data);
+}
 window.Telegram = window.Telegram || {};
 window.Telegram.WebView = { receiveEvent: receive };
-window.addEventListener("message", (e) => { const m = typeof e.data === "string" ? json(e.data) : null; if (m && m.eventType) receive(m.eventType, m.eventData); });
+window.addEventListener("message", (e) => {
+  if (e.source !== window.parent || e.origin !== WEB) return; // only Telegram Web's own frame
+  const m = typeof e.data === "string" ? json(e.data) : null;
+  if (m && m.eventType) receive(m.eventType, m.eventData);
+});
 const haptic = (kind) => post("web_app_trigger_haptic_feedback", kind === "select" ? { type: "selection_change" } : { type: "impact", impact_style: kind || "light" });
 function viewer() { const user = json(new URLSearchParams(TG.data).get("user")); return user ? user.id : null; }
 
@@ -1415,11 +2508,29 @@ function gate(glyph, title, body) {
   main.replaceChildren(box);
 }
 
-async function unpack(text) {
-  const b64 = text.replace(/-/g, "+").replace(/_/g, "/");
-  const bytes = Uint8Array.from(atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4)), (c) => c.charCodeAt(0));
-  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
-  return JSON.parse(await new Response(stream).text());
+// ---- the owner's key (#191): one «🔑 Ключ сторінок» in /settings, kept by Telegram ------------
+const SLOT = "her_owner_key";
+const KEY_HINT = "Торкнись /settings → «🔑 Ключ сторінок» у боті, який дав цю кнопку: один раз, на всіх пристроях.";
+async function ownerKey() {
+  let r = null;
+  try { r = await invoke("getStorageValues", { keys: [SLOT] }); } catch (e) { /* an old client, a keyboard launch, a browser */ }
+  return (r && r[SLOT]) || localKey.get(SLOT);
+}
+async function saveOwnerKey(key) {
+  localKey.set(SLOT, key);
+  try { await invoke("saveStorageValue", { key: SLOT, value: key }); return true; } catch (e) { return !TG.inside; }
+}
+// The snapshot of `field` opened with the kept key, or null after a gate that says why.
+async function sealedSnapshot(field, again) {
+  if (typeof DecompressionStream === "undefined") { gate("⬆️", "Онови Telegram", "Цій сторінці потрібен новіший вбудований браузер."); return null; }
+  const key = await ownerKey();
+  if (!key) { gate("🔑", "Відкрий з бота", "Посилання саме нічого не показує: ключ живе в Telegram. " + KEY_HINT); return null; }
+  try { return await openSealed(launch.get(field), key); } catch (e) {
+    if (e.kind === "unsigned") gate("⌛", "Посилання застаріло", again);
+    else if (e.kind === "forged") gate("⛔", "Посилання не від Her", "Його підписав не Her, тож сторінка нічого не показує. " + again);
+    else gate("🔑", "Ключ змінився", "Відкрий свіжу кнопку з бота або " + KEY_HINT[0].toLowerCase() + KEY_HINT.slice(1));
+    return null;
+  }
 }
 
 async function start() {
@@ -1428,14 +2539,21 @@ async function start() {
   post("web_app_expand");
   const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
   if (!TG.inside && !local) return gate("✨", "Відкрий з Telegram", "Дашборд відкривається кнопкою «✨ Дашборд» у /stats у Vector.");
-  if (launch.get("i")) return openEditor(launch.get("i"));
-  const data = launch.get("d");
-  if (!data) return gate("✨", "Немає знімка", "Натисни «✨ Дашборд» у /stats — я покладу в посилання свіжі цифри.");
-  if (typeof DecompressionStream === "undefined") return gate("⬆️", "Онови Telegram", "Цьому дашборду потрібен новіший вбудований браузер.");
-  try { S = await unpack(data); } catch (e) { return gate("⚠️", "Знімок пошкоджено", "Відкрий дашборд ще раз із /stats."); }
+  if (launch.get("k")) {
+    const kept = await saveOwnerKey(launch.get("k"));
+    haptic(kept ? "medium" : "light");
+    return kept
+      ? gate("🔑", "Ключ збережено", "Цей акаунт Telegram тепер відкриває дашборд і редактор на всіх пристроях. Повернись у чат і відкрий сторінку.")
+      : gate("⚠️", "Telegram не зберіг ключ", "Онови Telegram і торкнись 🔑 ще раз.");
+  }
+  if (launch.get("w")) return openWeek();
+  if (launch.get("i")) return openEditor();
+  if (!launch.get("d")) return gate("✨", "Немає знімка", "Натисни «✨ Дашборд» у /stats — я покладу в посилання свіжі цифри.");
+  S = await sealedSnapshot("d", "Відкрий дашборд із /stats.");
+  if (!S) return;
   if (S.v !== 1) return gate("⬆️", "Нова версія", "Відкрий дашборд ще раз із /stats.");
-  // A display check, not a lock (#192 F10): launch data is unsigned here and the snapshot is
-  // only deflated, so whoever holds the URL can read it. The link itself is the key.
+  // On top of the key (#191): this account and the snapshot's age. Launch data is unsigned,
+  // so this is a reminder against a forwarded button and old numbers, not the lock.
   if (TG.inside && viewer() !== S.o) return gate("🔒", "Лише для власника", "Цей дашборд показує цифри тільки тому, для кого його зроблено.");
   if (Date.now() / 1000 > S.exp) return gate("⌛", "Знімок застарів", "Натисни «✨ Дашборд» у /stats ще раз — покажу свіжі цифри.");
   const span = launch.get("s");
@@ -1446,11 +2564,10 @@ async function start() {
   render();
 }
 // The invoice editor (#176): its own snapshot, from the 🎛 keyboard button of /invoice.
-async function openEditor(data) {
+async function openEditor() {
   const again = "Натисни «🎛 Жестами» у картці /invoice ще раз.";
-  if (typeof DecompressionStream === "undefined") return gate("⬆️", "Онови Telegram", "Редактору потрібен новіший вбудований браузер.");
-  let E;
-  try { E = await unpack(data); } catch (e) { return gate("⚠️", "Посилання пошкоджено", again); }
+  const E = await sealedSnapshot("i", again);
+  if (!E) return;
   if (E.v !== 1) return gate("⬆️", "Нова версія", again);
   // A keyboard button's launch names no user: only the owner's private chat has that button,
   // and the bot checks who sent the edits. A launch that names someone else is refused.

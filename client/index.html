@@ -112,6 +112,11 @@ svg { display: block; overflow: visible; }
 .bar .logo img { width: 22px; height: 22px; }
 .bar b { font: var(--weight-semibold) 16px/1.1 var(--font); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* the owner's preview (#233): one quiet mark above the client's page, never a part of it */
+.peek { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 6px); z-index: 4; display: flex; align-items: center; gap: 7px; width: max-content; max-width: 100%; margin: 0 auto 10px; padding: 6px 12px 6px 10px; border-radius: 99px; background: color-mix(in oklab, var(--plane) 82%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px var(--border); font: var(--weight-semibold) 12px/1 var(--font); letter-spacing: .02em; color: var(--ink-2); }
+.peek svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.peek span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* heroes: a statement, or a sum */
 .chip { display: inline-flex; align-items: center; gap: 8px; font: var(--weight-semibold) 13px/1 var(--font); padding: 7px 11px 7px 10px; border-radius: 99px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); color: var(--ink); }
 .chip i { width: 8px; height: 8px; border-radius: 4px; background: var(--status-good); box-shadow: 0 0 0 4px color-mix(in oklab, var(--status-good) 22%, transparent); }
@@ -191,6 +196,34 @@ svg { display: block; overflow: visible; }
 .more { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 4px; font: var(--weight-semibold) 14px/1 var(--font); color: var(--ink); }
 .more svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+/* the living river (#273, concept B): the flow and the road in one card */
+.rhead { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.rbig { font: var(--weight-bold) 48px/.9 var(--font); letter-spacing: -.05em; margin-top: 8px; }
+.rhead > div:first-child > .rbig:first-child { margin-top: 0; }
+.rbig small { font: var(--weight-medium) 15px/1 var(--font); letter-spacing: 0; color: var(--muted); margin-left: 6px; }
+.rwhen { text-align: right; flex: none; }
+.rwhen b { display: block; font: var(--weight-bold) 20px/1.1 var(--font); letter-spacing: -.02em; margin-top: 5px; }
+.rwhen span { font: 13px/1.3 var(--font); color: var(--muted); }
+.rbox { position: relative; margin-top: 18px; }
+canvas.river { display: block; width: 100%; touch-action: manipulation; cursor: pointer; }
+.tip { position: absolute; z-index: 2; transform: translate(-50%, -135%); padding: 7px 11px; border-radius: 12px; background: var(--ink); color: var(--plane); font: var(--weight-semibold) 13px/1 var(--font); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.tip.on { opacity: 1; }
+.tip i { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 7px; }
+.rfoot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; }
+.rfoot .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font: var(--weight-medium) 12px/1.2 var(--font); color: var(--muted); }
+.rfoot .legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw.hatch { width: 8px; height: 8px; border-radius: 2px; background-image: repeating-linear-gradient(135deg, transparent 0 2px, color-mix(in oklab, var(--surface) 55%, transparent) 2px 3.4px) !important; }
+.seg { display: inline-flex; flex: none; padding: 2px; border-radius: 99px; background: color-mix(in oklab, var(--ink) 6%, transparent); font: var(--weight-semibold) 11px/1 var(--font); }
+.seg button { padding: 6px 10px; border-radius: 99px; color: var(--muted); font: inherit; }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.rlanes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--grid); }
+.rlanes .eyebrow { font-size: 10.5px; }
+.rlanes .it { margin-top: 10px; font: var(--weight-semibold) 13.5px/1.25 var(--font); }
+.rlanes .it .t { display: flex; gap: 6px; align-items: baseline; }
+.rlanes .it .t .sw { width: 8px; height: 8px; transform: translateY(-1px); }
+.rlanes .it.next { color: var(--ink-2); font-weight: var(--weight-medium); }
+.rlanes .meter { height: 4px; margin: 6px 0 0 14px; }
+
 /* value: what we built flows into what it gives and the risk it takes away */
 .flow { position: relative; margin-top: 16px; padding-left: 40px; }
 .flow svg { position: absolute; left: 0; top: 0; }
@@ -268,6 +301,89 @@ svg { display: block; overflow: visible; }
 @keyframes pulse { 50% { transform: scale(1.5); opacity: .45; } }
 .swap { animation: swap .42s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes swap { from { opacity: 0; transform: translateX(22px); } }
+/* the first-run tour (#230): concept A «Небо» — one picture a step under a deep sky */
+.tour { position: fixed; inset: 0; z-index: 6; display: flex; flex-direction: column; background: var(--plane); overflow: hidden; touch-action: pan-y; }
+.tour > .peek { position: absolute; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 8px); transform: translateX(-50%); margin: 0; z-index: 2; }
+.tour .sky { position: relative; height: min(440px, 59vh); flex: none; border-radius: 0 0 36px 36px; overflow: hidden; background: radial-gradient(130% 100% at 50% 0%, color-mix(in oklab, var(--series-7) 18%, var(--surface)), var(--surface)); }
+.tour .pic { position: absolute; inset: 0; }
+.tour .words { padding: 26px 24px 0; flex: 1; }
+.tour .brow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.tour .brow .logo { width: 24px; height: 24px; border-radius: 8px; flex: none; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); display: grid; place-items: center; font: var(--weight-bold) 11px/1 var(--font); }
+.tour .brow .logo img { width: 16px; height: 16px; }
+.tour .words h1 { font: var(--weight-bold) 38px/1.02 var(--font); letter-spacing: -.035em; text-wrap: balance; }
+.tour .words p { font: 17px/1.35 var(--font); color: var(--ink-2); margin-top: 12px; }
+.tour .foot { display: flex; align-items: center; justify-content: space-between; padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 22px); }
+.tour .skip { font: var(--weight-semibold) 17px/1 var(--font); color: var(--muted); padding: 14px 4px; min-width: 64px; text-align: left; }
+.tour .go { min-width: 112px; height: 52px; border-radius: 18px; background: var(--ink); color: var(--plane); font: var(--weight-semibold) 17px/1 var(--font); padding: 0 24px; transition: transform .15s; }
+.tour .go:active { transform: scale(.97); }
+.tour .swap-back { animation: swapback .42s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes swapback { from { opacity: 0; transform: translateX(-22px); } }
+.tour .words.swap, .tour .words.swap-back { animation-delay: .04s; }
+.tour.leave { animation: leave .5s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes leave { to { opacity: 0; transform: translateY(-24px) scale(.98); } }
+#app.arrive .screen > * { animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+#app.arrive .screen > :nth-child(2) { animation-delay: .06s; }
+#app.arrive .screen > :nth-child(3) { animation-delay: .12s; }
+#app.arrive .screen > :nth-child(n+4) { animation-delay: .18s; }
+/* 1 · the river */
+.tour .top { position: absolute; left: 22px; right: 22px; top: 22px; display: flex; justify-content: space-between; align-items: flex-start; z-index: 1; }
+.tour .top .big { font: var(--weight-bold) 52px/.9 var(--font); letter-spacing: -.05em; }
+.tour .top .big small { font: var(--weight-semibold) 16px/1 var(--font); letter-spacing: 0; color: var(--ink-2); margin-left: 4px; }
+.tour .pic canvas.river { position: absolute; left: 0; right: 0; bottom: 10px; width: 100%; }
+.tour .outline { position: absolute; left: 14px; right: 14px; bottom: 60px; width: calc(100% - 28px); }
+.tour .outline path { fill: var(--ink); fill-opacity: .05; stroke: var(--ink); stroke-opacity: .38; stroke-width: 1.2; stroke-dasharray: 3 4; animation: flowing 3s linear infinite; }
+@keyframes flowing { to { stroke-dashoffset: -14; } }
+/* 2 · the road */
+.tour .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tour .line { fill: none; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .5s cubic-bezier(.4,0,.2,1) forwards; }
+.tour .ahead { fill: none; stroke: var(--ink); stroke-opacity: .4; stroke-width: 2; stroke-dasharray: 3 5; opacity: 0; animation: fade .4s .9s forwards; }
+@keyframes fade { to { opacity: 1; } }
+.tour .tst { position: absolute; display: flex; align-items: center; gap: 12px; right: 18px; transform-origin: 18px 50%; animation: pop .55s cubic-bezier(.3,1.3,.5,1) both; }
+@keyframes pop { from { opacity: 0; transform: scale(.4) translateX(-8px); } }
+.tour .tst .node { width: 28px; height: 28px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--surface); box-shadow: inset 0 0 0 3px var(--c); }
+.tour .tst.done .node { background: var(--c); box-shadow: 0 0 0 5px color-mix(in oklab, var(--c) 22%, transparent); }
+.tour .tst.done .node svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.tour .tst.now .node { background: conic-gradient(var(--c) var(--p), var(--surface) 0); }
+.tour .tst.end .node { background: var(--ink); box-shadow: none; position: relative; width: 18px; height: 18px; margin: 0 5px; }
+.tour .tst.end .node::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1.5px solid var(--ink); animation: pulse 1.8s infinite; }
+.tour .tst > div { min-width: 0; }
+.tour .tst b { font: var(--weight-semibold) 18px/1.15 var(--font); letter-spacing: -.01em; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tour .tst small { font: 13px/1.25 var(--font); color: var(--muted); display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tour .tst .tag { font: var(--weight-semibold) 10px/1 var(--font); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+.tour .tst .ghost { display: block; width: 150px; height: 12px; border-radius: 6px; background: var(--ink); opacity: .08; margin-top: 2px; }
+/* 3 · the invoice */
+.tour .sum { position: absolute; left: 22px; top: 24px; z-index: 1; }
+.tour .sum .num { font: var(--weight-bold) 56px/.95 var(--font); letter-spacing: -.05em; animation: rise .5s cubic-bezier(.2,.8,.2,1) .6s both; }
+.tour .sum .num small { font-size: .55em; color: var(--ink-2); letter-spacing: -.02em; }
+.tour .sum .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; animation: rise .5s cubic-bezier(.2,.8,.2,1) .75s both; }
+.tour .sum .chip.ghost { background: none; box-shadow: none; border: 1px dashed color-mix(in oklab, var(--ink) 28%, transparent); color: var(--muted); animation: ghost .55s cubic-bezier(.3,1.3,.5,1) 2.6s both; }
+@keyframes ghost { from { opacity: 0; transform: translateX(-12px) scale(.9); } }
+.tour .pic-invoice svg { top: auto; bottom: 18px; height: auto; }
+.tour .pour { clip-path: inset(0 100% 0 0); animation: pour 1.1s cubic-bezier(.4,0,.2,1) .1s forwards; }
+.tour .hollow path, .tour .hollow rect { fill: var(--ink); fill-opacity: .05; stroke: var(--ink); stroke-opacity: .35; stroke-dasharray: 3 4; }
+.tour .onfill { font: var(--weight-semibold) 13px/1 var(--font); fill: #fff; }
+/* 4 · the questions */
+.tour .pic-ask { padding: 30px 20px 0; display: flex; flex-direction: column; gap: 10px; }
+.tour .msg { display: flex; gap: 10px; align-items: flex-end; animation: rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.tour .msg.me { justify-content: flex-end; animation-delay: 1.7s; }
+.tour .msg:last-child { animation-delay: 2.3s; }
+.tour .mono { width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font: var(--weight-bold) 14px/1 var(--font); letter-spacing: .02em; background: linear-gradient(160deg, #2a6fd0, #1d4e89 55%, #0f2a44); }
+.tour .bub { max-width: 78%; padding: 12px 15px; border-radius: 22px 22px 22px 8px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); font: 17px/1.3 var(--font); }
+.tour .me .bub { border-radius: 22px 22px 8px 22px; background: var(--ink); color: var(--plane); box-shadow: none; }
+.tour .opts { display: flex; gap: 8px; margin: 2px 0 0 48px; animation: rise .5s cubic-bezier(.2,.8,.2,1) .45s both; }
+.tour .opt { font: var(--weight-semibold) 15px/1 var(--font); padding: 11px 18px; border-radius: 99px; box-shadow: inset 0 0 0 1.5px var(--border); background: var(--surface); }
+.tour .opt.pick { animation: pick .4s ease 1.25s forwards; }
+@keyframes pick { to { background: var(--ink); color: var(--plane); box-shadow: none; } }
+.tour .typing { display: inline-flex; gap: 4px; padding: 16px; }
+.tour .typing i { width: 7px; height: 7px; border-radius: 4px; background: var(--muted); animation: blink 1s infinite; }
+.tour .typing i:nth-child(2) { animation-delay: .15s; }
+.tour .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 50% { opacity: .25; transform: translateY(-2px); } }
+.tour .swapin { display: grid; }
+.tour .swapin > * { grid-area: 1 / 1; }
+.tour .swapin .typing { animation: gone .2s 3s forwards; }
+.tour .swapin > .bub:last-child { opacity: 0; animation: fade .3s 3.05s forwards; }
+@keyframes gone { to { opacity: 0; } }
 /* ?still=1: the preview's screenshots (headless Chrome keeps a window wider than a phone) */
 html.still { width: 390px; overflow: hidden; }
 html.still body { position: relative; }
@@ -276,11 +392,19 @@ html.still *, html.still *::before, html.still *::after { animation: none !impor
 html.still .draw { stroke-dashoffset: 0; }
 html.still .pour { clip-path: none; }
 html.still .stop.end .node::after { display: none; }
+html.still .tour { position: absolute; width: 390px; height: 844px; }
+html.still .tour .line { stroke-dashoffset: 0; }
+html.still .tour .ahead, html.still .tour .swapin > .bub:last-child { opacity: 1; }
+html.still .tour .swapin .typing { display: none; }
+html.still .tour .opt.pick { background: var(--ink); color: var(--plane); box-shadow: none; }
+html.still .tour .tst.end .node::after { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .draw { stroke-dashoffset: 0; }
   .pour { clip-path: none; }
   .stop.end .node::after { display: none; }
+  .tour .swapin .typing { display: none; }
+  .tour .tst.end .node::after, .tour .outline path { animation: none; }
 }
 
 </style>
@@ -290,12 +414,475 @@ html.still .stop.end .node::after { display: none; }
   <section class="skeleton" aria-hidden="true"><div class="sk sk-bar"></div><div class="sk sk-hero"></div><div class="sk sk-card"></div></section>
 </main>
 <script>
+// The sealed snapshot (her.seal): AES-GCM with the viewer's key, signed by Her (#191 F14), and
+// Telegram's CloudStorage that keeps the key. Shared by the owner's pages (app.js) and the
+// client's (client.js): each defines TG (TG.inside) and post() and hands its bridge events to
+// sealEvent(). Vanilla JS, no library, no network.
+"use strict";
+
+const WEB = "https://web.telegram.org";
+const SEAL_PUB = "BLayuElZ6dmnCOYFYxBR5eDkLJrUjesDaxqyMg4smN6mUTBd7WpdO51X5OZWOJRhFUQ8YcHpFl3VDg6UQ4X-B6Q"; // Her's public key, pinned at the build (her.seal.Signer.public)
+const SEAL_CONTEXT = new TextEncoder().encode("her-seal/1\n");
+
+function unb64(text) {
+  const s = atob(text.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((text.length + 3) % 4));
+  return Uint8Array.from(s, (c) => c.charCodeAt(0));
+}
+
+// «unsigned»: a link from before the signature (#191), «forged»: a signature that is not Her's —
+// both show nothing; «key»: Her's, but this key does not open it.
+class SealError extends Error { constructor(kind) { super(kind); this.kind = kind; } }
+
+async function openSealed(text, keyText) {
+  const dot = text.indexOf(".");
+  if (dot < 0) throw new SealError("unsigned");
+  let raw, sig, pub;
+  try {
+    raw = unb64(text.slice(0, dot));
+    sig = unb64(text.slice(dot + 1));
+    pub = await crypto.subtle.importKey("raw", unb64(SEAL_PUB), { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+  } catch (e) { throw new SealError("forged"); }
+  const signed = new Uint8Array(SEAL_CONTEXT.length + raw.length);
+  signed.set(SEAL_CONTEXT);
+  signed.set(raw, SEAL_CONTEXT.length);
+  if (!(await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, pub, sig, signed))) throw new SealError("forged");
+  let plain;
+  try {
+    const key = await crypto.subtle.importKey("raw", unb64(keyText), "AES-GCM", false, ["decrypt"]);
+    plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
+  } catch (e) { throw new SealError("key"); }
+  const stream = new Blob([plain]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+// ---- Telegram's CloudStorage, as telegram-web-app.js calls it --------------------------------
+const pending = {};
+let calls = 0;
+function nonce() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+function invoke(method, params) {
+  if (!TG.inside) return Promise.reject(new Error("outside Telegram"));
+  return new Promise((ok, fail) => {
+    const id = `her${++calls}_${nonce()}`; // unguessable: a framing page cannot answer for Telegram
+    pending[id] = [ok, fail];
+    post("web_app_invoke_custom_method", { req_id: id, method, params });
+    setTimeout(() => { if (pending[id]) { delete pending[id]; fail(new Error("timeout")); } }, 2500);
+  });
+}
+function sealEvent(type, data) { // CloudStorage's answers, from the page's receive()
+  if (type !== "custom_method_invoked" || !data || !pending[data.req_id]) return;
+  const [ok, fail] = pending[data.req_id];
+  delete pending[data.req_id];
+  if (data.error) fail(new Error(data.error)); else ok(data.result);
+}
+// This webview's own copy: a client that cannot keep the key in CloudStorage, a local preview.
+const localKey = {
+  get(slot) { try { return localStorage.getItem(slot); } catch (e) { return null; } },
+  set(slot, v) { try { localStorage.setItem(slot, v); } catch (e) { /* private mode */ } },
+};
+
+// The living river (#273): a silhouette streamgraph whose bands breathe and flow, on Canvas 2D.
+// One module for every page that draws it: the client's home and week (concept B, the owner's
+// pick 2026-11-05), the owner's week (#274: hours over the days, a day by touch) and the tour's
+// first step (#230). Built into the page like the tokens; no library, no network.
+//
+// The data stays the picture; physics only makes it breathe (docs/learn, «жива ріка»):
+// 1. Shape: a monotone cubic between days (harmonic slopes, Fritsch–Butland), so a band never
+//    overshoots or dips below zero between two days.
+// 2. Breathing: thickness × (1 + A·Σ a_m sin(κ_m x − ω_m t + φ)), three waves with the
+//    deep-water dispersion ω = √(gκ): the longest crosses the river in ~9 s, long waves run
+//    faster than short ones, the frequencies are incommensurate, the pattern never repeats.
+// 3. Meander: the centre line rides the two longest waves, 2.2 % of the height.
+// 4. Surface: the damped wave equation u_tt = c² u_xx − γ u_t on the river's section, explicit
+//    finite differences, CFL C = c·Δt/Δx ≈ 0.45 at any width, fixed 1/120 s steps, sponges at
+//    the ends; a touch kicks u_t with a gaussian, two ripples run away and fade.
+// 5. Entry: a damped spring per band (ω0 = 7 rad/s, ζ = 0.72: one soft overshoot), 70 ms
+//    apart; the front pours in from the left.
+// Only the lines move: no particles (owner, 2026-11-04). Reduced motion or `still`: one frame.
+// `at` (seconds): a deterministic frame for screenshots and tests, `tap` (0..1) and `after`.
+"use strict";
+
+const River = (() => {
+  const TAU = Math.PI * 2;
+  const STEP = 1 / 120; // the surface's fixed step, whatever the display's rate
+  const N = 120; // points on every edge
+  const AMP = 0.07, QUIET = 0.4; // the breathing; with the days shown it is this much of it
+  const LAMBDA = [0.92, 0.47, 0.26], WAVE = [0.55, 0.3, 0.15], CROSS = 9; // of the width; s
+  const GAMMA = 1.6, SPONGE = 6, EDGE = 10, SPEED = 2.2; // the surface: damping, ends, c = L/2.2 s
+  const KICK = 3.2, BULGE = [-0.15, 0.25]; // a touch, and how far the section may swell
+
+  function monotone(xs, ys, x) { // Fritsch–Carlson monotone cubic at x (xs ascending)
+    const n = xs.length;
+    if (n === 1 || x <= xs[0]) return ys[0];
+    if (x >= xs[n - 1]) return ys[n - 1];
+    let i = 0;
+    while (x > xs[i + 1]) i++;
+    const h = xs[i + 1] - xs[i], t = (x - xs[i]) / h;
+    const d = (k) => (ys[k + 1] - ys[k]) / (xs[k + 1] - xs[k]);
+    const m = (k) => {
+      if (k === 0) return d(0);
+      if (k === n - 1) return d(n - 2);
+      const a = d(k - 1), b = d(k);
+      return a * b <= 0 ? 0 : (2 * a * b) / (a + b); // harmonic mean: monotone on equal steps
+    };
+    const m0 = m(i) * h, m1 = m(i + 1) * h, t2 = t * t, t3 = t2 * t;
+    return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * m0 + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * m1;
+  }
+
+  // ---- the physics: no DOM, so node runs it in the tests -------------------------------------
+  // data: {days: [iso], bands: [{name, color, manual, done, v: [level a day]}], from, to,
+  //        ahead?: {frac, label}, focus?: [first, last] day indexes, numbers?: [text a day],
+  //        week?: [7 short weekday names, Monday first]}
+  class Flow {
+    constructor(data, o) {
+      this.d = data;
+      this.o = Object.assign({ amp: AMP, meander: 1, days: false, height: 150 }, o || {});
+      this.t = 0; this.acc = 0;
+      this.dayAlpha = this.o.days ? 1 : 0;
+      this.spring = data.bands.map(() => ({ x: 0, v: 0 }));
+      this.front = { x: 0, v: 0 };
+    }
+
+    layout(width) {
+      const n = this.d.days.length, pad = 6, H = this.o.height, S = this.d.bands.length;
+      const ahead = this.d.ahead ? Math.max(0.1, Math.min(0.4, this.d.ahead.frac)) : 0;
+      this.W = width; this.H = H;
+      this.x0 = pad; this.xr = pad + (width - 2 * pad) * (1 - ahead); this.xe = width - pad - 6;
+      this.xs = Float32Array.from({ length: N }, (_, j) => this.x0 + (j * (this.xr - this.x0)) / (N - 1));
+      this.dx = (this.xr - this.x0) / (N - 1);
+      this.dayX = this.d.days.map((_, i) => this.x0 + (i * (this.xr - this.x0)) / Math.max(1, n - 1));
+      this.th0 = this.d.bands.map((b) => Float32Array.from(this.xs, (x) => Math.max(0, monotone(this.dayX, b.v, x))));
+      let peak = 1e-6;
+      for (let j = 0; j < N; j++) { let s = 0; for (const row of this.th0) s += row[j]; peak = Math.max(peak, s); }
+      this.k = (H * 0.86) / peak;
+      const L = this.xr - this.x0, k1 = TAU / (LAMBDA[0] * L), c1 = L / CROSS, g = c1 * c1 * k1;
+      this.waves = LAMBDA.map((l, m) => { const k = TAU / (l * L); return { k, w: Math.sqrt(g * k), a: WAVE[m] }; });
+      let seed = 7;
+      const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+      this.phase = this.d.bands.map(() => this.waves.map(() => rnd() * TAU));
+      this.c = L / SPEED;
+      this.u = new Float32Array(N); this.uOld = new Float32Array(N); this.uNew = new Float32Array(N);
+      this.th = this.d.bands.map(() => new Float32Array(N)); // reused every frame: no garbage
+      this.edges = Array.from({ length: S + 1 }, () => new Float32Array(N));
+      this.stars = this.d.bands.map((b) => { // ✦ where a closed feature's band last runs strong
+        if (!b.done) return -1;
+        const top = Math.max(...b.v);
+        for (let i = b.v.length - 1; i >= 0; i--) if (top > 0 && b.v[i] >= top * 0.5) return Math.round((this.dayX[i] - this.x0) / this.dx);
+        return -1;
+      });
+    }
+
+    cfl() { return (this.c * STEP) / this.dx; }
+    amplitude() { return this.o.amp * (1 - (1 - QUIET) * this.dayAlpha); }
+
+    kick(f) { // a gaussian push on u_t at a fraction of the river
+      const j0 = f * (N - 1);
+      for (let j = 0; j < N; j++) this.uOld[j] -= (KICK * Math.exp(-((j - j0) ** 2) / 18)) / 120;
+    }
+
+    step(dt) { // the damped wave equation, explicit, CFL-safe, sponges at the ends
+      const C2 = ((this.c * dt) / this.dx) ** 2, { u, uOld, uNew } = this;
+      for (let j = 1; j < N - 1; j++) {
+        const damp = ((GAMMA + (j < EDGE || j > N - 1 - EDGE ? SPONGE : 0)) * dt) / 2;
+        uNew[j] = (2 * u[j] - uOld[j] * (1 - damp) + C2 * (u[j + 1] - 2 * u[j] + u[j - 1])) / (1 + damp);
+      }
+      uNew[0] = uNew[1]; uNew[N - 1] = uNew[N - 2];
+      this.uOld = u; this.u = uNew; this.uNew = uOld;
+    }
+
+    advance(dt) {
+      this.t += dt;
+      const w0 = 7, z = 0.72;
+      this.spring.forEach((sp, s) => {
+        if (this.t < s * 0.07) return;
+        sp.v += (-w0 * w0 * (sp.x - 1) - 2 * z * w0 * sp.v) * dt; sp.x += sp.v * dt;
+      });
+      this.front.v += (-36 * (this.front.x - 1.02) - 2 * 0.9 * 6 * this.front.v) * dt;
+      this.front.x += this.front.v * dt;
+      this.acc += dt;
+      while (this.acc >= STEP) { this.step(STEP); this.acc -= STEP; }
+      this.dayAlpha += ((this.o.days ? 1 : 0) - this.dayAlpha) * Math.min(1, dt * 9);
+    }
+
+    settle() { this.spring.forEach((sp) => { sp.x = 1; sp.v = 0; }); this.front.x = 1; this.front.v = 0; this.dayAlpha = this.o.days ? 1 : 0; }
+
+    // The edges of every band at time t: band s lies between edges[s] and edges[s + 1].
+    geometry(still) {
+      const { H, xs, th, edges, t } = this, S = th.length;
+      const A = still ? 0 : this.amplitude();
+      const B = still ? 0 : 0.022 * H * this.o.meander * (1 - (1 - QUIET) * this.dayAlpha);
+      for (let s = 0; s < S; s++) {
+        const row = th[s], base = this.th0[s], ph = this.phase[s], grow = still ? 1 : Math.max(0, this.spring[s].x);
+        for (let j = 0; j < N; j++) {
+          let e = 0;
+          for (let m = 0; m < 3; m++) { const w = this.waves[m]; e += w.a * Math.sin(w.k * xs[j] - w.w * t + ph[m]); }
+          row[j] = base[j] * this.k * (1 + A * e) * grow;
+        }
+      }
+      const w1 = this.waves[0], w2 = this.waves[1];
+      for (let j = 0; j < N; j++) {
+        const mid = H / 2 + B * (0.7 * Math.sin(w1.k * xs[j] - w1.w * t + 1.3) + 0.3 * Math.sin(w2.k * xs[j] - w2.w * t + 0.4));
+        let tot = 0;
+        for (let s = 0; s < S; s++) tot += th[s][j];
+        // the ripple swells the whole section alike: a bulge, never a tear
+        const f = tot > 1 && !still ? 1 + Math.max(BULGE[0], Math.min(BULGE[1], (this.u[j] * H) / tot)) : 1;
+        let y = mid - (tot * f) / 2;
+        edges[0][j] = y;
+        for (let s = 0; s < S; s++) { y += th[s][j] * f; edges[s + 1][j] = y; }
+      }
+      return edges;
+    }
+
+    band(x, y) { // the band under a point of the last geometry, or -1
+      const j = Math.max(0, Math.min(N - 1, Math.round((x - this.x0) / this.dx))), e = this.edges;
+      for (let s = 0; s + 1 < e.length; s++) if (y >= e[s][j] - 2 && y <= e[s + 1][j] + 2 && e[s + 1][j] - e[s][j] > 0.5) return s;
+      return -1;
+    }
+
+    day(x) { // the nearest day to x
+      let best = 0;
+      this.dayX.forEach((dx, i) => { if (Math.abs(dx - x) < Math.abs(this.dayX[best] - x)) best = i; });
+      return best;
+    }
+  }
+
+  // ---- the view: a canvas, the page's tokens, a frame loop that sleeps when nobody looks ------
+  // opts: {amp, meander, days, still, at, tap, after, height, foot, onTap(band, day, x, y)}
+  class River {
+    constructor(canvas, data, opts) {
+      this.c = canvas;
+      this.g = canvas.getContext("2d");
+      this.d = data;
+      this.o = Object.assign({ still: false, height: 150, foot: 26 }, opts || {});
+      this.f = new Flow(data, this.o);
+      this.frames = []; this.draws = 0;
+      this.running = false; this.seen = true;
+      this.retheme(false);
+      this.resize();
+      // a tap, not the start of a scroll: up within 8 px and 400 ms of down
+      this.onDown = (e) => { this.down = [e.clientX, e.clientY, performance.now()]; };
+      this.onUp = (e) => {
+        const d = this.down; this.down = null;
+        if (d && Math.hypot(e.clientX - d[0], e.clientY - d[1]) < 8 && performance.now() - d[2] < 400) this.touch(e);
+      };
+      canvas.addEventListener("pointerdown", this.onDown);
+      canvas.addEventListener("pointerup", this.onUp);
+      this.observers = [];
+      if (typeof IntersectionObserver !== "undefined") this.observers.push(new IntersectionObserver((es) => es.forEach((en) => { this.seen = en.isIntersecting; if (this.seen) this.play(); else this.pause(); })));
+      if (typeof ResizeObserver !== "undefined") this.observers.push(new ResizeObserver(() => { if (Math.abs(this.width() - this.f.W) > 1) { this.resize(); if (!this.running) this.frame(); } }));
+      this.observers.forEach((o) => o.observe(canvas));
+      this.onVisible = () => (document.hidden ? this.pause() : this.play());
+      document.addEventListener("visibilitychange", this.onVisible);
+      if (this.o.still) { this.f.settle(); this.frame(); }
+      else if (this.o.at) {
+        this.simulate(this.o.at);
+        if (this.o.tap) { this.f.kick(this.o.tap); this.simulate(this.o.after || 0); }
+      } else this.play();
+    }
+
+    width() { return Math.max(200, this.c.getBoundingClientRect().width || 0); }
+
+    retheme(draw) { // the page's tokens; a Telegram theme change calls it again
+      const css = getComputedStyle(this.c), v = (n) => css.getPropertyValue(n).trim();
+      this.T = { surface: v("--surface"), ink: v("--ink"), ink2: v("--ink-2"), muted: v("--muted"), font: v("--font") || "system-ui, sans-serif" };
+      this.colors = this.d.bands.map((b) => (b.color.startsWith("var(") ? v(b.color.slice(4, -1)) : b.color));
+      this.hatch = null;
+      if (draw !== false && !this.running) this.frame();
+    }
+
+    resize() {
+      this.dpr = Math.min(2, (typeof window !== "undefined" && window.devicePixelRatio) || 1);
+      const W = this.width(), H = this.o.height;
+      this.c.width = Math.round(W * this.dpr);
+      this.c.height = Math.round((H + this.o.foot) * this.dpr);
+      this.c.style.height = H + this.o.foot + "px";
+      this.hatch = null; // the device pixel ratio may have changed
+      this.f.layout(W);
+    }
+
+    pattern() { // the hatch of the work outside git: drawn once, anchored to the canvas, still
+      const p = document.createElement("canvas"), q = p.getContext("2d"), size = Math.round(7 * this.dpr);
+      p.width = p.height = size;
+      q.strokeStyle = this.T.surface; q.globalAlpha = 0.42; q.lineWidth = 1.7 * this.dpr;
+      q.beginPath(); q.moveTo(0, size); q.lineTo(size, 0); q.moveTo(-size / 2, size / 2); q.lineTo(size / 2, -size / 2); q.moveTo(size / 2, size * 1.5); q.lineTo(size * 1.5, size / 2); q.stroke();
+      const pattern = this.g.createPattern(p, "repeat"); // drawn in device pixels: back to CSS pixels
+      if (pattern && pattern.setTransform && typeof DOMMatrix !== "undefined") pattern.setTransform(new DOMMatrix().scale(1 / this.dpr));
+      return pattern;
+    }
+
+    touch(e) {
+      if (this.dead) return;
+      const r = this.c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, f = this.f;
+      if (x > f.xr + 4) return;
+      if (!this.o.still) { f.kick((x - f.x0) / (f.xr - f.x0)); this.play(); }
+      if (this.o.onTap) this.o.onTap(f.band(x, y), f.day(x), x, y);
+    }
+
+    draw(still) {
+      const g = this.g, f = this.f, T = this.T, { W, H, xs } = f, foot = this.o.foot, n = xs.length;
+      if (!this.hatch) this.hatch = this.pattern();
+      this.draws++;
+      g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      g.clearRect(0, 0, W, H + foot);
+      const e = f.geometry(still), S = this.d.bands.length;
+      const front = still ? W : Math.max(0, Math.min(W, f.front.x * W));
+      g.save();
+      g.beginPath(); g.rect(0, 0, front, H + foot); g.clip();
+      for (let s = 0; s < S; s++) {
+        const a = e[s], z = e[s + 1];
+        g.beginPath();
+        g.moveTo(xs[0], a[0]);
+        for (let j = 1; j < n; j++) g.lineTo(xs[j], a[j]);
+        for (let j = n - 1; j >= 0; j--) g.lineTo(xs[j], z[j]);
+        g.closePath();
+        g.globalAlpha = 0.95; g.fillStyle = this.colors[s]; g.fill();
+        if (this.d.bands[s].manual) { g.fillStyle = this.hatch; g.fill(); }
+        g.globalAlpha = 1; g.strokeStyle = T.surface; g.lineWidth = 0.9;
+        g.beginPath(); g.moveTo(xs[0], z[0]); for (let j = 1; j < n; j++) g.lineTo(xs[j], z[j]); g.stroke();
+      }
+      if (this.d.focus) { // the report's week in focus: the days before it fade into the card
+        const step = f.dayX.length > 1 ? f.dayX[1] - f.dayX[0] : 0, fx = f.dayX[this.d.focus[0]] - step / 2;
+        if (fx > f.x0) {
+          const fade = g.createLinearGradient(fx - 14, 0, fx + 4, 0);
+          fade.addColorStop(0, "rgba(0,0,0,0.62)"); fade.addColorStop(1, "rgba(0,0,0,0)");
+          g.globalCompositeOperation = "destination-out"; g.fillStyle = fade; g.fillRect(0, 0, fx + 4, H); g.globalCompositeOperation = "source-over";
+        }
+      }
+      f.stars.forEach((j, s) => { if (j >= 0) star(g, xs[j], (e[s][j] + e[s + 1][j]) / 2, 6, T.ink, T.surface); });
+      g.restore();
+      const top = e[0], bottom = e[S], endY = (top[n - 1] + bottom[n - 1]) / 2, done = front >= f.xr - 1;
+      const ph = still ? 0.35 : (f.t % 1.8) / 1.8;
+      if (this.d.ahead && done) { // the channel to the deadline: ink, dashed, the date pulses
+        const lx = f.xe, ly = H / 2, xr = f.xr, ty = top[n - 1], by = bottom[n - 1];
+        const edge = (y0, dy) => { g.moveTo(xr, y0); g.bezierCurveTo(xr + 40, y0, lx - 30, ly + dy, lx, ly); };
+        g.beginPath(); edge(ty, -8); g.bezierCurveTo(lx - 30, ly + 8, xr + 40, by, xr, by); g.closePath();
+        g.globalAlpha = 0.07; g.fillStyle = T.ink; g.fill();
+        g.globalAlpha = 0.45; g.strokeStyle = T.ink; g.lineWidth = 1.2; g.setLineDash([3, 3]);
+        g.beginPath(); edge(ty, -8); edge(by, 8); g.stroke(); g.setLineDash([]);
+        if (!still) { g.globalAlpha = 0.5 * (1 - ph); g.lineWidth = 1.5; g.beginPath(); g.arc(lx, ly, 6 + 9 * ph, 0, TAU); g.stroke(); }
+        g.globalAlpha = 1; g.fillStyle = T.ink; g.beginPath(); g.arc(lx, ly, 5.5, 0, TAU); g.fill();
+      }
+      if (done) { // today pulses at the river's end
+        if (!still) { g.beginPath(); g.arc(f.xr, endY, 5 + 11 * ph, 0, TAU); g.globalAlpha = 0.24 * (1 - ph); g.fillStyle = T.ink; g.fill(); }
+        g.globalAlpha = 1; g.beginPath(); g.arc(f.xr, endY, 4, 0, TAU); g.fillStyle = T.ink; g.fill();
+        g.strokeStyle = T.surface; g.lineWidth = 1.5; g.stroke();
+      }
+      this.labels();
+      g.globalAlpha = 1;
+    }
+
+    labels() { // the ends quietly; with the days: a dotted line, the weekday and the date each
+      const g = this.g, f = this.f, T = this.T, H = f.H, da = f.dayAlpha, n = this.d.days.length, ahead = this.d.ahead;
+      const wk = this.d.week || ["M", "T", "W", "T", "F", "S", "S"];
+      let room = f.W;
+      if (ahead && da < 0.5) { g.font = `600 12px ${T.font}`; room = f.W - 2 - g.measureText(ahead.label).width - 10; }
+      g.font = `10px ${T.font}`;
+      if (da > 0.01) {
+        const every = n <= 16 ? 1 : 7; // a long river: Mondays only, by their date
+        this.d.days.forEach((iso, i) => {
+          const dd = new Date(iso + "T12:00:00"), dow = (dd.getDay() + 6) % 7, x = f.dayX[i], mark = every === 1 || dow === 0;
+          g.globalAlpha = (mark ? 0.18 : 0.08) * da; g.strokeStyle = T.ink; g.lineWidth = 1; g.setLineDash([1, 3]);
+          g.beginPath(); g.moveTo(x, 2); g.lineTo(x, H); g.stroke(); g.setLineDash([]);
+          if (!mark || x + 6 > room) return;
+          g.textAlign = i === 0 ? "left" : i === n - 1 && !ahead ? "right" : "center";
+          g.globalAlpha = 0.8 * da; g.fillStyle = T.muted;
+          g.fillText(every === 1 ? wk[dow] : String(dd.getDate()), x, H + 11);
+          if (every === 1) { g.globalAlpha = 0.5 * da; g.fillText(String(dd.getDate()), x, H + 23); }
+          if (this.d.numbers && this.d.numbers[i]) { g.globalAlpha = 0.9 * da; g.fillStyle = T.ink2; g.font = `600 9.5px ${T.font}`; g.fillText(this.d.numbers[i], x, 10); g.font = `10px ${T.font}`; }
+        });
+      }
+      g.globalAlpha = 1 - da; g.fillStyle = T.muted; g.font = `12px ${T.font}`;
+      g.textAlign = "left"; g.fillText(this.d.from, f.x0, H + 17);
+      if (!ahead) { g.textAlign = "right"; g.fillText(this.d.to, f.xr, H + 17); return; }
+      g.save(); g.fillStyle = T.ink; g.font = `600 12px ${T.font}`; g.textAlign = "right";
+      g.globalAlpha = 1 - da; g.fillText(ahead.label, f.W - 2, H + 17);
+      g.globalAlpha = da; g.fillText(ahead.label, f.W - 2, H / 2 - 16); // with the days: over the dot
+      g.restore();
+      const half = g.measureText(this.d.to).width / 2; // «Today» under the river's end, clear of the date
+      g.textAlign = "center"; g.fillText(this.d.to, Math.min(f.xr, room - half), H + 17);
+    }
+
+    frame() { this.draw(Boolean(this.o.still)); }
+
+    tick(now) {
+      if (!this.running) return;
+      const dt = Math.min(0.05, (now - (this.prev || now)) / 1000);
+      this.prev = now;
+      const t0 = performance.now();
+      this.f.advance(dt);
+      this.draw(false);
+      this.frames.push(performance.now() - t0);
+      if (this.frames.length > 240) this.frames.shift();
+      this.raf = requestAnimationFrame((n) => this.tick(n));
+    }
+
+    simulate(seconds) { // deterministic: fixed 1/60 s steps (screenshots, tests: ?at=<s>)
+      for (let k = 0; k < Math.round(seconds * 60); k++) this.f.advance(1 / 60);
+      this.draw(false);
+    }
+
+    play() {
+      if (this.dead || this.o.still || this.o.at || this.running || !this.seen || document.hidden) return;
+      this.running = true; this.prev = 0;
+      this.raf = requestAnimationFrame((n) => this.tick(n));
+    }
+    pause() { // one loop at most: a resume never finds the old frame still queued
+      this.running = false;
+      if (this.raf) cancelAnimationFrame(this.raf);
+      this.raf = 0;
+    }
+    destroy() { // the page drew a new screen (or a new river on the same canvas): nothing stays behind
+      this.dead = true;
+      this.pause();
+      if (this.c.removeEventListener) { this.c.removeEventListener("pointerdown", this.onDown); this.c.removeEventListener("pointerup", this.onUp); }
+      this.observers.forEach((o) => o.disconnect());
+      document.removeEventListener("visibilitychange", this.onVisible);
+    }
+    setData(data) { // new numbers on the same river (#291): the clock, the waves and the ripples
+      // stay, the entry is over; an edit reshapes the bands in place, nothing pours in again
+      const f = this.f, u = f.u, uOld = f.uOld;
+      this.d = data; f.d = data;
+      f.layout(f.W);
+      f.u = u; f.uOld = uOld;
+      f.spring = data.bands.map(() => ({ x: 1, v: 0 }));
+      f.front.x = Math.max(1, f.front.x); f.front.v = 0;
+      this.retheme(false);
+      if (!this.running) this.frame();
+    }
+    set(opts) { // the Days switch, the owner's sliders: a still river redraws once, a live one eases
+      Object.assign(this.o, opts); Object.assign(this.f.o, opts);
+      if (this.o.still || this.o.at) { this.f.dayAlpha = this.f.o.days ? 1 : 0; this.frame(); } else this.play();
+    }
+    cost() { const f = this.frames.slice().sort((a, b) => a - b); return f.length ? f[Math.floor(f.length / 2)] : 0; }
+  }
+
+  function star(g, x, y, r, ink, halo) { // ✦ a closed feature: ink, a thin halo of the surface
+    g.save(); g.translate(x, y); g.globalAlpha = 1;
+    g.beginPath();
+    for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4 - Math.PI / 2, rr = i % 2 ? r * 0.32 : r; g.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+    g.closePath(); g.lineWidth = 2; g.strokeStyle = halo; g.stroke(); g.fillStyle = ink; g.fill();
+    g.restore();
+  }
+
+  River.Flow = Flow;
+  River.monotone = monotone;
+  River.STEP = STEP;
+  return River;
+})();
+
+if (typeof module !== "undefined") module.exports = River;
+
 // The client's app (#210): the week's report and invoice, «B · Flow» (docs/design/client/README.md),
 // and the client's home (#231): status, the road to launch, this week, the invoice at a glance.
+// The living river (#273, concept B): the project's flow and the Features road in one card,
+// drawn by river.js (built into the page ahead of this script). The first-run tour (#230, concept
+// A «Небо»): ✨ in the chat opens it once, «How it works» again; the owner's preview every time.
 // Vanilla JS, no library, no network. The fragment holds either the sealed snapshot (#s=) or the
 // viewer's key (#k=), never both: the key lives in the viewer's Telegram CloudStorage (her.seal),
-// next to the newest home this viewer opened (an old button still shows the newest one).
-"use strict";
+// next to the newest home this viewer opened (an old button still shows the newest one). The
+// snapshot opens only when Her signed it (seal.js, #191 F14), so a forged link shows nothing.
 
 // ---- Telegram: a tiny bridge instead of telegram-web-app.js (nothing loads from outside) ----
 const launch = new URLSearchParams(location.hash.slice(1));
@@ -303,11 +890,10 @@ const QS = new URLSearchParams(location.search); // the local preview: ?theme=da
 const TG = { data: launch.get("tgWebAppData") || "", theme: json(launch.get("tgWebAppThemeParams")) };
 TG.inside = Boolean(TG.data || launch.get("tgWebAppPlatform") || window.TelegramWebviewProxy || (window.external && "notify" in window.external));
 // What a link cannot fake (#239 F14): a native client's bridge, or a frame of Telegram Web.
-const WEB = "https://web.telegram.org";
 const framed = window.parent !== window && ((location.ancestorOrigins && location.ancestorOrigins[0] === WEB) || document.referrer.startsWith(WEB + "/"));
 TG.native = Boolean(window.TelegramWebviewProxy || (window.external && "notify" in window.external) || framed);
 try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* file:// */ }
-if (QS.get("still")) document.documentElement.classList.add("still");
+if (QS.get("still") || QS.get("at")) document.documentElement.classList.add("still"); // a frozen frame: ?still=1, ?at=<s>
 
 function json(text) { try { return JSON.parse(text); } catch (e) { return null; } }
 function post(type, data) {
@@ -317,14 +903,9 @@ function post(type, data) {
     else if (window.parent !== window) window.parent.postMessage(JSON.stringify({ eventType: type, eventData: data || {} }), WEB);
   } catch (e) { /* outside Telegram */ }
 }
-const pending = {};
 function receive(type, data) {
-  if (type === "theme_changed" && data && data.theme_params) theme(data.theme_params);
-  if (type === "custom_method_invoked" && data && pending[data.req_id]) {
-    const [ok, fail] = pending[data.req_id];
-    delete pending[data.req_id];
-    if (data.error) fail(new Error(data.error)); else ok(data.result);
-  }
+  if (type === "theme_changed" && data && data.theme_params) { theme(data.theme_params); rivers.forEach((r) => r.retheme()); }
+  sealEvent(type, data);
 }
 window.Telegram = window.Telegram || {};
 window.Telegram.WebView = { receiveEvent: receive };
@@ -335,32 +916,32 @@ window.addEventListener("message", (e) => {
 });
 const haptic = (kind) => post("web_app_trigger_haptic_feedback", kind === "select" ? { type: "selection_change" } : { type: "impact", impact_style: kind || "light" });
 
-let calls = 0;
-function nonce() {
-  if (crypto.randomUUID) return crypto.randomUUID();
-  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
-}
-function invoke(method, params) { // Telegram's CloudStorage, as telegram-web-app.js calls it
-  if (!TG.inside) return Promise.reject(new Error("outside Telegram"));
-  return new Promise((ok, fail) => {
-    const id = `her${++calls}_${nonce()}`; // unguessable: a framing page cannot answer for Telegram
-    pending[id] = [ok, fail];
-    post("web_app_invoke_custom_method", { req_id: id, method, params });
-    setTimeout(() => { if (pending[id]) { delete pending[id]; fail(new Error("timeout")); } }, 2500);
-  });
-}
-const SLOT = "her_client_key", HOME = "her_client_home";
-const local = { get() { try { return localStorage.getItem(SLOT); } catch (e) { return null; } }, set(v) { try { localStorage.setItem(SLOT, v); } catch (e) { /* private mode */ } } };
-async function loadStore() { // the key and the newest home in one round trip
+const SLOT = "her_client_key", MADE = "her_client_key_m", HOME = "her_client_home", SEEN = "her_tour_seen";
+const local = { get: () => localKey.get(SLOT), set: (v) => localKey.set(SLOT, v) };
+async function loadStore() { // the key and its age, the newest home and the tour's «seen» in one round trip
   let r = null;
-  try { r = await invoke("getStorageValues", { keys: [SLOT, HOME] }); } catch (e) { /* old client, or a browser */ }
-  return { key: (r && r[SLOT]) || local.get(), home: (r && r[HOME]) || "" };
+  try { r = await invoke("getStorageValues", { keys: [SLOT, MADE, HOME, SEEN] }); } catch (e) { /* old client, or a browser */ }
+  const key = (r && r[SLOT]) || local.get();
+  return { key, made: (r && r[SLOT] && Number(r[MADE])) || 0, home: (r && r[HOME]) || "", seen: Boolean(r && r[SEEN]) };
 }
-function keepHome(sealed) { invoke("saveStorageValue", { key: HOME, value: sealed }).catch(() => { /* a browser */ }); }
-async function saveKey(key) {
+// What the page remembers in the viewer's CloudStorage. A preview remembers nothing (#233): the
+// owner's look never becomes their newest home or marks anything seen. #230's tour keeps its
+// «seen» here too, so the owner's preview shows the tour every time and the client's stays unseen.
+function remember(key, value) {
+  if (D && D.preview) return Promise.resolve(false);
+  return invoke("saveStorageValue", { key, value }).then(() => true, () => false); // a browser
+}
+function keepHome(sealed) { remember(HOME, sealed); }
+async function saveKey(key, made) {
   local.set(key);
-  try { await invoke("saveStorageValue", { key: SLOT, value: key }); return true; } catch (e) { return !TG.inside; }
+  try { await invoke("saveStorageValue", { key: SLOT, value: key }); } catch (e) { return !TG.inside; }
+  await invoke("saveStorageValue", { key: MADE, value: String(made || 0) }).catch(() => {}); // an older age: overwritten next time
+  return true;
 }
+// A key link's own key, or the one kept here when that is newer (#291): ✨ and 🔑 under old
+// cards still carry the key from before the owner's ♻️, and a tap must not bring it back.
+// `m` is when the key was made (Signal's app_keys); a link or a store without it counts as 0.
+function newerKept(store, key, made) { return Boolean(store.key) && store.key !== key && store.made > made; }
 
 function theme(params) {
   const forced = QS.get("theme");
@@ -374,19 +955,6 @@ function theme(params) {
   post("web_app_set_header_color", { color: plane });
   post("web_app_set_background_color", { color: plane });
   post("web_app_set_bottom_bar_color", { color: plane });
-}
-
-// ---- the sealed snapshot ------------------------------------------------------------------
-function unb64(text) {
-  const s = atob(text.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((text.length + 3) % 4));
-  return Uint8Array.from(s, (c) => c.charCodeAt(0));
-}
-async function unseal(text, keyText) {
-  const raw = unb64(text);
-  const key = await crypto.subtle.importKey("raw", unb64(keyText), "AES-GCM", false, ["decrypt"]);
-  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
-  const stream = new Blob([plain]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
-  return JSON.parse(await new Response(stream).text());
 }
 
 // ---- words: the client's language ------------------------------------------------------------
@@ -410,13 +978,26 @@ const WORDS = {
     paying: "What you're paying for", payingHint: "Every line flows into the total", total: "Total",
     payBy: "Pay by bank transfer", copy: "Copy details", copied: "Payment details copied", pdf: "PDF",
     pdfHint: "The PDF is in our chat, right under the card", pdfSending: "Sending the PDF to our chat…", from: "From", to: "To",
-    unlockTitle: "One tap to unlock", unlockText: "For your privacy, this link carries no key. Tap 🔑 Unlock under the report card in our chat. Once is enough, on every device.",
+    peek: (n) => `Preview as ${n}`, peekPdf: (n) => `Preview: nothing is sent. ${n} gets the PDF in the chat`,
+    unlockTitle: "One tap to unlock", unlockText: "For your privacy, this link carries no key. In our chat, tap ✨ Take a 30-second tour or 🔑 Unlock once. Once is enough, on every device.",
     unlocked: "Unlocked", unlockedText: "This Telegram account can now open your reports. Go back to the chat and open the report.",
     unlockFail: "Telegram did not keep the key", unlockFailText: "Update Telegram and tap 🔑 Unlock once more.",
     keyHeld: "This browser already holds a key", keyHeldText: "Open the report from our chat in Telegram.",
     nodata: "Open me from our chat", nodataText: "This page shows your report when you open it from the card in Telegram.",
     broken: "This report needs a fresh unlock", brokenText: "Tap 🔑 Unlock under the newest report card, then open the report again.",
+    stale: "This button is from an older card", staleText: "Open My project from the menu button in our chat, or send /start for a fresh card.",
+    forged: "This link is not from us", forgedText: "It was not made in our chat, so it shows nothing. Open your report from the card in our chat.",
     back: "Back to the chat",
+    flowing: "Your project, flowing", since: (d) => `What we built each day since ${d}`,
+    flowMode: "Flow", days: "Days", outside: "Outside the code", weekdays: ["M", "T", "W", "T", "F", "S", "S"],
+    // the tour (#230): ≤ 12 words a screen, the picture carries the rest
+    hi: (n) => (n ? `Hi ${n}` : "Welcome"), of: (i, n) => `${i} of ${n}`, skip: "Skip", next: "Next", openProject: "Open my project",
+    tourRiver: ["Your project, flowing to launch.", "Wider means more got built."], tourFirst: "Your first week fills it in.",
+    tourRoad: ["Done, now, next.", "Always one glance away."],
+    tourInvoice: ["Your invoice, calm and clear.", "Copy the details. Paid shows here."],
+    tourAsk: ["Questions go both ways.", "Write here any time. We answer."],
+    there: (p) => `${p}% there`, sent: "Sent",
+    talk: ["Logo on the login page: light or dark?", "Light", "Dark", "Dark, please ✓", "Done. It's live tonight ✦"],
   },
   uk: {
     home: "Проєкт", week: "Тиждень", invoice: "Рахунок", ask: "Питання",
@@ -437,13 +1018,25 @@ const WORDS = {
     paying: "За що ви платите", payingHint: "Кожен рядок впадає в суму", total: "Разом",
     payBy: "Оплата переказом", copy: "Скопіювати реквізити", copied: "Реквізити скопійовано", pdf: "PDF",
     pdfHint: "PDF у нашому чаті, одразу під карткою", pdfSending: "Надсилаю PDF у наш чат…", from: "Від", to: "Кому",
-    unlockTitle: "Один дотик, щоб відкрити", unlockText: "Задля приватності в цьому посиланні немає ключа. Торкніться 🔑 під карткою звіту в нашому чаті — один раз, на всіх пристроях.",
+    peek: (n) => `Прев'ю: як бачить ${n}`, peekPdf: (n) => `Прев'ю: нічого не надсилається. ${n} отримає PDF у чаті`,
+    unlockTitle: "Один дотик, щоб відкрити", unlockText: "Задля приватності в цьому посиланні немає ключа. У нашому чаті торкніться ✨ Тур за 30 секунд або 🔑 — один раз, на всіх пристроях.",
     unlocked: "Відкрито", unlockedText: "Цей акаунт Telegram тепер відкриває ваші звіти. Поверніться в чат і відкрийте звіт.",
     unlockFail: "Telegram не зберіг ключ", unlockFailText: "Оновіть Telegram і торкніться 🔑 ще раз.",
     keyHeld: "У цьому браузері вже є ключ", keyHeldText: "Відкрийте звіт з нашого чату в Telegram.",
     nodata: "Відкрийте з нашого чату", nodataText: "Ця сторінка показує звіт, коли її відкрити з картки в Telegram.",
     broken: "Звіт треба відкрити заново", brokenText: "Торкніться 🔑 під найновішою карткою звіту, а тоді відкрийте звіт ще раз.",
+    stale: "Ця кнопка зі старої картки", staleText: "Відкрийте «Мій проєкт» кнопкою меню в нашому чаті або надішліть /start, щоб отримати нову картку.",
+    forged: "Це посилання не від нас", forgedText: "Його зроблено не в нашому чаті, тож воно нічого не показує. Відкрийте звіт з картки в нашому чаті.",
     back: "Назад у чат",
+    flowing: "Ваш проєкт у русі", since: (d) => `Що ми робили щодня з ${d}`,
+    flowMode: "Потік", days: "Дні", outside: "Поза кодом", weekdays: ["пн", "вт", "ср", "чт", "пт", "сб", "нд"],
+    hi: (n) => (n ? `Вітаю, ${n}` : "Вітаю"), of: (i, n) => `${i} з ${n}`, skip: "Пропустити", next: "Далі", openProject: "Відкрити мій проєкт",
+    tourRiver: ["Ваш проєкт тече до запуску.", "Ширше — значить більше зроблено."], tourFirst: "Перший тиждень наповнить її кольором.",
+    tourRoad: ["Зроблено, зараз, далі.", "Завжди на відстані погляду."],
+    tourInvoice: ["Ваш рахунок — спокійно й ясно.", "Скопіюйте реквізити. Тут з'явиться «Оплачено»."],
+    tourAsk: ["Питання — в обидва боки.", "Пишіть сюди будь-коли. Ми відповімо."],
+    there: (p) => `готово на ${p}%`, sent: "Надіслано",
+    talk: ["Логотип на сторінці входу: світлий чи темний?", "Світлий", "Темний", "Темний, будь ласка ✓", "Готово. Увечері вже на сайті ✦"],
   },
 };
 let W = WORDS.en, LANG = "en";
@@ -468,10 +1061,11 @@ const ICON = {
   chat: '<path d="M5 18l-1 3 4-1.5A8 8 0 1 0 5 18z"/>',
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
   down: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
 };
 function day(iso) { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d); }
-// Today on the viewer's calendar; the still preview pins it (?still=1&today=2026-11-01).
-const TODAY = QS.get("still") && /^\d{4}-\d{2}-\d{2}$/.test(QS.get("today") || "") ? day(QS.get("today")) : (() => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); })();
+// Today on the viewer's calendar; a still or `at` preview pins it (?still=1&today=2026-11-01).
+const TODAY = (QS.get("still") || QS.get("at")) && /^\d{4}-\d{2}-\d{2}$/.test(QS.get("today") || "") ? day(QS.get("today")) : (() => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); })();
 function dateText(iso, weekday) {
   const opts = weekday ? { weekday: "short", day: "numeric", month: "short" } : { day: "numeric", month: "short" };
   return new Intl.DateTimeFormat(LANG === "uk" ? "uk-UA" : "en-GB", opts).format(day(iso));
@@ -526,8 +1120,13 @@ function tabs() {
   }
   return n;
 }
+// The owner's preview (#233): the client's page, same code and data, under one quiet mark.
+function viewer() { return typeof D.preview === "string" && D.preview ? D.preview : D.client; }
+function peek() { const m = h("div", "peek"); m.innerHTML = icon(ICON.eye); m.append(h("span", "", W.peek(viewer()))); return m; }
 function render() {
+  clearRivers(); // the old screen's rivers stop with it
   app.replaceChildren();
+  if (D.preview) app.append(peek());
   const screen = h("section", "screen");
   app.append(screen);
   ({ home: homeScreen, invoice: invoiceScreen }[current] || weekScreen)(screen);
@@ -567,7 +1166,8 @@ function weekScreen(root) {
   const statement = D.status || (D.deadline ? `${D.deadline.what}: ${dateText(D.deadline.date, true)}.` : D.period.title);
   top.append(h("div", "statement", statement));
   root.append(top);
-  root.append(roadCard());
+  const flow = riverData(true);
+  root.append(flow ? riverCard(flow, D.deadline ? Math.round((day(D.deadline.date) - TODAY) / 864e5) : -1, true) : roadCard());
   const valued = D.lines.map((l, i) => Object.assign({ slot: i }, l)).filter((l) => l.v || l.r);
   if (valued.length) root.append(valueCard(valued));
   if (D.next.length) root.append(nextCard());
@@ -637,8 +1237,21 @@ function bands(svg, H, width) {
   return [top0, base];
 }
 function isoOf(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`; }
+// A title's colour slot: its invoice line's (the first of two alike); a river line not on the
+// invoice (outside git, a Feature not billed this week), then a goal or a next step on neither,
+// the next free one: the same colour in the river and on the road, never two titles on one.
+function titleSlots() {
+  const map = new Map();
+  let free = D.lines.length;
+  D.lines.forEach((l, i) => { const k = String(l.t).toLowerCase(); if (!map.has(k)) map.set(k, i); });
+  const add = (t) => { const k = String(t).toLowerCase(); if (!map.has(k)) map.set(k, free++); };
+  (D.flow && Array.isArray(D.flow.lines) ? D.flow.lines : []).forEach((l) => add(l.t));
+  D.goals.forEach((g) => add(g[0]));
+  D.next.forEach((x) => add(x[0]));
+  return map;
+}
 function lanesOf() {
-  const slotOf = (title, fallback) => { const i = D.lines.findIndex((l) => l.t.toLowerCase() === title.toLowerCase()); return i >= 0 ? i : fallback; };
+  const slots = titleSlots(), slotOf = (title, fallback) => (slots.has(title.toLowerCase()) ? slots.get(title.toLowerCase()) : fallback);
   const done = [], now = [], next = [];
   D.goals.forEach(([title, closed, total], i) => (total && closed >= total ? done : now).push([title, slotOf(title, D.lines.length + i)]));
   D.next.forEach(([what], i) => next.push([what, slotOf(what, D.lines.length + D.goals.length + i)]));
@@ -713,6 +1326,7 @@ function pdfLink() {
 function getPdf(e) {
   if (e) e.stopPropagation(); // the teaser's own tap opens the invoice
   haptic();
+  if (D.preview) { toast(W.peekPdf(viewer())); return; } // the owner's preview (#233): no Signal
   const path = pdfLink();
   toast(path ? W.pdfSending : W.pdfHint);
   if (path && TG.inside) post("web_app_open_tg_link", { path_full: path });
@@ -753,7 +1367,8 @@ function homeScreen(root) {
   if (left >= 0) { const chips = h("div", "chips"); chips.append(chip(W.daysTo(left, D.deadline.what))); top.append(chips); }
   top.append(h("div", "statement", D.status || (left >= 0 ? `${D.deadline.what}: ${dateText(D.deadline.date, true)}.` : D.client)));
   root.append(top);
-  const road = launchCard(left);
+  const flow = riverData(false);
+  const road = flow ? riverCard(flow, left) : launchCard(left);
   if (road) root.append(road);
   if (Array.isArray(D.asks)) root.append(asksCard()); // #216 fills it; without the key, no claim
   root.append(D.invoice ? thisWeekCard() : firstCard());
@@ -763,7 +1378,7 @@ function homeScreen(root) {
 // The features as stations on one road: done (filled, ✓), now (filled as far as it got), next
 // (hollow), and the launch at the end. The ring: every feature's built share in its colour.
 function stationsOf() {
-  const slotOf = (title, fallback) => { const i = D.lines.findIndex((l) => l.t.toLowerCase() === title.toLowerCase()); return i >= 0 ? i : fallback; };
+  const slots = titleSlots(), slotOf = (title, fallback) => (slots.has(title.toLowerCase()) ? slots.get(title.toLowerCase()) : fallback);
   const done = [], now = [], next = [];
   D.goals.forEach(([t, closed, total], i) => (total && closed >= total ? done : now).push({ t, slot: slotOf(t, D.lines.length + i), closed, total }));
   D.next.forEach(([t], i) => { if (!D.goals.some((g) => g[0].toLowerCase() === t.toLowerCase())) next.push({ t, slot: slotOf(t, D.lines.length + D.goals.length + i), closed: 0, total: 0 }); });
@@ -837,6 +1452,114 @@ function launchCard(left) {
   return card;
 }
 
+// ---- the living river (#273): the flow and the road in one card -------------------------------
+// The snapshot's `flow` (monitor.client_lens): levels only, no hours. A band takes its invoice
+// line's colour by title; a line not on the invoice (outside git, PM) the next free slot.
+const rivers = [];
+let screens = 0; // each new screen: a frame queued for an older one builds nothing (#291)
+function clearRivers() { screens++; rivers.splice(0).forEach((r) => r.destroy()); }
+function nextFrame(node, draw) { // laid out first; never on a screen replaced since, or a detached node
+  const gen = screens;
+  requestAnimationFrame(() => { if (gen === screens && node.isConnected) draw(); });
+}
+const RQ = { at: Number(QS.get("at")) || 0, tap: Number(QS.get("tap")) || 0, after: Number(QS.get("after")) || 0 };
+function riverData(week) {
+  const F = D.flow;
+  if (!F || !(F.days > 1) || !Array.isArray(F.lines) || !F.lines.length || !/^\d{4}-\d{2}-\d{2}$/.test(F.first || "")) return null;
+  const first = day(F.first), n = F.days;
+  const days = Array.from({ length: n }, (_, i) => { const d = new Date(first); d.setDate(first.getDate() + i); return isoOf(d); });
+  const closed = new Set(D.goals.filter(([, c, t]) => t && c >= t).map(([t]) => String(t).toLowerCase()));
+  const slots = titleSlots();
+  const ordered = F.lines.filter((l) => l.manual).concat(F.lines.filter((l) => !l.manual)); // outside git lies on top
+  const bands = ordered.filter((l) => Array.isArray(l.v) && l.v.length === n && l.t && l.v.some((x) => Number(x) > 0)).map((l) => {
+    const slot = slots.get(String(l.t).toLowerCase());
+    return { name: String(l.t), color: color(slot), slot, manual: Boolean(l.manual), done: closed.has(String(l.t).toLowerCase()), v: l.v.map((x) => Math.max(0, Number(x) || 0)) };
+  });
+  if (!bands.length) return null;
+  const last = days[n - 1];
+  const data = { days, bands, from: dateText(F.first), to: last === isoOf(TODAY) ? W.today : dateText(last), week: W.weekdays };
+  if (D.deadline && day(D.deadline.date) > day(last)) {
+    const ahead = Math.round((day(D.deadline.date) - day(last)) / 864e5);
+    data.ahead = { frac: Math.min(0.3, Math.max(0.18, ahead / (n - 1 + ahead))), label: dateText(D.deadline.date) };
+  }
+  if (week && D.period) { const i = days.indexOf(D.period.first); if (i > 0) data.focus = [i, n - 1]; }
+  return data;
+}
+function riverCard(data, left, week) {
+  const card = h("section", "card deep river-card"), head = h("div", "rhead"), mine = h("div", "");
+  const [done, now, next] = stationsOf(), goals = [...done, ...now], total = sum(goals.map((g) => g.total));
+  if (week) { const big = h("div", "rbig", weekLabel()); big.style.fontSize = "34px"; mine.append(h("div", "eyebrow", ageLabel()), big); }
+  else if (total) { const big = h("div", "rbig num", `${Math.round((sum(goals.map((g) => g.closed)) / total) * 100)}%`); big.append(h("small", "", W.builtPct)); mine.append(big); }
+  else mine.append(h("h3", "", W.flowing), h("div", "hint", W.since(dateText(D.flow.first))));
+  head.append(mine);
+  if (left >= 0) {
+    const when = h("div", "rwhen");
+    when.append(h("div", "eyebrow", D.deadline.what || W.launchOn), h("b", "", dateText(D.deadline.date, true)), h("span", "", W.daysLeft(left)));
+    head.append(when);
+  }
+  card.append(head);
+  const box = h("div", "rbox"), c = h("canvas", "river"), tip = h("div", "tip");
+  c.setAttribute("role", "img");
+  c.setAttribute("aria-label", `${W.flowing}: ${data.bands.map((b) => b.name).join(", ")}`);
+  box.append(c, tip);
+  card.append(box);
+  let timer = 0;
+  const name = (band, x, y) => { // a touch: the ripple, a light tap, and the colour's name
+    haptic("light");
+    if (band < 0) return;
+    const b = data.bands[band];
+    tip.replaceChildren(h("i"), document.createTextNode(`${b.done ? "✦ " : ""}${b.name}`));
+    tip.firstChild.style.background = b.color;
+    tip.style.left = `${Math.max(64, Math.min(box.clientWidth - 64, x))}px`; tip.style.top = `${y}px`;
+    tip.classList.add("on"); clearTimeout(timer); if (!RQ.at) timer = setTimeout(() => tip.classList.remove("on"), 1800);
+  };
+  const still = Boolean(QS.get("still")) || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let daysOn = false; // the switch may be tapped before the river exists
+  nextFrame(c, () => { // laid out first: the canvas knows its width
+    const r = new River(c, data, { height: 160, still, days: daysOn, at: RQ.at, tap: RQ.tap, after: RQ.after, onTap: (band, _day, x, y) => name(band, x, y) });
+    rivers.push(r); c.river = r;
+    if (RQ.at && RQ.tap) { const x = r.f.x0 + RQ.tap * (r.f.xr - r.f.x0); name(r.f.band(x, r.f.H / 2), x, r.f.H / 2); }
+  });
+  const foot = h("div", "rfoot"), outside = h("div", "legend"), seg = h("div", "seg");
+  const manual = data.bands.filter((b) => b.manual);
+  if (manual.length) {
+    outside.append(h("span", "", `${W.outside}:`));
+    for (const b of manual) { const it = h("span", ""), sw = h("i", "sw hatch"); sw.style.background = b.color; it.append(sw, document.createTextNode(b.name)); outside.append(it); }
+  }
+  const modes = [[W.flowMode, false], [W.days, true]].map(([label, on]) => {
+    const b = h("button", on ? "" : "on", label);
+    b.onclick = () => { haptic("select"); daysOn = on; modes.forEach((m) => m.classList.toggle("on", m === b)); if (c.river) c.river.set({ days: on }); };
+    return b;
+  });
+  seg.append(...modes);
+  foot.append(outside, seg);
+  card.append(foot);
+  const road = roadColumns([done, now, next]);
+  if (road) card.append(road);
+  return card;
+}
+// Done · Now · Next under the river: its legend (the bands' colours) and the road at once.
+function roadColumns(lanes) {
+  if (!lanes.some((l) => l.length)) return null;
+  const box = h("div", "rlanes");
+  [[W.done, "done"], [W.now, "now"], [W.next, "next"]].forEach(([name, kind], z) => {
+    const col = h("div", ""), items = lanes[z];
+    col.append(h("div", "eyebrow", name));
+    const shown = items.length > 3 ? items.slice(0, 2) : items;
+    for (const g of shown) {
+      const it = h("div", `it ${kind}`), t = h("div", "t"), sw = h("span", kind === "next" ? "sw hollow" : "sw");
+      sw.style.background = color(g.slot); sw.style.setProperty("--c", color(g.slot));
+      t.append(sw, h("span", "", (kind === "done" ? "✦ " : "") + g.t));
+      it.append(t);
+      if (kind === "now" && g.total) { const m = h("div", "meter"), fill = h("i", "grow"); fill.style.cssText = `width:${Math.max(4, (g.closed / g.total) * 100)}%;background:${color(g.slot)}`; m.append(fill); it.append(m); }
+      col.append(it);
+    }
+    if (shown.length < items.length) col.append(h("div", "it next", W.more(items.length - shown.length)));
+    box.append(col);
+  });
+  return box;
+}
+
 function asksCard() {
   const card = h("section", "card");
   card.append(h("span", "eyebrow", W.waiting));
@@ -862,7 +1585,7 @@ function thisWeekCard() {
   const card = h("section", "card tap"), head = h("div", "head");
   head.append(h("span", "eyebrow", `${ageLabel()} · ${weekLabel()}`));
   card.append(head);
-  if (D.days.length > 1 && sum(D.days.map(sum)) > 0) {
+  if (!D.flow && D.days.length > 1 && sum(D.days.map(sum)) > 0) { // the river above says it
     const svg = s("svg", { viewBox: "0 0 318 72", width: "100%", role: "img" }, card);
     svg.style.marginTop = "14px";
     bands(svg, 72, 318);
@@ -1003,6 +1726,189 @@ function payCard() {
   return card;
 }
 
+// ---- the first-run tour (#230): concept A «Небо», the owner's pick 2026-11-05 ------------------
+// Four steps, one picture each under a deep sky (docs/design/client/README.md#tour-230): the
+// person's own river, the road Done · Now · Next, the invoice pouring into one sum, a question
+// answered in a tap. Without a home here (before the first report, or a first tap on ✨ before
+// any «My project») the same pictures as outlines: no dates, no names, no sum.
+const REDUCED = Boolean(QS.get("still")) || matchMedia("(prefers-reduced-motion: reduce)").matches;
+const STEPS = ["river", "road", "invoice", "ask"];
+const PICS = { river: skyRiver, road: skyRoad, invoice: skyInvoice, ask: skyAsk };
+let tourAt = 1, tourDone = null, tourShell = null;
+function viewerName() { // the receiver in the owner's preview, else the viewer's first name
+  if (D && D.preview) return String(D.preview).split(" ")[0];
+  const user = TG.data && json(new URLSearchParams(TG.data).get("user"));
+  return (user && user.first_name ? String(user.first_name) : "").slice(0, 24);
+}
+function tour(done) {
+  tourDone = done;
+  rivers.splice(0).forEach((r) => r.destroy());
+  app.replaceChildren();
+  tourShell = h("section", "tour");
+  app.append(tourShell);
+  let x0 = null, y0 = 0; // a swipe: left = next, right = back
+  tourShell.addEventListener("pointerdown", (e) => { x0 = e.clientX; y0 = e.clientY; });
+  tourShell.addEventListener("pointerup", (e) => {
+    if (x0 == null) return;
+    const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) (dx < 0 ? tourNext : tourBack)();
+  });
+  document.onkeydown = (e) => { if (e.key === "ArrowRight") tourNext(); if (e.key === "ArrowLeft") tourBack(); };
+  const first = Number(QS.get("step")); // the screens: ?still=1&step=3
+  tourStep(QS.get("still") || QS.get("at") ? Math.min(STEPS.length, Math.max(1, first || 1)) : 1, 1);
+}
+function tourStep(i, dir) {
+  tourAt = i;
+  const n = STEPS.length, key = STEPS[i - 1], [title, sub] = W[`tour${key[0].toUpperCase()}${key.slice(1)}`];
+  const outline = key === "river" && !riverOf();
+  const sky = h("div", "sky"), pic = h("div", `pic pic-${key}`), words = h("div", "words"), foot = h("div", "foot");
+  sky.append(pic);
+  const brow = h("div", "brow");
+  if (i === 1 && D) brow.append(bar("").querySelector(".logo"));
+  brow.append(h("span", "eyebrow", i === 1 ? `${W.hi(viewerName())} · ${W.of(1, n)}` : W.of(i, n)));
+  words.append(brow, h("h1", "", title), h("p", "", outline ? W.tourFirst : sub));
+  if (!REDUCED) for (const part of [sky, words]) part.classList.add(dir < 0 ? "swap-back" : "swap");
+  const skip = h("button", "skip", i < n ? W.skip : ""), dots = h("div", "dots"), go = h("button", "go", i < n ? W.next : W.openProject);
+  for (let k = 1; k <= n; k++) dots.append(h("i", k === i ? "on" : ""));
+  skip.onclick = () => { if (i < n) { haptic("select"); tourFinish(); } };
+  go.onclick = () => (i < n ? tourNext() : tourFinish());
+  foot.append(skip, dots, go);
+  clearRivers();
+  tourShell.replaceChildren(sky, words, foot);
+  if (D && D.preview) tourShell.prepend(peek());
+  nextFrame(pic, () => PICS[key](pic));
+}
+function tourNext() { if (tourAt < STEPS.length) { haptic("select"); tourStep(tourAt + 1, 1); } }
+function tourBack() { if (tourAt > 1) { haptic("select"); tourStep(tourAt - 1, -1); } }
+function tourFinish() { // «seen» through remember(): nothing in the owner's preview (#233)
+  haptic("medium");
+  if (D) remember(SEEN, "1"); // the outline alone is not the tour: the person's own comes once 🏠 kept a home
+  document.onkeydown = null;
+  const done = tourDone;
+  if (REDUCED || !tourShell) return done();
+  tourShell.classList.add("leave");
+  setTimeout(done, 380);
+}
+function riverOf() { // the person's river without the channel ahead: «19 Oct» … «Today» (#273)
+  const data = D ? riverData(false) : null;
+  if (data) { delete data.ahead; data.to = W.today; }
+  return data;
+}
+
+// 1 · the river: «68% built», the days to launch, the person's own river breathing
+function skyRiver(pic) {
+  const top = h("div", "top"), data = riverOf();
+  const [done, now] = D ? stationsOf() : [[], []], goals = [...done, ...now], total = sum(goals.map((g) => g.total));
+  if (total) { const big = h("div", "big num", `${Math.round((sum(goals.map((g) => g.closed)) / total) * 100)}%`); big.append(h("small", "", W.builtPct)); top.append(big); }
+  const left = D && D.deadline ? Math.round((day(D.deadline.date) - TODAY) / 864e5) : -1;
+  if (left >= 0) { if (!total) top.append(h("i")); top.append(chip(W.daysTo(left, D.deadline.what))); }
+  pic.append(top);
+  if (!data) { // before the first report: the outline, slowly flowing, no dates
+    const svg = s("svg", { viewBox: "0 0 318 120", class: "outline", role: "img" }, pic);
+    s("path", { d: "M2,60 C40,18 70,22 100,48 S160,100 200,56 S270,26 316,60 C270,96 240,100 200,76 S130,18 100,72 S40,104 2,60Z", class: "flowing" }, svg);
+    return;
+  }
+  const c = h("canvas", "river");
+  c.setAttribute("role", "img");
+  c.setAttribute("aria-label", `${W.flowing}: ${data.bands.map((b) => b.name).join(", ")}`);
+  pic.append(c);
+  rivers.push(new River(c, data, { height: Math.max(200, Math.min(290, pic.clientHeight - 150)), still: REDUCED, at: RQ.at }));
+}
+
+// 2 · the road: done, now, next and the launch, one line drawn in the features' colours
+function skyRoad(pic) {
+  const list = [];
+  if (D) {
+    const [done, now, next] = stationsOf();
+    done.slice(-2).forEach((g) => list.push(["done", g, W.done, (D.lines.find((l) => l.t === g.t) || {}).v || ""]));
+    now.slice(0, 2).forEach((g) => list.push(["now", g, W.now, g.total ? W.there(Math.round((g.closed / g.total) * 100)) : ""]));
+    next.slice(0, 1).forEach((g) => list.push(["next", g, W.next, (D.next.find((x) => x[0] === g.t) || [])[1] || ""]));
+  }
+  const ghost = !list.length; // before any feature: the road's shape, no names
+  if (ghost) [["done", 0, W.done], ["now", 1, W.now], ["next", 2, W.next]].forEach(([k, slot, tag]) => list.push([k, { slot, closed: k === "now" ? 1 : 0, total: 2 }, tag, ""]));
+  const H0 = pic.clientHeight, x = 40, y0 = 52, end = D && D.deadline, step = (H0 - (end ? 120 : 80)) / list.length;
+  const svg = s("svg", { viewBox: `0 0 ${pic.clientWidth} ${H0}` }, pic);
+  const firstNext = list.findIndex(([k]) => k === "next");
+  list.forEach(([kind, g], k) => { // one segment a station, in its colour; dashed from the next one
+    if (kind === "next") return;
+    const seg = s("path", { d: `M${x},${y0 + k * step} L${x},${y0 + (k + 1) * step}`, class: "line", stroke: color(g.slot), pathLength: 1 }, svg);
+    seg.style.animationDelay = `${0.1 + k * 0.28}s`;
+  });
+  if (firstNext >= 0 || end) s("path", { d: `M${x},${y0 + (firstNext >= 0 ? firstNext : list.length) * step} L${x},${H0 - 50}`, class: "ahead" }, svg);
+  const put = (el, y, k) => { el.style.left = `${x - 14}px`; el.style.top = `${y - 14}px`; el.style.animationDelay = `${0.1 + k * 0.28}s`; pic.append(el); };
+  list.forEach(([kind, g, tag, line], k) => {
+    const st = h("div", `tst ${kind}`), node = h("i", "node"), words = h("div", "");
+    node.style.setProperty("--c", color(g.slot));
+    if (kind === "now") node.style.setProperty("--p", `${Math.round((g.closed / (g.total || 1)) * 100)}%`);
+    if (kind === "done") node.innerHTML = icon(ICON.ok);
+    words.append(h("span", "tag", tag));
+    if (ghost) words.append(h("span", "ghost"));
+    else words.append(h("b", "", g.t), h("small", "", line));
+    st.append(node, words);
+    put(st, y0 + k * step + 4, k);
+  });
+  if (end) {
+    const st = h("div", "tst end"), words = h("div", "");
+    words.append(h("span", "tag", D.deadline.what || W.launchOn), h("b", "", dateText(D.deadline.date, true)));
+    st.append(h("i", "node"), words);
+    put(st, H0 - 48, list.length);
+  }
+}
+
+// 3 · the invoice: every line pours into one ink column, the sum rises, then «Paid ✓»
+function skyInvoice(pic) {
+  const inv = D && D.invoice, lines = inv ? D.lines.filter((l) => l.q > 0) : [];
+  if (inv && inv.total) {
+    const m = money(inv.total, inv.currency), head = h("div", "sum"), num = h("div", "num");
+    num.append(document.createTextNode(`${m.sym}${m.whole}`), h("small", "", `${m.cents}${m.code}`));
+    const row = h("div", "chips");
+    row.append(dueChip());
+    if (!inv.paid) { // what payment will look like, beside the real state: never a claim on this invoice
+      const ghost = chip(W.paid);
+      ghost.classList.add("ghost");
+      row.append(ghost);
+      if (!REDUCED) setTimeout(() => { if (ghost.isConnected) haptic("light"); }, 2600);
+    }
+    head.append(num, row);
+    pic.append(head);
+  } else {
+    const head = h("div", "sum");
+    head.append(chip(W.sent, true));
+    pic.append(head);
+  }
+  const Wd = pic.clientWidth, H = Math.min(230, pic.clientHeight - 150), x0 = 16, bw = 6, x1 = Wd - 34;
+  const rows = lines.length ? lines.map((l) => ({ q: l.q, t: l.t, slot: D.lines.indexOf(l) })) : [5, 3, 2, 1].map((q) => ({ q, t: "", slot: -1 }));
+  const total = sum(rows.map((r) => r.q)), gap = 6, TH = H * 0.62, T0 = (H - TH) / 2, k = (H - gap * (rows.length - 1)) / total;
+  const svg = s("svg", { viewBox: `0 0 ${Wd} ${H}`, height: H, role: "img" }, pic), g = s("g", { class: lines.length ? "pour" : "pour hollow" }, svg);
+  let y = 0, ty = T0;
+  rows.forEach((r) => {
+    const hh = Math.max(r.q * k, 3), th = (r.q * TH) / total, m1 = x0 + bw + 140, m2 = x1 - 100;
+    s("path", { d: `M${x0 + bw},${y} C${m1},${y} ${m2},${ty} ${x1},${ty} L${x1},${ty + th} C${m2},${ty + th} ${m1},${y + hh} ${x0 + bw},${y + hh}Z`, fill: color(r.slot), "fill-opacity": 0.78 }, g);
+    s("rect", { x: x0, y, width: bw, height: hh, rx: 2, fill: color(r.slot) }, g);
+    if (r.t && hh > 30) txt(g, x0 + bw + 10, y + 19, r.t.length > 28 ? `${r.t.slice(0, 27)}…` : r.t, { class: "onfill" });
+    y += hh + gap; ty += th;
+  });
+  s("rect", { x: x1, y: T0, width: 14, height: TH, rx: 4, fill: "var(--ink)" }, g);
+}
+
+// 4 · the questions: the team asks, one tap answers, the team replies
+function skyAsk(pic) {
+  const from = D && D.invoice && D.invoice.from ? String(D.invoice.from.name || "") : "";
+  const initials = from.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "✦";
+  const mono = () => h("span", "mono", initials);
+  const [q, a, b, mine, reply] = W.talk;
+  const ask = h("div", "msg"), opts = h("div", "opts"), me = h("div", "msg me"), them = h("div", "msg");
+  ask.append(mono(), h("div", "bub", q));
+  opts.append(h("span", "opt", a), h("span", "opt pick", b));
+  me.append(h("div", "bub", mine));
+  const typing = h("div", "bub typing"), swapin = h("div", "swapin");
+  typing.append(h("i"), h("i"), h("i"));
+  swapin.append(typing, h("div", "bub", reply));
+  them.append(mono(), swapin);
+  pic.append(ask, opts, me, them);
+  setTimeout(() => { if (pic.isConnected) haptic("light"); }, REDUCED ? 0 : 1300);
+}
+
 // ---- gates ---------------------------------------------------------------------------------
 function gate(glyph, title, text) {
   app.replaceChildren();
@@ -1018,6 +1924,54 @@ function gate(glyph, title, text) {
   app.append(box);
 }
 
+// The tour or not: «again» (How it works) and the owner's preview every time, «1» (the first
+// card's ✨) until the viewer saw it once, nothing without the flag.
+function tourDue(wants, seen, preview) { return wants === "again" || (wants === "1" && (preview || !seen)); }
+function speak() { // the client's language wins
+  if (D && WORDS[D.lang]) { W = WORDS[D.lang]; LANG = D.lang; }
+  document.documentElement.lang = LANG;
+}
+function showHome(arrive) {
+  current = "home";
+  document.title = `${D.client} · ${W.myProject}`;
+  render();
+  if (arrive && !REDUCED) app.classList.add("arrive");
+  window.scrollTo(0, 0);
+}
+function leave() { // a tour without a home here: back to the chat, where «🏠 Open my project» waits
+  if (TG.inside) post("web_app_close");
+  else gate("ok", W.unlocked, W.unlockedText);
+}
+
+// What a report or home link opens: {D} (and `keep`: it becomes the newest home kept here), or
+// {gate} with the gate's glyph and words. An unsigned link (#291) is a /start card from before
+// the signature (#191) that Signal cannot edit: the newest home kept here stands in for it, and
+// without one the gate points to the menu button, since 🔑 cannot help an unsigned link.
+async function opening(sealed, store) {
+  async function kept() { // the newest home this viewer opened, if this key still opens it
+    if (!store.key || !store.home || store.home === sealed) return null;
+    try { const k = await openSealed(store.home, store.key); return k && k.home ? k : null; } catch (e) { return null; } // a new key, an unsigned one
+  }
+  if (!sealed) { // the tour's «Open my week», a bare link: the newest home kept here
+    const k = await kept();
+    return k ? { D: k } : { gate: ["chat", W.nodata, W.nodataText] };
+  }
+  if (!store.key) return { gate: ["key", W.unlockTitle, W.unlockText] };
+  let d;
+  try { d = await openSealed(sealed, store.key); } catch (e) {
+    if (e.kind === "forged") return { gate: ["chat", W.forged, W.forgedText] };
+    if (e.kind !== "unsigned") return { gate: ["key", W.broken, W.brokenText] };
+    const k = await kept();
+    return k ? { D: k } : { gate: ["chat", W.stale, W.staleText] };
+  }
+  if (d.home && !d.preview) { // an old «My project» button: the newest home wins, a newer one is kept
+    const newest = await kept();
+    if (newest && newest.at > d.at) return { D: newest };
+    return { D: d, keep: store.home !== sealed };
+  }
+  return { D: d };
+}
+
 async function start() {
   theme(TG.theme);
   post("web_app_ready");
@@ -1025,33 +1979,32 @@ async function start() {
   const lang = (TG.data && json(new URLSearchParams(TG.data).get("user")) || {}).language_code || navigator.language || "en";
   if (/^uk/.test(lang)) { W = WORDS.uk; LANG = "uk"; }
   const key = launch.get("k"), sealed = launch.get("s");
+  const wants = launch.get("tour") || ""; // the tour (#230): "1" the first time only, "again" always
   if (key) {
     // A plain browser keeps the key in localStorage: a link never replaces another one there.
     const held = TG.native ? null : local.get();
     if (held && held !== key) return gate("key", W.keyHeld, W.keyHeldText);
-    const kept = await saveKey(key);
+    const store = await loadStore(), made = Number(launch.get("m")) || 0;
+    const newer = newerKept(store, key, made); // an old ✨ after ♻️: the new key stays, the tour still runs
+    const kept = newer || (await saveKey(key, made));
     haptic(kept ? "medium" : "light");
-    return kept ? gate("ok", W.unlocked, W.unlockedText) : gate("key", W.unlockFail, W.unlockFailText);
+    if (!kept) return gate("key", W.unlockFail, W.unlockFailText);
+    if (wants) { // ✨ one tap keeps the key and runs the tour, on the newest home kept here if any
+      try { const k = store.home ? await openSealed(store.home, newer ? store.key : key) : null; D = k && k.home ? k : null; } catch (e) { D = null; } // an older key's home
+      speak();
+      if (tourDue(wants, store.seen, false)) return tour(D ? () => showHome(true) : leave);
+      if (D) return showHome(false);
+    }
+    return gate("ok", W.unlocked, W.unlockedText);
   }
   const store = await loadStore();
-  async function kept() { // the newest home this viewer opened, if this key still opens it
-    if (!store.key || !store.home || store.home === sealed) return null;
-    try { const k = await unseal(store.home, store.key); return k && k.home ? k : null; } catch (e) { return null; } // a new key
-  }
-  if (!sealed) { // the tour's «Open my week», a bare link: the newest home kept here
-    D = await kept();
-    if (!D) return gate("chat", W.nodata, W.nodataText);
-  } else {
-    if (!store.key) return gate("key", W.unlockTitle, W.unlockText);
-    try { D = await unseal(sealed, store.key); } catch (e) { return gate("key", W.broken, W.brokenText); }
-    if (D.home) { // an old «My project» button: the newest home wins, and a newer one is kept
-      const newest = await kept();
-      if (newest && newest.at > D.at) D = newest;
-      else if (store.home !== sealed) keepHome(sealed);
-    }
-  }
-  if (WORDS[D.lang]) { W = WORDS[D.lang]; LANG = D.lang; } // the client's language wins
-  document.documentElement.lang = LANG;
+  const opened = await opening(sealed, store);
+  if (opened.gate) return gate(...opened.gate);
+  D = opened.D;
+  if (opened.keep) keepHome(sealed);
+  speak();
+  // ✨ on a home link: the owner's preview (#233) every time, «How it works» again, else once
+  if (D.home && tourDue(wants, store.seen, Boolean(D.preview))) return tour(() => showHome(true));
   const tab = QS.get("tab");
   current = D.home ? (D.invoice && (tab === "week" || tab === "invoice") ? tab : "home") : tab === "invoice" ? "invoice" : "week";
   document.title = D.home ? `${D.client} · ${W.myProject}` : `${D.client} · ${weekLabel()}`;
