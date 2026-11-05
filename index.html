@@ -304,7 +304,8 @@ main { position: relative; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation-delay: 0s !important; } }
 
-/* The week's analytics (#274): concept B «Одне полотно». Tokens from her.design. */
+/* The owner's cabinet (#303): the week's canvas (#274, concept B «Одне полотно») in a
+   three-step wizard, the reference S. Tokens from her.design. */
 .wk { margin: 0 -16px; padding-bottom: 24px; }
 .wk-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 4px 20px 0; }
 .wk-head .eyebrow { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -325,9 +326,9 @@ main { position: relative; }
 .wk-lens { display: flex; gap: 4px; padding: 0 20px 8px; }
 .wk-lens button { font: var(--weight-medium) 12px/1 var(--font); padding: 7px 11px; border-radius: 99px; color: var(--muted); transition: background .25s, color .25s; }
 .wk-lens button.on { background: var(--ink); color: var(--plane); }
-.wk-stage { position: relative; margin: 0 12px; height: 352px; transition: height .35s; }
+.wk-stage { position: relative; margin: 0 12px; height: calc(var(--rh, 200px) + 152px); transition: height .35s; }
 .wk-stage canvas { position: absolute; top: 18px; left: 0; width: 100%; display: block; }
-.wk-refl { position: absolute; left: 0; right: 0; top: 226px; height: 100px; pointer-events: none; }
+.wk-refl { position: absolute; left: 0; right: 0; top: calc(var(--rh, 200px) + 26px); height: 100px; pointer-events: none; }
 .wk-refl .rb { position: absolute; top: 0; height: 100px; transition: opacity .3s; }
 .wk-refl .rb i { position: absolute; left: 0; right: 0; border-radius: 3px 3px 6px 6px; }
 .wk-refl .rb i.rp { opacity: .8; }
@@ -417,21 +418,303 @@ main { position: relative; }
 .wk-lines .row-t { display: flex; gap: 6px; align-items: center; padding: 7px 0; border-top: 1px solid var(--border); }
 .wk-lines .row-t em { margin-left: auto; font-style: normal; color: var(--muted); font-size: 12px; }
 
-/* the dock: the proposal under the thumb */
-.wk-dock { position: fixed; max-width: 560px; margin: 0 auto; z-index: 4; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px); background: linear-gradient(to top, var(--plane) 62%, transparent); }
-.wk-step { flex: 1; display: flex; align-items: center; border-radius: 26px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border), 0 6px 20px rgba(0,0,0,.08); }
-.wk-step button { width: 56px; height: 56px; font: 300 28px/1 var(--font); color: var(--ink-2); transition: transform .15s, opacity .2s; }
-.wk-step button:active { transform: scale(.9); }
-.wk-step button:disabled { opacity: .25; }
-.wk-sv { flex: 1; text-align: center; }
-.wk-sv b { display: block; font: var(--weight-semibold) 15px/1.1 var(--font); }
-.wk-sv span { font: 11px/1 var(--font); color: var(--muted); }
-.wk-ok { width: 56px; height: 56px; border-radius: 28px; flex: none; background: var(--status-good); color: #fff; font: var(--weight-bold) 26px/1 var(--font); box-shadow: 0 6px 20px rgba(0,0,0,.18); transition: transform .15s; }
-.wk-ok:active { transform: scale(.92); }
-.wk-ok:disabled { opacity: .3; }
-.wk-ok.sent { animation: sent .5s cubic-bezier(.3,1.3,.5,1); }
-.wk-toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); }
-body:has(.wk) { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 110px); }
+/* #315: after 🔄 — the river gives way to a day, the days after the range, the rules' ribbons */
+.wk-stage.tw { transition: none; }
+.cb-veil { position: absolute; top: 14px; bottom: 34px; border-left: 1.5px dashed color-mix(in oklab, var(--ink) 28%, transparent); background: linear-gradient(to right, color-mix(in oklab, var(--plane) 55%, transparent), color-mix(in oklab, var(--plane) 25%, transparent)); pointer-events: none; }
+.cb-veil span { position: absolute; top: 2px; left: 8px; font: var(--weight-medium) 10px/1 var(--font); letter-spacing: .02em; color: var(--muted); white-space: nowrap; }
+.wk-refl .rb.out { opacity: .32; }
+.wk-refl .rb.out .rt { font-size: 10.5px; color: var(--ink-2); }
+.wk-refl .rb.fut { height: 30px; border: 1px dashed color-mix(in oklab, var(--ink) 30%, transparent); border-top: 0; border-radius: 0 0 6px 6px; opacity: .8; }
+.wk-stage.picked .rb.out, .wk-stage.picked .rb.fut { opacity: .18; }
+.wk-cols button.ax span, .wk-cols button.ax span b { color: color-mix(in oklab, var(--muted) 70%, transparent); }
+.wk-refl .rb.new::after, .wk-refl .rb.flash::after { content: ""; position: absolute; left: -7px; right: -7px; top: -6px; height: 92px; border-radius: 12px; box-shadow: 0 0 0 2px var(--series-1); opacity: 0; animation: cb-ping 1.6s ease-out 3; }
+.wk-refl .rb.flash::after { box-shadow: 0 0 0 2px var(--ink); animation-iteration-count: 1; }
+@keyframes cb-ping { 0% { opacity: .9; transform: scale(.92); } 100% { opacity: 0; transform: scale(1.12); } }
+.cb-rib { position: absolute; left: 0; right: 0; top: calc(var(--rh, 200px) + 21px); height: 0; pointer-events: none; }
+.cb-rib i { position: absolute; height: 0; }
+.cb-rib .ln { border-top: 1px solid color-mix(in oklab, var(--c) 55%, transparent); }
+.cb-rib .dt { height: 3px; margin-top: -1px; border-radius: 2px; background: var(--c); }
+.cb-rib .fu { border-top: 2px dotted color-mix(in oklab, var(--c) 70%, transparent); margin-top: -.5px; }
+.cb-rib .pl { position: absolute; transform: translateY(-100%); margin-top: -4px; padding: 3px 7px; border-radius: 99px; font: var(--weight-semibold) 9.5px/1 var(--font); color: var(--ink-2); background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--c) 60%, transparent); white-space: nowrap; }
+
+/* #315: the banner after 🔄 — what changed, the days the owner holds, ↩ */
+.cb-news { margin: 12px 16px 0; padding: 9px 8px 9px 12px; border-radius: 16px; background: color-mix(in oklab, var(--series-1) 10%, var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--series-1) 24%, transparent); animation: wk-in .45s cubic-bezier(.2,.8,.2,1) both; }
+.cb-nt { display: flex; align-items: center; gap: 8px; font: 13px/1.25 var(--font); color: var(--ink-2); }
+.cb-nt > i { font-style: normal; }
+.cb-nt span { flex: 1; min-width: 0; }
+.cb-nt b { color: var(--ink); font-weight: var(--weight-semibold); }
+.cb-nt small { font: 11px/1 var(--font); color: var(--muted); }
+.cb-nx { width: 28px; height: 28px; border-radius: 14px; color: var(--muted); font-size: 12px; }
+.cb-npl { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cb-np { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 99px; font: var(--weight-medium) 12px/1 var(--font); color: var(--ink-2); background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+.cb-np b { color: var(--good, var(--status-good)); font-weight: var(--weight-semibold); }
+.cb-np.held { padding: 0; overflow: hidden; }
+.cb-np.held > button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 4px 6px 10px; font: inherit; color: inherit; }
+.cb-np.held small { font: 11px/1 var(--font); color: var(--muted); }
+.cb-np .x { width: 30px; align-self: stretch; justify-content: center; padding: 0; border-left: 1px solid var(--border); color: var(--ink); }
+
+/* a chip's place, rung when a chip leads there */
+.cb-flash { animation: cb-flash 1.6s ease-out; border-radius: 14px; }
+@keyframes cb-flash { 0%, 40% { box-shadow: 0 0 0 3px color-mix(in oklab, var(--series-1) 70%, transparent); background-color: color-mix(in oklab, var(--series-1) 10%, transparent); } }
+
+/* ---- the cabinet's frame: the steps, the hint, the dock ---------------------------------- */
+.cab { padding-top: 2px; }
+.cb-head { display: flex; align-items: center; gap: 10px; padding: 6px 16px 0; }
+.cb-steps { flex: 1; display: flex; margin: 0; padding: 0; list-style: none; position: relative; }
+.cb-steps li { flex: 1; position: relative; }
+.cb-steps li + li::before { content: ""; position: absolute; top: 15px; right: 50%; width: 100%; height: 2px; background: var(--track); transition: background .35s; }
+.cb-steps li:has(.on, .done) + li::before { background: var(--ink); }
+.cb-steps li:has(.done) + li:has(.done, .on)::before { background: var(--ink); }
+.cb-steps button { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; font: 12px/1 var(--font); color: var(--muted); }
+.cb-steps i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 15px; font: var(--weight-semibold) 13px/1 var(--font); font-style: normal; background: var(--plane); box-shadow: inset 0 0 0 1.5px var(--track); transition: background .3s, color .3s, box-shadow .3s, transform .3s cubic-bezier(.3,1.4,.5,1); }
+.cb-steps .on { color: var(--ink); font-weight: var(--weight-semibold); }
+.cb-steps .on i { box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 5px color-mix(in oklab, var(--ink) 10%, transparent); transform: scale(1.06); }
+.cb-steps .done i { background: var(--ink); color: transparent; box-shadow: none; position: relative; }
+.cb-steps .done i::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--plane); font-size: 14px; }
+.cb-gh { flex: none; width: 46px; height: 46px; border-radius: 23px; display: grid; place-items: center; align-content: center; gap: 1px; box-shadow: inset 0 0 0 1px var(--border); background: var(--surface); color: var(--ink); transition: transform .15s; }
+.cb-gh:active { transform: scale(.92) rotate(-30deg); }
+.cb-gh svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cb-gh small { font: 9px/1 var(--font); color: var(--muted); }
+.cb-hint { display: flex; align-items: center; gap: 8px; margin: 12px 16px 0; font: 13px/1.3 var(--font); color: var(--ink-2); }
+.cb-hint b { padding: 3px 6px; border-radius: 6px; background: var(--ink); color: var(--plane); font: var(--weight-semibold) 11px/1 var(--font); }
+.cb-body { padding-top: 14px; }
+.cb-body.in > * { animation: wk-in .45s cubic-bezier(.2,.8,.2,1) both; }
+.cb-dock { position: fixed; z-index: 4; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 14px); background: color-mix(in oklab, var(--plane) 88%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 1px solid var(--border); }
+.cb-sum { flex: 1; min-width: 0; display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 10px; }
+.cb-sum b { font: var(--weight-bold) 32px/1 var(--font); letter-spacing: -.04em; white-space: nowrap; }
+.cb-sum b small { font-size: 15px; letter-spacing: 0; font-weight: var(--weight-medium); color: var(--ink-2); }
+.cb-sum span { font: var(--weight-medium) 15px/1 var(--font); color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-st { grid-column: 1 / -1; justify-self: start; margin: 3px 0 0 -6px; padding: 3px 6px; border-radius: 8px; font: 12px/1.2 var(--font); color: var(--muted); text-align: left; }
+.cb-st.pend { color: var(--ink); font-weight: var(--weight-medium); }
+.cb-st:not(:disabled):active { background: color-mix(in oklab, var(--ink) 8%, transparent); }
+.cab .dot, .cb-dock .dot, .cb-drw .dot { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 4px; background: var(--status-warning); vertical-align: 1px; animation: cb-pulse 1.8s ease-in-out infinite; }
+@keyframes cb-pulse { 50% { opacity: .35; } }
+.cb-go { flex: none; height: 54px; padding: 0 22px; border-radius: 27px; background: var(--ink); color: var(--plane); font: var(--weight-semibold) 16px/1 var(--font); box-shadow: 0 8px 22px rgba(0,0,0,.18); transition: transform .15s, background .3s; white-space: nowrap; max-width: 62%; overflow: hidden; text-overflow: ellipsis; }
+.cb-go:active { transform: scale(.95); }
+.cb-go.ok { background: var(--status-good); color: #fff; }
+.cb-go:disabled { opacity: .35; }
+.cb-go.sent { animation: sent .5s cubic-bezier(.3,1.3,.5,1); }
+body:has(.cab) { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 104px); }
+
+/* ---- step 1: the calendar --------------------------------------------------------------- */
+.cb-cal { padding: 0 16px; }
+.cb-range { display: flex; justify-content: space-between; align-items: flex-end; }
+.cb-range .eyebrow { display: block; text-align: left; }
+.cb-range b { display: block; margin-top: 6px; font: var(--weight-bold) clamp(34px, 11vw, 44px)/1 var(--font); letter-spacing: -.04em; }
+.cb-range b i { font-style: normal; font-weight: 300; color: var(--muted); }
+.cb-nd { text-align: right; }
+.cb-nd b { font-size: clamp(34px, 11vw, 44px); }
+.cb-nd span { font: 12px/1 var(--font); color: var(--muted); }
+.cb-wd { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 20px 0 6px; text-align: center; font: 11px/1 var(--font); color: var(--muted); }
+.cb-wd .we { opacity: .7; }
+.cb-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; touch-action: none; -webkit-user-select: none; user-select: none; }
+.cb-d { position: relative; aspect-ratio: 1 / .92; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font: var(--weight-semibold) 15px/1 var(--font); color: var(--ink-2); transition: background .25s, color .25s, transform .2s cubic-bezier(.3,1.4,.5,1), box-shadow .25s; }
+.cb-d small { font: 10px/1 var(--font); opacity: .85; }
+.cb-d em { position: absolute; top: -5px; right: -4px; font-style: normal; font-size: 11px; }
+.cb-d.pre, .cb-d.off { color: color-mix(in oklab, var(--muted) 60%, transparent); }
+.cb-d.fut { color: var(--muted); box-shadow: inset 0 0 0 1px var(--border); background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in oklab, var(--border) 70%, transparent) 5px 6px); }
+.cb-d.tk { background: color-mix(in oklab, var(--ink) 9%, var(--plane)); color: var(--muted); }
+.cb-d.in { color: #fff; background: color-mix(in oklab, var(--series-1) calc(var(--a) * 100%), color-mix(in oklab, var(--series-1) 22%, var(--plane))); box-shadow: 0 0 0 0 transparent; }
+.cb-d.in small { color: rgba(255,255,255,.88); }
+.cb-d.in.pale, .cb-d.in.pale small { color: var(--ink); }
+.cb-d b span { display: block; margin-top: 1px; font: var(--weight-medium) 9px/1 var(--font); color: var(--muted); }
+.cb-d.free { background: color-mix(in oklab, var(--series-1) calc(var(--a) * 22%), var(--plane)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--series-1) 30%, var(--border)); }
+.cb-d.first em.pin { top: -7px; left: -5px; right: auto; font-size: 13px; }
+.cb-d.end { box-shadow: 0 0 0 2.5px var(--ink); transform: scale(1.04); z-index: 1; }
+.cb-d.end::after { content: ""; position: absolute; right: -9px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 8px; background: var(--ink); box-shadow: 0 0 0 3px var(--plane); }
+.cb-d:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.cb-ends { margin-top: 18px; }
+.cab .chip { display: inline-flex; align-items: center; gap: 4px; padding: 10px 14px; border-radius: 99px; font: var(--weight-medium) 13px/1 var(--font); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--border); background: var(--surface); transition: transform .15s, background .2s, color .2s; }
+.cab .chip.on { background: var(--ink); color: var(--plane); box-shadow: none; }
+.cab .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cb-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 16px; font: 11px/1.3 var(--font); color: var(--muted); }
+.cb-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.lg { width: 14px; height: 10px; border-radius: 3px; display: inline-block; }
+.lg.heat { background: linear-gradient(to right, color-mix(in oklab, var(--series-1) 30%, var(--plane)), var(--series-1)); }
+.lg.in { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.lg.tk { background: color-mix(in oklab, var(--ink) 14%, var(--plane)); }
+.lg.fut { box-shadow: inset 0 0 0 1px var(--border); background-image: repeating-linear-gradient(135deg, transparent 0 2px, var(--border) 2px 3px); }
+
+/* ---- step 2: the canvas ----------------------------------------------------------------- */
+.cb-mode { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 10px; }
+.cb-mode > span { font: 12px/1 var(--font); color: var(--muted); }
+.cb-seg { display: flex; padding: 3px; border-radius: 14px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); }
+.cb-seg button { padding: 9px 20px; border-radius: 11px; font: var(--weight-medium) 14px/1 var(--font); color: var(--ink-2); transition: background .25s, color .25s; }
+.cb-seg button.on { background: var(--ink); color: var(--plane); }
+.cb-seg button:disabled { opacity: .35; }
+.cab .wk-canvas { margin-top: 0; }
+.wk-stage.rows { height: 150px; }
+.wk-stage.rows .wk-refl, .wk-stage.rows .wk-feel, .wk-stage.rows .wk-cols { opacity: 0; pointer-events: none; }
+.wk-refl .rb i.gh { left: -3px; right: -3px; top: 0; border-radius: 4px; background: none !important; box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--ink) 45%, transparent); border: 0; opacity: .7; }
+.wk-refl .rt u { display: block; text-decoration: none; margin-top: 2px; font: var(--weight-semibold) 10px/1 var(--font); color: var(--series-1); }
+.cb-was { display: inline-block; margin-top: 6px; font: 12px/1 var(--font); color: var(--muted); }
+button.cb-was { color: var(--ink-2); padding: 5px 9px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--border); }
+
+/* «Рядки»: the disk, the strip, the lines */
+.cb-rows { padding-bottom: 8px; }
+.cb-disk { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.cb-disk .round { width: 48px; height: 48px; border-radius: 24px; font: 300 26px/1 var(--font); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--border); background: var(--surface); transition: transform .15s; }
+.cb-disk .round:active { transform: scale(.9); }
+.cb-dial { position: relative; width: min(62vw, 240px); aspect-ratio: 1; touch-action: none; cursor: grab; outline: none; -webkit-user-select: none; user-select: none; }
+.cb-dial svg { width: 100%; height: 100%; overflow: visible; }
+.cb-dial .dial-ring { transform-origin: 50% 50%; transform-box: view-box; transition: transform .12s ease-out; }
+.cb-dial.off { opacity: .45; cursor: not-allowed; }
+.cb-dial:focus-visible { box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 25%, transparent); border-radius: 50%; }
+.cb-dc { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.cb-dc b { font: var(--weight-bold) 44px/1 var(--font); letter-spacing: -.04em; }
+.cb-dc span { font: 13px/1 var(--font); color: var(--ink-2); margin-top: 2px; }
+.cb-dc em { font: var(--weight-medium) 14px/1 var(--font); font-style: normal; color: var(--muted); margin-top: 8px; }
+.cb-dv { margin: 10px 16px 0; text-align: center; font: 13px/1.3 var(--font); color: var(--muted); }
+.cb-dv b { color: var(--ink); font-weight: var(--weight-semibold); }
+.cb-dv .ln { display: inline-block; width: 14px; height: 2px; margin-right: 4px; vertical-align: 4px; background: var(--ink-2); opacity: .55; }
+.cb-strip { margin: 18px 16px 0; }
+.cb-ghost { display: flex; gap: 2px; height: 4px; opacity: .45; margin-bottom: 6px; }
+.cb-ghost i { border-radius: 2px; }
+.cb-bar { display: flex; align-items: stretch; height: 52px; touch-action: none; -webkit-user-select: none; user-select: none; }
+.cb-bar .seg { min-width: 4px; border-radius: 12px; background: var(--c); transition: flex .18s ease-out; position: relative; }
+.cb-bar .seg.locked { background-image: repeating-linear-gradient(135deg, transparent 0 4px, color-mix(in oklab, var(--plane) 40%, transparent) 4px 6px); }
+.cb-bar .seg.manual { background-image: repeating-linear-gradient(135deg, transparent 0 2px, color-mix(in oklab, var(--plane) 45%, transparent) 2px 3.5px); opacity: .85; }
+.cb-bar .hd { flex: none; width: 14px; margin: 0 -2px; position: relative; z-index: 1; display: grid; place-items: center; cursor: ew-resize; }
+.cb-bar .hd i { width: 5px; height: 30px; border-radius: 3px; background: var(--plane); box-shadow: 0 0 0 1px var(--border), 0 1px 4px rgba(0,0,0,.2); transition: transform .15s; }
+.cb-bar .hd.on i { transform: scaleY(1.2) scaleX(1.3); }
+.cb-bar .hd.fixed { cursor: not-allowed; }
+.cb-bar .hd.fixed i { opacity: .35; }
+.cb-lh { display: flex; justify-content: space-between; margin: 22px 16px 4px; }
+.cb-lh .eyebrow { text-align: left; }
+.cb-list { padding: 0 16px; }
+.cb-line { display: grid; grid-template-columns: auto 1fr auto auto auto; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px solid var(--border); }
+.cb-line .sw { width: 10px; height: 10px; border-radius: 5px; }
+.cb-ln { min-width: 0; }
+.cb-ln b { display: block; font: var(--weight-semibold) 15px/1.25 var(--font); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cb-ln small { font: 12px/1.3 var(--font); color: var(--muted); }
+.cb-ln u { text-decoration: none; color: var(--series-1); font-weight: var(--weight-semibold); }
+.cb-lq { font: var(--weight-semibold) 18px/1 var(--font); }
+.cb-pm { display: flex; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--border); }
+.cb-pm button { width: 36px; height: 36px; font: 18px/1 var(--font); color: var(--ink-2); }
+.cb-pm button:disabled { opacity: .25; }
+.cb-line .cb-lock { width: 36px; height: 36px; display: grid; place-items: center; color: var(--muted); }
+.cb-line .cb-lock svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.cb-line .cb-lock .shackle { transition: transform .25s; transform-origin: 16px 11px; }
+.cb-line .cb-lock:not(.on) .shackle { transform: translateY(-2px) rotate(25deg); }
+.cb-line .cb-lock.on { color: var(--ink); }
+.cb-line .cb-lock:disabled { opacity: .2; }
+.cb-line.locked .cb-lq { color: var(--ink-2); }
+
+/* ---- step 3: the review ----------------------------------------------------------------- */
+.cb-review { padding: 0 16px; }
+.cb-inv { text-align: center; padding: 6px 0 18px; }
+.cb-big { margin-top: 10px; font: var(--weight-bold) clamp(64px, 21vw, 88px)/.95 var(--font); letter-spacing: -.06em; }
+.cb-big small { font-size: 22px; letter-spacing: 0; font-weight: var(--weight-medium); color: var(--ink-2); margin-left: 4px; }
+.cb-cash { margin-top: 6px; font: var(--weight-semibold) 22px/1 var(--font); color: var(--ink-2); }
+.cb-vs { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px 12px; max-width: 320px; margin: 20px auto 0; font: 12px/1 var(--font); color: var(--muted); text-align: left; }
+.cb-vs i { height: 5px; border-radius: 3px; background: var(--track); overflow: hidden; }
+.cb-vs i b { display: block; height: 100%; border-radius: 3px; background: var(--ink-2); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.cb-vs i.me b { background: linear-gradient(to right, var(--series-1), var(--series-7)); }
+.cb-vs em { font-style: normal; color: var(--ink); font-weight: var(--weight-semibold); }
+.cb-sum-l { border-radius: 18px; background: var(--surface); box-shadow: 0 0 0 1px var(--border); padding: 4px 14px; }
+.cb-sum-l > div { display: flex; align-items: center; gap: 8px; padding: 11px 0; font: 14px/1.3 var(--font); }
+.cb-sum-l > div + div { border-top: 1px solid var(--border); }
+.cb-sum-l b { font-weight: var(--weight-medium); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cb-sum-l u { text-decoration: none; color: var(--series-1); font: var(--weight-semibold) 12px/1 var(--font); }
+.cb-sum-l em { margin-left: auto; font-style: normal; color: var(--ink-2); white-space: nowrap; }
+.cb-ed { margin-top: 22px; }
+.cb-eh { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font: 12px/1 var(--font); }
+.cb-eh .eyebrow { text-align: left; }
+.cb-ok { color: var(--muted); }
+.cb-ok::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 4px; margin-right: 5px; background: var(--status-good); }
+.cb-pd { color: var(--ink); font-weight: var(--weight-medium); }
+.cb-g { display: grid; grid-template-columns: 76px 1fr; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); }
+.cb-g > span { font: 12px/30px var(--font); color: var(--muted); }
+.cb-g > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.cb-chip { display: inline-flex; align-items: stretch; overflow: hidden; border-radius: 99px; font: var(--weight-medium) 13px/1.1 var(--font); color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--border); transition: transform .15s; }
+.cb-chip .go { display: inline-flex; align-items: center; gap: 5px; padding: 7px 6px 7px 11px; font: inherit; color: inherit; text-align: left; }
+.cb-chip .x { width: 32px; display: grid; place-items: center; border-left: 1px solid var(--border); color: var(--ink-2); font-size: 13px; }
+.cb-chip button:active { background: color-mix(in oklab, var(--ink) 8%, transparent); }
+.cb-chip s { color: var(--muted); font-weight: 400; }
+.cb-chip.pend { box-shadow: inset 0 0 0 1.5px var(--status-warning); }
+.cb-none { margin: 10px 0; text-align: center; font: 14px/1.4 var(--font); color: var(--muted); }
+.cb-reset, .cb-save { display: block; margin: 14px auto 0; padding: 11px 18px; border-radius: 99px; font: var(--weight-medium) 14px/1 var(--font); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--border); }
+.cb-reset:disabled, .cb-save:disabled { opacity: .35; }
+.cb-save { margin-bottom: 8px; color: var(--ink); }
+.cb-meter { position: relative; margin-top: 22px; padding: 12px 14px 12px; border-radius: 14px; background: var(--surface); box-shadow: 0 0 0 1px var(--border); font: 12px/1.4 var(--font); color: var(--ink-2); overflow: hidden; }
+.cb-meter > i { position: absolute; left: 0; top: 0; height: 3px; background: var(--status-good); }
+.cb-meter.over > i { background: var(--status-serious); }
+.cb-meter b { color: var(--ink); font-weight: var(--weight-semibold); }
+
+/* #314: what the client reads — a calm paper, every text edited in place */
+.cb-paper { margin-top: 22px; }
+.cb-ph { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cb-ph .eyebrow { text-align: left; }
+.cb-lang { font: var(--weight-semibold) 10px/1 var(--font); letter-spacing: .08em; color: var(--muted); padding: 4px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px var(--border); }
+.cb-mail, .cb-sheet-p { border-radius: 18px; background: var(--surface); box-shadow: 0 0 0 1px var(--border); padding: 14px 16px; }
+.cb-mail { margin-bottom: 10px; }
+.cb-mail h4, .cb-ps h4 { margin: 0 0 6px; font: var(--weight-semibold) 11px/1 var(--font); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.cb-ps + .cb-ps { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.cb-pl + .cb-pl { margin-top: 12px; }
+.cb-plt { display: flex; align-items: baseline; gap: 8px; }
+.cb-plt .sw { flex: none; width: 8px; height: 8px; border-radius: 4px; transform: translateY(-1px); }
+.cb-plt em { margin-left: auto; flex: none; font: 12px/1.2 var(--font); font-style: normal; color: var(--muted); white-space: nowrap; }
+.cb-plv, .cb-plr { padding-left: 16px; }
+.cb-plr { color: var(--muted); }
+.cb-tx { display: inline; outline: none; border-radius: 4px; font: 14px/1.45 var(--font); color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; cursor: text; transition: background .2s, box-shadow .2s; }
+.cb-tx.t { font-weight: var(--weight-semibold); color: var(--ink); }
+.cb-plr .cb-tx { font-size: 12.5px; color: var(--muted); }
+.cb-tx.long { display: block; }
+.cb-tx:empty::before { content: attr(data-ph); color: var(--axis); }
+.cb-tx:focus { background: color-mix(in oklab, var(--series-1) 9%, transparent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--series-1) 9%, transparent); }
+.cb-tx.chg { box-shadow: inset 0 -1.5px 0 var(--status-warning); }
+.cb-rv { margin-left: 6px; padding: 3px 7px; border-radius: 99px; font: var(--weight-medium) 11px/1 var(--font); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--border); white-space: nowrap; }
+.cb-tx.long + .cb-rv { margin: 6px 0 0; }
+/* «Рядки»: the name renames in place, a hand-made line says where it comes from */
+.cb-rn { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; max-width: 100%; text-align: left; font: var(--weight-semibold) 15px/1.25 var(--font); color: var(--ink); overflow: hidden; overflow-wrap: anywhere; }
+.cb-rn::after { content: " ✎"; color: var(--axis); font-weight: 400; font-size: 12px; }
+.cb-ren { width: 100%; font: var(--weight-semibold) 15px/1.25 var(--font); color: var(--ink); background: var(--plane); border: 0; border-radius: 8px; padding: 4px 6px; margin: -4px -6px; outline: 2px solid color-mix(in oklab, var(--series-1) 40%, transparent); }
+.cb-hand { color: var(--ink-2); }
+.cb-ln .cb-rv { margin-left: 6px; vertical-align: 1px; }
+/* a day's rules: ↻ from this day, or the rule that laid it and «вимкнути» */
+.cb-rls { display: grid; gap: 6px; margin: 4px 0 12px; }
+.cb-rl { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font: 12.5px/1.3 var(--font); color: var(--ink-2); }
+.cb-rl span { margin-right: auto; }
+.cab .cb-rl .chip { padding: 7px 10px; font-size: 12px; }
+/* the calendar's invoices: 💵 marks a sent one paid */
+.cb-invs { display: grid; gap: 2px; margin-top: 14px; }
+.cb-iv { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); font: 13px/1 var(--font); color: var(--ink-2); }
+.cb-iv .cb-pill { margin-right: auto; }
+.cb-pill { padding: 4px 8px; border-radius: 99px; font: var(--weight-medium) 11px/1 var(--font); color: var(--muted); background: color-mix(in oklab, var(--ink) 6%, transparent); }
+.cb-pill.paid { color: var(--status-good); background: color-mix(in oklab, var(--status-good) 12%, transparent); }
+.cab .chip.pend { box-shadow: inset 0 0 0 1.5px var(--status-warning); }
+.cab .cb-iv .chip { padding: 8px 12px; font-size: 12.5px; }
+
+/* the sheet: what closing the app will do, before it does */
+.cb-sheet { position: fixed; inset: 0; z-index: 6; display: flex; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.32); opacity: 0; pointer-events: none; transition: opacity .25s; }
+.cb-sheet.on { opacity: 1; pointer-events: auto; }
+.cb-sh { width: 100%; max-width: 560px; padding: 22px 20px calc(env(safe-area-inset-bottom, 0px) + 18px); border-radius: 24px 24px 0 0; background: var(--plane); transform: translateY(24px); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.cb-sheet.on .cb-sh { transform: none; }
+.cb-sh h3 { margin: 0 0 8px; font: var(--weight-bold) 20px/1.2 var(--font); }
+.cb-sh p { margin: 0 0 18px; font: 14px/1.45 var(--font); color: var(--ink-2); }
+.cb-sh:not(.cb-dw) div { display: flex; gap: 10px; }
+.cb-sh:not(.cb-dw) > div > button { flex: 1; height: 50px; border-radius: 25px; font: var(--weight-semibold) 15px/1 var(--font); box-shadow: inset 0 0 0 1px var(--border); }
+.cb-sh .cb-yes { background: var(--ink); color: var(--plane); box-shadow: none; }
+
+/* «Правки» from any step (#315): a sheet over the step, chips lead to their edit */
+.cb-drw { z-index: 5; }
+.cb-dw { max-height: 78vh; display: flex; flex-direction: column; padding-top: 10px; }
+.cb-grab { display: block; width: 38px; height: 4px; margin: 0 auto 12px; border-radius: 2px; background: var(--track); }
+.cb-dw h3 { margin: 0; font: var(--weight-bold) 20px/1.2 var(--font); }
+.cb-dw h3 span { margin-left: 4px; font-size: 14px; color: var(--muted); font-weight: var(--weight-medium); }
+.cb-dl { overflow-y: auto; overscroll-behavior: contain; margin: 0 -4px; padding: 0 4px; }
+.cb-dw .cb-g { grid-template-columns: 70px 1fr; }
+.cb-dw p.cb-dh { margin: 10px 0 0; font: 11px/1.3 var(--font); color: var(--muted); text-align: center; }
+.cb-dw .cb-df { display: flex; gap: 10px; margin-top: 12px; }
+.cb-dw .cb-df button { flex: 1; height: 48px; margin: 0; border-radius: 24px; font: var(--weight-semibold) 14px/1 var(--font); box-shadow: inset 0 0 0 1px var(--border); }
+.cb-dw .cb-dsave { background: var(--ink); color: var(--plane); box-shadow: none !important; }
+
+/* desktop: the cabinet stays a calm column */
+@media (min-width: 700px) {
+  .cab { max-width: 520px; margin: 0 auto; }
+  .cb-d:hover:not(.tk, .fut, .pre, .off) { transform: scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) { .cab *, .cab *::after, .cb-dock, .cb-sheet * { animation: none !important; transition: none !important; } }
 
 </style>
 </head>
@@ -992,7 +1275,7 @@ function sourcesCard(snap) {
     it.append(sw, `${label} · ${Math.round((100 * minutes) / all)}%`); legend.append(it);
   });
   card.append(strip, legend);
-  if (snap.cd) card.append(h("p", "hint", `${snap.cd} ${snap.md ? "непідтверджених кандидатів" : "кандидатів без таймера"} чекають у картці /invoice — тут їх не враховано`));
+  if (snap.cd) card.append(h("p", "hint", `${snap.cd} ${snap.md ? "непідтверджених кандидатів" : "кандидатів без таймера"} чекають у 🧾 чернетці (/hours) — тут їх не враховано`));
   return card;
 }
 
@@ -1048,7 +1331,7 @@ const River = (() => {
 
   // ---- the physics: no DOM, so node runs it in the tests -------------------------------------
   // data: {days: [iso], bands: [{name, color, manual, done, v: [level a day]}], from, to,
-  //        ahead?: {frac, label}, focus?: [first, last] day indexes, numbers?: [text a day],
+  //        ahead?: {frac, label, exact?}, focus?: [first, last] day indexes, numbers?: [text a day],
   //        week?: [7 short weekday names, Monday first]}
   class Flow {
     constructor(data, o) {
@@ -1062,7 +1345,8 @@ const River = (() => {
 
     layout(width) {
       const n = this.d.days.length, pad = 6, H = this.o.height, S = this.d.bands.length;
-      const ahead = this.d.ahead ? Math.max(0.1, Math.min(0.4, this.d.ahead.frac)) : 0;
+      // `exact`: the owner's cabinet lines its days ahead up with the river's (#315)
+      const a = this.d.ahead, ahead = !a ? 0 : a.exact ? Math.max(0, Math.min(0.9, a.frac)) : Math.max(0.1, Math.min(0.4, a.frac));
       this.W = width; this.H = H;
       this.x0 = pad; this.xr = pad + (width - 2 * pad) * (1 - ahead); this.xe = width - pad - 6;
       this.xs = Float32Array.from({ length: N }, (_, j) => this.x0 + (j * (this.xr - this.x0)) / (N - 1));
@@ -1389,14 +1673,19 @@ const River = (() => {
 
 if (typeof module !== "undefined") module.exports = River;
 
-// The week's analytics (#274), concept B «Одне полотно» (the owner's pick, 2026-11-05): the
-// living river is the screen, each day a column through it, the day's hours hang under it; a
-// tap on a column opens the day in place. The proposal is one capsule, − 50,75 + and ✅.
-// This file only declares: the model below runs under node in the tests (tests/test_week_app.py),
-// the screen uses app.js's helpers (h, haptic, post, gate, color, hrs) and river.js when called.
+// The owner's cabinet (#303): all work on an invoice in three steps, the reference S (concepts
+// A + B, the owner's pick 2026-11-05). 1 «Календар»: the range — the start pinned on the first
+// day not invoiced, the end dragged, never after today. 2 «Полотно»: the river with the days'
+// columns (#274/#288, the equalizer) or «Рядки» (the disk, the share strip, 🔒, − / +). 3
+// «Перевірка»: the invoice, every edit as a chip with ↩, the sendData size, ✅. Edits stay local
+// until one sendData (her.cabinet's payload) carries the final state: ✅, 🔄 or «Зберегти».
+// After 🔄 (#315): the banner of what the read changed (`gn`), the days after the range, the rules'
+// ribbons, «Правки» from any step and a chip that leads to its edit.
+// This file only declares: the model below runs under node in the tests (tests/test_cabinet.py),
+// the screen uses app.js's helpers (h, s, svg, arc, haptic, post, gate, color, hrs) and river.js.
 "use strict";
 
-// ---- the model: the bot's arithmetic (her.week_app.total, monitor.hours, Proposal.range) ------
+// ---- the model: the bot's arithmetic (her.cabinet.total, monitor.hours, Proposal.range) --------
 function pyRound(x) { // Python's round(): half to even
   const f = Math.floor(x), d = x - f;
   if (d > 0.5) return f + 1;
@@ -1410,17 +1699,66 @@ function weekTotal(whole, held, steps, step) {
   if (target === whole) target += steps > 0 ? 1 : -1;
   return Math.max(held + 1, target);
 }
-// The snapshot with the page's edits ({steps, feel: {day: q|null}, acts: {"day:code": q}}):
-// each day's quarters, the total the bot will approve and the range by activity.
-function weekState(W, E) {
+// The page's edits: {steps, feel: {day: q|null}, acts: {"day:code": q}, lines: {line: [dq, lock]},
+// end: days, texts: {id: text}, rules: [[code, q, iso, "d"|"w"]], ends: {rule id: iso}, pay:
+// {range key: 0|1}}. A fresh state carries the stored line edits (the snapshot's l[6], l[7]).
+function fresh(W) {
+  const lines = {};
+  W.l.forEach((l, i) => { if (l[6] || l[7]) lines[i] = [l[6], l[7] ? 1 : 0]; });
+  return { steps: W.s, feel: {}, acts: {}, lines, end: W.d.length, texts: {}, rules: [], ends: {}, pay: {} };
+}
+// An edit state from before #314 (the tests' plain ones) gets the newer fields, empty.
+function norm(E) {
+  for (const k of ["texts", "ends", "pay", "lines", "feel", "acts"]) if (!E[k]) E[k] = {};
+  if (!E.rules) E.rules = [];
+  return E;
+}
+// ---- the rules (#314): her.worklog._ruled on the page -----------------------------------------
+// The client's rules with the page's changes, oldest first: a stored one ended on `ends` stops the
+// day before (gone when that is its first day or earlier), the page's new ones are the newest.
+function ruleList(W, E) {
+  const ends = E.ends || {}, out = [];
+  (W.ru || []).forEach((r) => {
+    let last = r[4];
+    if (r[0] in ends) {
+      if (ends[r[0]] <= r[3]) return;
+      const off = isoAdd(ends[r[0]], -1);
+      last = last && last < off ? last : off;
+    }
+    out.push({ id: r[0], code: r[1], q: r[2], first: r[3], last, wd: Boolean(r[5]) });
+  });
+  (E.rules || []).forEach((r, k) => out.push({ id: -(k + 1), code: r[0], q: r[1], first: r[2], last: "", wd: r[3] === "w", added: k }));
+  return out;
+}
+function ruleOn(r, iso) {
+  if (iso < r.first || (r.last && iso > r.last)) return false;
+  const wd = new Date(iso + "T12:00:00Z").getUTCDay();
+  return !r.wd || (wd !== 0 && wd !== 6);
+}
+// A day's activities before the page's own (E.acts): the day's own entries (row[8] names their
+// kinds; an older snapshot without it: all of row[2]), and on a day up to today the newest rule
+// of a kind the day has no entry of. `laid`: code → the rule that laid it.
+function baseActs(W, E, i) {
+  const row = W.d[i], own = row[8] == null ? Object.keys(row[2]).join("") : row[8], acts = {}, laid = {};
+  Object.keys(row[2]).forEach((c) => { if (own.includes(c)) acts[c] = row[2][c]; });
+  const iso = isoAdd(W.f, i);
+  if (row[8] != null && (!W.cal || iso <= W.cal.t)) {
+    ruleList(W, E).reverse().forEach((r) => {
+      if (!own.includes(r.code) && !(r.code in laid) && ruleOn(r, iso)) { laid[r.code] = r; acts[r.code] = r.q; }
+    });
+  }
+  return { acts, laid };
+}
+// Each day's quarters, the days' total after the taps (`base`) and the range by activity.
+function dayState(W, E) {
   const days = W.d.map((row, i) => {
-    const acts = Object.assign({}, row[2]);
+    const { acts: ruled, laid } = baseActs(W, E, i), acts = Object.assign({}, ruled);
     for (const k in E.acts) { const [d, c] = k.split(":"); if (Number(d) === i) acts[c] = E.acts[k]; }
     const feel = i in E.feel ? E.feel[i] : row[1];
     const quarters = (by) => Object.values(by).reduce((x, y) => x + y, 0) + row[3];
     const a = quarters(acts), a0 = quarters(row[2]), total = dayQ(row[0], feel, a);
     // origRepo: the repo's quarters the snapshot's lines were split from (the river scales them)
-    return { i, model: row[0], feel, acts, own: row[3], act: a, total, repo: total - a, origRepo: dayQ(row[0], row[1], a0) - a0 };
+    return { i, model: row[0], feel, acts, laid, ruled, own: row[3], act: a, total, repo: total - a, origRepo: dayQ(row[0], row[1], a0) - a0 };
   });
   const whole = days.reduce((x, d) => x + d.total, 0), held = days.reduce((x, d) => x + d.act, 0);
   let range;
@@ -1429,7 +1767,86 @@ function weekState(W, E) {
     days.forEach((d) => { const r = W.d[d.i][7]; lo += d.feel != null ? d.total : r[0] + d.act; hi += d.feel != null ? d.total : r[1] + d.act; });
     range = [pyRound(lo / 4), pyRound(hi / 4)];
   } else range = [pyRound((whole / 4) * (1 - 0.1)), pyRound((whole / 4) * (1 + 0.1))];
-  return { days, whole, held, total: weekTotal(whole, held, E.steps, W.sp), range };
+  return { days, whole, held, base: weekTotal(whole, held, E.steps, W.sp), range };
+}
+// Each line's quarters before the owner's shift: the snapshot's (its taps, no line edit), re-
+// estimated when the days or the taps changed (a repo line by the repo's new part, an activity's
+// line by its days). Exact while both are the snapshot's.
+function lineBases(W, E, st) {
+  const was = dayState(W, { steps: W.s, feel: {}, acts: {}, rules: [], ends: {} }), codeOf = {};
+  Object.keys(W.kc).forEach((c) => { codeOf[W.kc[c][1]] = c; });
+  const repoNow = st.base - st.held, repoWas = was.base - was.held;
+  return W.l.map((l) => {
+    if (l[2]) { const c = codeOf[l[0]]; return c ? st.days.reduce((x, d) => x + (d.acts[c] || 0), 0) : l[4]; }
+    if (repoWas === repoNow) return l[4];
+    return repoWas > 0 ? pyRound((l[4] * repoNow) / repoWas) : 0;
+  });
+}
+// A line's shift as it takes effect: never below its line (her.cabinet.shifted stops at 0 too).
+const effective = (dq, base) => Math.max(dq, -base);
+// The days and the total the bot will approve: the days' total plus the lines' shifts.
+function weekState(W, E) {
+  const st = dayState(W, E), bases = lineBases(W, E, st), lines = E.lines || {};
+  st.total = st.base + Object.keys(lines).reduce((x, i) => x + (i < W.l.length ? effective(lines[i][0], bases[i]) : 0), 0);
+  return st;
+}
+// The lines as the page shows them: the base, the owner's shift, the lock.
+function lineState(W, E) {
+  const st = weekState(W, E), bases = lineBases(W, E, st);
+  const lines = W.l.map((l, i) => {
+    const base = bases[i], [raw, lock] = (E.lines || {})[i] || [0, 0], dq = effective(raw, base);
+    return { i, key: l[0], name: l[1] || `#${i + 1}`, manual: Boolean(l[2]), model: l[5], base, dq, lock: Boolean(lock), q: base + dq };
+  });
+  return { lines, total: st.total, base: st.base };
+}
+// Shares of `total` by `weights`, the largest remainders first (editor.js's shareQ, worktime's).
+function shareQ(total, weights) {
+  if (!weights.length) return [];
+  if (!weights.some(Boolean)) weights = weights.map(() => 1);
+  const whole = weights.reduce((a, b) => a + b, 0);
+  const shares = weights.map((w) => Math.floor((total * w) / whole));
+  const rest = (i) => (total * weights[i]) % whole;
+  const order = weights.map((_, i) => i).sort((a, b) => rest(b) - rest(a) || a - b);
+  const left = total - shares.reduce((a, b) => a + b, 0);
+  for (const i of order.slice(0, left)) shares[i] += 1;
+  return shares;
+}
+function setShift(E, i, dq, lock) {
+  if (!dq && !lock) delete E.lines[i]; else E.lines[i] = [dq, lock ? 1 : 0];
+}
+// The disk: the total to `target` quarters, the loose repo lines keep their proportions (a lock
+// and an activity's line stay). Returns the total kept (the floor: the lines that stay).
+function turnTo(W, E, target) {
+  const { lines, total } = lineState(W, E);
+  const loose = lines.filter((x) => !x.lock && !x.manual);
+  if (!loose.length) return total;
+  const fixed = total - loose.reduce((a, x) => a + x.q, 0);
+  target = Math.max(fixed, Math.min(W.d.length * MAX_Q, target));
+  const shares = shareQ(target - fixed, loose.map((x) => x.q));
+  loose.forEach((x, k) => setShift(E, x.i, x.dq + shares[k] - x.q, x.lock));
+  return lineState(W, E).total;
+}
+// A border of the strip: `v` quarters from line `a` to line `b` (neither locked nor an activity's).
+function moveQ(W, E, a, b, v) {
+  const L = lineState(W, E).lines, x = L[a], y = L[b];
+  if (!x || !y || x.lock || y.lock || x.manual || y.manual) return 0;
+  v = Math.max(-y.q, Math.min(x.q, v));
+  if (!v) return 0;
+  setShift(E, a, x.dq - v, x.lock); setShift(E, b, y.dq + v, y.lock);
+  return v;
+}
+// − / + on a line: 15 min a press, never below 0.
+function nudgeLine(W, E, i, by) {
+  const x = lineState(W, E).lines[i];
+  if (!x || x.manual || x.lock || x.q + by < 0) return false;
+  setShift(E, i, x.dq + by, x.lock);
+  return true;
+}
+function lockLine(W, E, i) {
+  const x = lineState(W, E).lines[i];
+  if (!x || x.manual) return false;
+  setShift(E, i, x.dq, !x.lock);
+  return true;
 }
 // ---- the drag (#288): a day like an equalizer's slider, 15 min a step, 16 h at most -------------
 const MAX_Q = 64; // quarters: a day and its activities (her.daywork.MAX_DAY)
@@ -1467,7 +1884,7 @@ function drag(axis, from, lo, hi, px) {
 function room(model, feel, act) { return Math.max(0, feel == null ? MAX_Q - model - act : MAX_Q - act); }
 // The day dragged to `q`: a feel of any quarter, never under the day's activities (the repo would
 // go negative) and never over 16 h: a day the model alone put over it snaps into 16 h on the
-// first step (#291, as her.week_app.parse takes it); back on the snapshot's own value, no edit.
+// first step (#291, as her.cabinet.parse takes it); back on the snapshot's own value, no edit.
 // Returns the value kept.
 function setDay(W, E, i, q) {
   const d = weekState(W, E).days[i], row = W.d[i];
@@ -1476,7 +1893,7 @@ function setDay(W, E, i, q) {
   else E.feel[i] = q;
   return q;
 }
-// «↺»: the model again, no feel — unless that takes the day past 16 h (the model plus the
+// «↩»: the model again, no feel — unless that takes the day past 16 h (the model plus the
 // activities): false, nothing changed.
 function resetDay(W, E, i) {
   const d = weekState(W, E).days[i], t = dayQ(d.model, null, d.act);
@@ -1487,31 +1904,245 @@ function resetDay(W, E, i) {
 // An activity's quarters on a day: 0 removes it; at most what room() leaves and 16 h (one stored
 // over 16 h before the rule snaps into it). Returns the value kept.
 function setAct(W, E, i, code, q) {
-  const d = weekState(W, E).days[i], cur = d.acts[code] || 0, base = W.d[i][2][code] || 0;
+  const d = weekState(W, E).days[i], cur = d.acts[code] || 0, base = d.ruled[code] || 0;
   q = Math.max(0, Math.min(cur + room(d.model, d.feel, d.act), MAX_Q, q));
   if (q === base) delete E.acts[`${i}:${code}`];
   else E.acts[`${i}:${code}`] = q;
   return q;
 }
-// The decision for sendData: the final state, not a history (the screen checks the 4096 bytes).
-function decisionText(W, E, editor) {
+// ---- the edits: every one the cabinet knows, against the model, each with its ↩ -------------
+// {kind, key, day|line|code, now, was, sent}: `sent` the stored one (in the snapshot), else
+// pending. An activity is one chip a kind (its days and hours), its ↩ takes it off every day.
+function editList(W, E) {
+  norm(E);
+  const st = weekState(W, E), out = [], acts = {};
+  st.days.forEach((d) => {
+    if (d.feel != null) out.push({ kind: "day", key: `f${d.i}`, day: d.i, now: d.total, was: dayQ(d.model, null, d.act), sent: !(d.i in E.feel) });
+    Object.keys(d.acts).forEach((c) => {
+      const q = d.acts[c] || 0, kept = !(`${d.i}:${c}` in E.acts);
+      if (!q || (kept && d.laid[c])) return; // a rule's day: the rule's own chip
+      const a = acts[c] = acts[c] || { kind: "act", key: `a${c}`, code: c, days: [], now: 0, was: 0, sent: true };
+      a.days.push(d.i); a.now += q; a.sent = a.sent && kept;
+    });
+  });
+  Object.keys(W.kc).forEach((c) => { if (acts[c]) out.push(acts[c]); });
+  if (E.steps) out.push({ kind: "steps", key: "s", now: E.steps, was: 0, sent: E.steps === W.s });
+  const L = lineState(W, E).lines;
+  W.l.forEach((l, i) => {
+    const [, lock] = (E.lines || {})[i] || [0, 0], dq = L[i].dq;
+    if (dq) out.push({ kind: "line", key: `l${i}`, line: i, now: dq, was: 0, sent: dq === l[6] });
+    if (lock) out.push({ kind: "lock", key: `k${i}`, line: i, now: 1, was: 0, sent: Boolean(l[7]) });
+  });
+  (W.ru || []).forEach((r) => {
+    const off = (E.ends || {})[r[0]];
+    out.push({ kind: "rule", key: `u${r[0]}`, id: r[0], code: r[1], q: r[2], first: r[3], last: r[4], wd: Boolean(r[5]), off: off || null, sent: off == null });
+  });
+  (E.rules || []).forEach((r, k) => out.push({ kind: "rule", key: `n${k}`, added: k, code: r[0], q: r[1], first: r[2], wd: r[3] === "w", sent: false }));
+  textIds(W).forEach((id) => { if (textNow(W, E, id) !== textModel(W, id)) out.push({ kind: "text", key: `t:${id}`, id, now: textNow(W, E, id), was: textModel(W, id), sent: !(id in E.texts) }); });
+  Object.keys(E.pay || {}).sort().forEach((k) => out.push({ kind: "pay", key: `p:${k}`, range: k, now: E.pay[k], sent: false }));
+  return out;
+}
+// ---- the client's texts (#314): ids «t3» «v3» «r3» (a line's title · value · risk), «d» «m» «x»
+// (What we did · the letter · What's next). The snapshot's `tx` holds what the bot has now and,
+// in `o`, the model of each text the owner edited before.
+function textIds(W) {
+  const tx = W.tx || {}, ids = [];
+  (tx.l || []).forEach((_, i) => { if (i < W.l.length) ids.push(`t${i}`, `v${i}`, `r${i}`); });
+  ["d", "m", "x"].forEach((p) => { if (typeof tx[p] === "string") ids.push(p); });
+  return ids;
+}
+function textSnap(W, id) {
+  const tx = W.tx || {};
+  if (id.length > 1) { const row = (tx.l || [])[Number(id.slice(1))]; return row ? row["tvr".indexOf(id[0])] : ""; }
+  return tx[id] == null ? "" : tx[id];
+}
+const textModel = (W, id) => (W.tx && W.tx.o && id in W.tx.o ? W.tx.o[id] : textSnap(W, id));
+const textNow = (W, E, id) => (id in E.texts ? E.texts[id] : textSnap(W, id));
+// a text's most characters, as her.cabinet.parse takes it (MAX_LINE_TEXT, MAX_REPORT_TEXT)
+const textMax = (id) => (id.length > 1 ? 160 : id === "m" ? 1200 : 2000);
+// A text set: the bot's own again → no edit; an empty title stays the model's.
+function setText(W, E, id, v) {
+  // a pasted tab or another control character: her.cabinet._text refuses any but a line break
+  v = String(v).replace(/\r/g, "").replace(/[\x00-\x09\x0b-\x1f]/g, " ");
+  if (id[0] !== "m" && id[0] !== "d" && id[0] !== "x") v = v.replace(/\s+/g, " ");
+  v = v.trim();
+  if (id[0] === "t" && !v) v = textModel(W, id);
+  if (v === textSnap(W, id)) delete E.texts[id]; else E.texts[id] = v;
+  return textNow(W, E, id);
+}
+// ---- a rule from a day (↻), a rule ended from a day, an invoice marked paid -------------------
+function addRule(W, E, i, code, mode) {
+  const q = weekState(W, E).days[i].acts[code] || 0;
+  if (!q) return false;
+  E.rules.push([code, q, isoAdd(W.f, i), mode]);
+  setAct(W, E, i, code, q); // the day's own value is the rule's now: no edit of its own
+  return true;
+}
+// The rule that laid `code` on day i stops from that day: a stored one is ended there (gone when
+// it began that day or later), a new one of the page's is taken back.
+function endRule(W, E, i, code) {
+  const r = weekState(W, E).days[i].laid[code];
+  if (!r) return false;
+  if (r.id > 0) E.ends[r.id] = isoAdd(W.f, i);
+  else E.rules.splice(r.added, 1);
+  return true;
+}
+function paidNow(W, E, key) {
+  const tk = ((W.cal && W.cal.tk) || []).find((x) => x[3] === key);
+  if (!tk) return null;
+  return key in E.pay ? Boolean(E.pay[key]) : tk[2] === "p";
+}
+function togglePay(W, E, key) {
+  const tk = ((W.cal && W.cal.tk) || []).find((x) => x[3] === key);
+  if (!tk || tk[2] === "a") return false; // an invoice not sent yet has no payment
+  const next = paidNow(W, E, key) ? 0 : 1;
+  if (next === (tk[2] === "p" ? 1 : 0)) delete E.pay[key]; else E.pay[key] = next;
+  return true;
+}
+function undoEdit(W, E, e) {
+  norm(E);
+  if (e.kind === "day") return resetDay(W, E, e.day);
+  if (e.kind === "act") { e.days.forEach((i) => setAct(W, E, i, e.code, 0)); return true; }
+  if (e.kind === "steps") { E.steps = 0; return true; }
+  if (e.kind === "text") { setText(W, E, e.id, e.was); return true; }
+  if (e.kind === "pay") { delete E.pay[e.range]; return true; }
+  if (e.kind === "rule") {
+    if (e.added != null) E.rules.splice(e.added, 1);
+    else if (e.off) delete E.ends[e.id];
+    else E.ends[e.id] = e.first > W.f ? e.first : W.f; // a stored rule ends from the range's start
+    return true;
+  }
+  const [dq, lock] = E.lines[e.line] || [0, 0];
+  if (e.kind === "line") setShift(E, e.line, 0, lock);
+  else setShift(E, e.line, dq, 0);
+  return true;
+}
+// «Скинути все до моделі»: no feel, no activity, no rule (a stored one ends from the range's start),
+// no tap, no line edit, every text its model's; a payment mark not sent yet goes (paid is not
+// the model's). A day the model alone puts over 16 h keeps its feel (resetDay says no).
+function resetAll(W, E) {
+  norm(E);
+  E.steps = 0; E.lines = {}; E.rules = []; E.ends = {}; E.pay = {};
+  (W.ru || []).forEach((r) => { E.ends[r[0]] = r[3] > W.f ? r[3] : W.f; });
+  E.texts = {};
+  textIds(W).forEach((id) => { if (textModel(W, id) !== textSnap(W, id)) E.texts[id] = textModel(W, id); });
+  weekState(W, E).days.forEach((d) => { Object.keys(d.acts).forEach((c) => setAct(W, E, d.i, c, 0)); });
+  weekState(W, E).days.forEach((d) => { if (d.feel != null) resetDay(W, E, d.i); });
+}
+// How many changes the page holds that the bot has not got: the footer's «● N не надіслано».
+function unsent(W, E) {
+  norm(E);
+  let n = Object.keys(E.feel).filter((i) => E.feel[i] !== W.d[i][1]).length;
+  n += pageActs(W, E).length + Object.keys(E.texts).length + E.rules.length + Object.keys(E.ends).length + Object.keys(E.pay).length;
+  n += E.steps !== W.s ? 1 : 0;
+  W.l.forEach((l, i) => { const [dq, lock] = E.lines[i] || [0, 0]; if (dq !== l[6] || Boolean(lock) !== Boolean(l[7])) n++; });
+  return n + (E.end !== W.d.length ? 1 : 0);
+}
+// The page's activities that differ from the day's own and its rules': [day, code, q].
+function pageActs(W, E) {
+  return Object.keys(E.acts).map((k) => { const [d, c] = k.split(":"); return [Number(d), c, E.acts[k]]; })
+    .filter(([d, c, q]) => q !== (baseActs(W, E, d).acts[c] || 0)).sort((a, b) => a[0] - b[0] || (a[1] < b[1] ? -1 : 1));
+}
+// The payload for sendData (her.cabinet's table): the final state, not a history.
+function payload(W, E, action) {
+  norm(E);
   const st = weekState(W, E);
   const feel = Object.keys(E.feel).map(Number).filter((i) => E.feel[i] !== W.d[i][1]).sort((a, b) => a - b).map((i) => [i, E.feel[i]]);
-  const acts = Object.keys(E.acts).filter((k) => { const [d, c] = k.split(":"); return E.acts[k] !== (W.d[Number(d)][2][c] || 0); })
-    .sort().map((k) => { const [d, c] = k.split(":"); return [Number(d), c, E.acts[k]]; });
-  const out = { w: 1, c: W.c[0], k: W.k, m: W.m, s: E.steps, f: feel, a: acts, q: st.total };
-  if (editor) out.e = 1;
+  const out = { w: 2, x: action, c: W.c[0], k: W.k, m: W.m, q: st.total, s: E.steps, f: feel, a: pageActs(W, E) };
+  if (W.l.length) { // the shifts as they take effect: an undone tap never sends a line below 0
+    const L = lineState(W, E).lines;
+    out.l = Object.keys(E.lines).map(Number).sort((a, b) => a - b).filter((i) => i < L.length).map((i) => [i, L[i].dq, E.lines[i][1] ? 1 : 0]).filter((x) => x[1] || x[2]);
+  }
+  const ids = Object.keys(E.texts).sort();
+  const n = ids.filter((id) => id.length > 1).map((id) => [Number(id.slice(1)), id[0], E.texts[id]]);
+  const r = ids.filter((id) => id.length === 1).map((id) => [id, E.texts[id]]);
+  if (E.end === W.d.length && n.length) out.n = n; // the texts are the range's: a new one has its own
+  if (E.end === W.d.length && r.length) out.r = r;
+  const u = E.rules.map((x) => ["+", ...x]).concat(Object.keys(E.ends).sort().map((id) => ["-", Number(id), E.ends[id]]));
+  if (u.length) out.u = u;
+  const p = Object.keys(E.pay).sort().map((k) => [k, E.pay[k]]);
+  if (p.length) out.p = p;
+  if (E.end !== W.d.length) { out.e = E.end; out.x = "sv"; }
   return JSON.stringify(out);
+}
+// ---- after 🔄 (#315): what the read changed, the days ahead, where an edit lives -------------
+// The snapshot's `gn` (her.cabinet.news) on the page's state: the read's time, the total's and
+// the PRs' change, the days whose model moved — `held` when the owner's feel keeps the day's
+// hours (its ↩ gives the day the new model, sent as `f`). None: no read to tell.
+function newsOf(W, E) {
+  const g = W.gn;
+  if (!g || !g.at) return null;
+  const st = weekState(W, norm(E)), s = g.s || [];
+  const days = (g.d || []).filter((x) => x[0] < W.d.length).map(([i, was, now]) => ({ i, was, now, held: st.days[i].feel != null }));
+  return { at: g.at, q: g.q || 0, pr: s[1] || s[2] || 0, commits: s[0] || 0, days };
+}
+const AHEAD_MAX = 7; // the canvas's days after the range: a week at most
+const sunday = (iso) => new Date(iso + "T12:00:00Z").getUTCDay() === 0;
+// The days after the range on the canvas: the free ones up to today (their model's quarters,
+// outside this invoice) and, when those reach today, the days ahead to Sunday (q null).
+function aheadDays(W) {
+  const n = W.d.length, cal = W.cal || {}, hx = cal.hx || [];
+  if (n < 2 || !cal.t) return [];
+  const out = hx.slice(0, AHEAD_MAX).map((q, k) => ({ iso: isoAdd(W.f, n + k), q }));
+  let last = isoAdd(W.f, n - 1 + out.length);
+  if (last < cal.t || hx.length > AHEAD_MAX) return out; // another invoice, or a long way to today
+  while (!sunday(last) && out.length < AHEAD_MAX) { last = isoAdd(last, 1); out.push({ iso: last, q: null }); }
+  return out;
+}
+// The rules on the canvas's slots (the range's days, then the ones ahead): `on` the days up to
+// today it lays on, `fut` the days ahead it will (an open rule runs on into them).
+function ruleSlots(W, E, ahead) {
+  const slots = W.d.map((_, i) => isoAdd(W.f, i)).concat((ahead || []).map((a) => a.iso)), today = (W.cal && W.cal.t) || "9999";
+  const at = (r, past) => slots.map((iso, k) => ((iso <= today) === past && ruleOn(r, iso) ? k : -1)).filter((k) => k >= 0);
+  return ruleList(W, norm(E)).map((r) => ({ r, on: at(r, true), fut: at(r, false) })).filter((x) => x.on.length || x.fut.length);
+}
+// Where an edit lives: a chip's tap opens it — a day (an activity's first, a rule's first in the
+// range) on the canvas, a line or the disk in «Рядки», a client's text on the review, a payment
+// in the calendar.
+function goTarget(W, e) {
+  const n = W.d.length, at = (iso) => Math.max(0, Math.min(n - 1, isoDays(W.f, iso)));
+  if (e.kind === "day") return { step: 1, mode: "days", day: e.day };
+  if (e.kind === "act") return { step: 1, mode: "days", day: e.days[0] };
+  if (e.kind === "rule") return { step: 1, mode: "days", day: at(e.off && e.off > e.first ? e.off : e.first) };
+  if (e.kind === "steps") return { step: 1, mode: "rows", disk: true };
+  if (e.kind === "line" || e.kind === "lock") return { step: 1, mode: "rows", line: e.line };
+  if (e.kind === "text" && e.id[0] === "t") return { step: 1, mode: "rows", line: Number(e.id.slice(1)) };
+  if (e.kind === "text") return { step: 2, id: e.id };
+  return { step: 0, range: e.range };
+}
+
+// ---- the calendar's arithmetic ---------------------------------------------------------------
+function isoAdd(iso, n) { const [y, m, d] = iso.split("-").map(Number), t = new Date(Date.UTC(y, m - 1, d + n)); return t.toISOString().slice(0, 10); }
+function isoDays(a, b) { const p = (x) => Date.UTC(...x.split("-").map((v, k) => Number(v) - (k === 1 ? 1 : 0))); return Math.round((p(b) - p(a)) / 864e5); }
+// The longest range the end may take: the snapshot's days and the free ones after it, never past
+// today (her.cabinet.calendar's `hx` stops at the next invoice).
+function maxEnd(W) { return Math.max(1, Math.min(W.d.length + W.cal.hx.length, isoDays(W.f, W.cal.t) + 1)); }
+// «до неділі»: the last Sunday the end may take (none: the start's own week is still running);
+// «до сьогодні»: as far as it goes.
+function sundayEnd(W) {
+  const most = maxEnd(W);
+  for (let n = most; n >= 1; n--) { const d = new Date(isoAdd(W.f, n - 1) + "T12:00:00Z"); if (d.getUTCDay() === 0) return n; }
+  return null;
+}
+// A day's quarters in a range of `n` days: the edited day, or the model of a day after the
+// snapshot's (no feel: that day is not open yet). The footer's total while the end moves.
+function rangeQ(W, E, n) {
+  const st = weekState(W, E);
+  let q = 0;
+  for (let i = 0; i < n; i++) q += i < st.days.length ? st.days[i].total : W.cal.hx[i - st.days.length] || 0;
+  return q;
 }
 
 // ---- the screen ----------------------------------------------------------------------------
 const WEEK_FEEL = [["🌤", "Легкий"], ["⛅", "Звичайний"], ["🔥", "Насичений"], ["🌋", "Жесть"]];
 const WEEK_DAYS = ["пн", "вт", "ср", "чт", "пт", "сб", "нд"];
+const STEPS = [["Календар", "Тягни ● — кінець періоду"], ["Полотно", "Тягни стовпчик · дотик — день"], ["Перевірка", "Правки й рахунок — тоді ✅"]];
 const LONG_DAY = 48; // quarters: the owner's «!» over 12 h
 const Q_PX = 4; // px of a finger's travel a quarter: a 16 h day in 256 px
-function week(W) {
-  const E = { steps: W.s, feel: {}, acts: {} };
-  const n = W.d.length, iso = (i) => { const d = day(W.f); d.setDate(d.getDate() + i); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+const DISK_Q = 32; // the disk: quarters a turn (8 h)
+function cabinet(W) {
+  const E = fresh(W);
+  const n = W.d.length, iso = (i) => isoAdd(W.f, i);
   const dow = (i) => (day(iso(i)).getDay() + 6) % 7;
   const rateCents = W.c[3] != null ? Math.round(Number(W.c[3]) * 100) : null;
   const money = (q) => {
@@ -1520,71 +2151,371 @@ function week(W) {
     const text = amount((cents / 100).toFixed(2));
     return sym.length === 1 ? sym + text : `${text} ${sym}`;
   };
-  const changed = () => E.steps !== W.s || Object.keys(E.feel).length + Object.keys(E.acts).length > 0;
-  // a kind's colour: its line's slot in the proposal, else the slots after the lines
+  const sign = (q) => (q > 0 ? "+" : "−") + hrs(Math.abs(q));
   const lineOf = {}; W.l.forEach((l, i) => { lineOf[l[0]] = i; });
   const codes = Object.keys(W.kc);
   const slotOf = (code) => { const k = W.kc[code][1]; return k in lineOf ? lineOf[k] : Math.min(8, W.l.length + codes.indexOf(code)); };
-  let sel = -1, lens = QS_WEEK.get("lens") === "client" && W.fw && W.fw.days ? "client" : "owner", sent = false;
+  const model0 = W.d.reduce((x, row) => x + row[0], 0); // the repo's model alone: no feel, no activity, no edit
+  const canText = Boolean(W.tx && W.tx.l); // a level that dropped the texts edits none
+  // a line's name: the owner's, or the client's title once it was renamed (here or stored)
+  const lineName = (i) => (canText && (`t${i}` in E.texts || textModel(W, `t${i}`) !== textSnap(W, `t${i}`)) ? textNow(W, E, `t${i}`) : W.l[i][1] || `#${i + 1}`);
+  const ruleText = (r) => `↻ ${W.kc[r.code] ? W.kc[r.code][0] : r.code} ${hrs(r.q)} · ${r.wd ? "будні" : "щодня"} з ${dm(day(r.first))}`;
+  // right after 🔄 the cabinet opens on the canvas: the new proposal with the owner's edits on top
+  // (a page opened later from the card starts at the calendar, the banner still on)
+  const asked = QS_WEEK.get("step"), opened = asked != null ? Number(asked) || 0 : W.gn && W.gn.at && W.at - W.gn.at < 600 ? 1 : 0;
+  let step = Math.min(2, Math.max(0, opened)), mode = QS_WEEK.get("rows") ? "rows" : "days", sel = -1, sent = false;
+  const ahead = aheadDays(W); // the canvas's days after the range (#315)
+  let newsOff = false, drawerOn = false, flashDay = -1, flashTimer = 0;
+  const fresh0 = newsOf(W, E), pinged = new Set(fresh0 ? fresh0.days.map((d) => d.i) : []); // a ring on the moved days, once
 
   document.querySelector(".top").hidden = true;
   document.getElementById("tabs").hidden = true;
-  const screen = h("section", "screen on wk");
+  const screen = h("section", "screen on wk cab");
   screen.innerHTML = `
-  <header class="wk-head"><span class="eyebrow">${esc(W.c[1])}</span><span class="wk-t">${esc(W.t)}</span></header>
-  <div class="wk-top"><div class="wk-hero num" id="wk-hero"></div><div class="wk-money num" id="wk-money"></div></div>
-  <div class="wk-rng" id="wk-rng"></div>
-  <div class="wk-canvas">
-    <div class="wk-lens" role="tablist"><button class="${lens === "owner" ? "on" : ""}" data-l="owner">Години</button>${W.fw && W.fw.days ? `<button class="${lens === "client" ? "on" : ""}" data-l="client">Як бачить клієнт</button>` : ""}</div>
-    <div class="wk-stage" id="wk-stage"><canvas id="wk-rv" aria-label="Тиждень за фічами"></canvas><div class="wk-refl"></div><div class="wk-feel"></div><div class="wk-cols"></div></div>
-    <div class="legend wk-legend"></div>
-  </div>
-  <section class="wk-panel" id="wk-panel"></section>`;
-  // the dock and the toast live on the body: the screen's entry animation leaves a transform,
-  // and a fixed bar inside it would scroll with the page
-  const dock = h("nav", "wk-dock");
-  dock.innerHTML = `<div class="wk-step"><button id="wk-minus" aria-label="−10 %">−</button><div class="wk-sv"><b class="num" id="wk-sv"></b><span>±10 %</span></div><button id="wk-plus" aria-label="+10 %">+</button></div><button class="wk-ok" id="wk-ok" aria-label="Затвердити">✓</button>`;
+  <header class="cb-head">
+    <ol class="cb-steps" role="tablist">${STEPS.map(([name], k) => `<li><button role="tab" data-step="${k}"><i>${k + 1}</i><span>${name}</span></button></li>`).join("")}</ol>
+    <button class="cb-gh" id="cb-gh" aria-label="Перечитати GitHub"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.6-4.5M4 4v3h3M4 13a8 8 0 0 0 14.6 4.5M20 20v-3h-3"/></svg><small class="num">${W.ga ? new Date(W.ga * 1000).toTimeString().slice(0, 5) : "—"}</small></button>
+  </header>
+  <p class="cb-hint"><b class="num" id="cb-n"></b><span id="cb-ht"></span></p>
+  <div class="cb-news" id="cb-news" hidden></div>
+  <div class="cb-body" id="cb-body"></div>`;
+  const dock = h("nav", "cb-dock");
+  dock.innerHTML = `<div class="cb-sum"><b class="num" id="cb-t"></b><span class="num" id="cb-m"></span><button class="cb-st" id="cb-st" aria-haspopup="dialog"></button></div><button class="cb-go" id="cb-go"></button>`;
   const toast = h("div", "toast wk-toast");
-  toast.id = "wk-toast";
+  const sheet = h("div", "cb-sheet");
+  const drawer = h("div", "cb-sheet cb-drw"); // «Правки» from any step (#315)
   main.replaceChildren(screen);
-  document.body.append(dock, toast);
+  document.body.append(dock, toast, sheet, drawer);
   const $ = (id) => screen.querySelector(id) || document.querySelector(id);
-  const stage = $("#wk-stage");
+  const body = $("#cb-body");
 
-  // -- the river: the owner's lens (hours as they are), or the client's (#273)
-  let river = null;
-  function riverData() {
-    if (lens === "client") {
-      const f = W.fw, first = day(f.first), ds = [];
-      for (let i = 0; i < f.days; i++) { const d = new Date(first); d.setDate(d.getDate() + i); ds.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`); }
-      return { days: ds, bands: f.lines.map((l) => ({ name: l.t, color: color(l.slot), manual: l.manual, v: l.v })), from: dm(first), to: dm(day(ds[ds.length - 1])), week: WEEK_DAYS };
+  // ---- the frame: the steps, the hint, the dock -----------------------------------------------
+  function frame() {
+    screen.querySelectorAll(".cb-steps button").forEach((b, k) => {
+      b.classList.toggle("on", k === step); b.classList.toggle("done", k < step);
+      b.setAttribute("aria-selected", k === step);
+    });
+    $("#cb-n").textContent = `${step + 1}/3`;
+    $("#cb-ht").textContent = step === 1 && mode === "rows" ? "Крути диск · тягни межі · 🔒" : STEPS[step][1];
+    paintNews();
+    dockPaint();
+  }
+  function dockPaint(now) {
+    const moved = E.end !== n, t = moved ? rangeQ(W, E, E.end) : weekState(W, E).total, p = unsent(W, E);
+    const node = $("#cb-t"), from = Number(node.dataset.q || t);
+    node.dataset.q = t;
+    const paint = (q) => { node.innerHTML = `${moved ? "≈" : ""}${hrs(q)}<small> год</small>`; };
+    if (reduced || from === t || now) paint(t);
+    else { const t0 = performance.now(); const go = (k) => { k = Math.min(1, (k - t0) / 420); paint(Math.round(from + (t - from) * (1 - (1 - k) ** 3))); if (k < 1) requestAnimationFrame(go); }; requestAnimationFrame(go); }
+    $("#cb-m").textContent = step === 2 ? "" : money(t); // the review's own hero has it
+    const edits = editList(W, E).length;
+    $("#cb-st").innerHTML = p ? `<i class="dot"></i>${p} не надіслано ›` : edits ? `${edits} ${edits === 1 ? "правка" : edits < 5 ? "правки" : "правок"} · збережено ›` : "= модель";
+    $("#cb-st").classList.toggle("pend", p > 0);
+    $("#cb-st").disabled = !edits && !p;
+    const go = $("#cb-go");
+    go.classList.toggle("ok", step === 2 && !moved);
+    go.disabled = false;
+    if (moved) go.textContent = `Відкрити ${dm(day(W.f))}–${dm(day(iso(E.end - 1)))} ›`;
+    else if (step < 2) go.textContent = "Далі ›";
+    else { go.textContent = "✅ Створити рахунок"; go.disabled = !t; }
+    post("web_app_setup_closing_behavior", { need_confirmation: p > 0 });
+  }
+  function show(k) {
+    if (k !== step && k > 0 && E.end !== n) { haptic("light"); say("Спершу відкрий новий період або поверни кінець"); return false; }
+    if (k !== step) haptic("select");
+    step = k; sel = -1;
+    cancelAnimationFrame(rhTween);
+    if (river) { river.destroy(); river = null; }
+    body.replaceChildren(step === 0 ? calendar() : step === 1 ? canvas() : review());
+    body.classList.remove("in"); void body.offsetWidth; body.classList.add("in");
+    frame();
+    if (step === 1) requestAnimationFrame(() => { drawRiver(); layout(); ripple(); });
+    return true;
+  }
+
+  // ---- after 🔄 (#315): the banner — what the read changed, the days the owner holds, ↩ -------
+  function paintNews() {
+    const box = $("#cb-news"), g = newsOff ? null : newsOf(W, E);
+    box.hidden = !g;
+    if (!g) return;
+    const t = new Date(g.at * 1000).toTimeString().slice(0, 5), plus = (v) => `${v > 0 ? "+" : "−"}${Math.abs(v)}`;
+    const bits = [g.pr ? `${plus(g.pr)} PR` : "", g.q ? `${sign(g.q)} год` : ""].filter(Boolean);
+    if (!bits.length && g.commits) bits.push(`${plus(g.commits)} комітів`);
+    const name = (i) => `${WEEK_DAYS[dow(i)]} ${dm(day(iso(i)))}`;
+    const pills = g.days.map((d) => (d.held
+      ? `<span class="cb-np held"><button data-go="${d.i}">✋ ${name(d.i)}<small>модель ${sign(d.now - d.was)}</small></button><button class="x" data-hold="${d.i}" aria-label="${name(d.i)}: до нової моделі">↩</button></span>`
+      : `<button class="cb-np" data-go="${d.i}">${name(d.i)}<b class="num">${sign(d.now - d.was)}</b></button>`)).join("");
+    const held = g.days.filter((d) => d.held).length;
+    box.innerHTML = `<div class="cb-nt"><i aria-hidden="true">🔄</i><span><b class="num">${bits.join(" · ") || "без змін"}</b>${held ? ` · ✋ ${held} тримаєш` : ""}</span><small class="num">${t}</small><button class="cb-nx" aria-label="Сховати">✕</button></div>${pills ? `<div class="cb-npl">${pills}</div>` : ""}`;
+  }
+  $("#cb-news").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.classList.contains("cb-nx")) { newsOff = true; haptic("light"); paintNews(); return; }
+    if (b.dataset.hold != null) { reset(Number(b.dataset.hold)); paintNews(); return; }
+    if (b.dataset.go != null) { haptic("select"); go({ kind: "day", day: Number(b.dataset.go) }); }
+  });
+
+  // ---- a chip leads to its edit (#315): the day, the line, the disk, the text, the invoice ----
+  function go(e) {
+    const t = goTarget(W, e);
+    closeDrawer();
+    if (t.mode) mode = t.mode;
+    if (!show(t.step)) return;
+    if (t.day != null) { sel = t.day; flashDay = t.day; clearTimeout(flashTimer); flashTimer = setTimeout(() => { flashDay = -1; layout(); }, 1800); }
+    const at = t.line != null ? `.cb-line[data-i="${t.line}"]` : t.disk ? ".cb-dial" : t.id ? `[data-id="${t.id}"]` : t.range ? `[data-pay="${CSS.escape(t.range)}"]` : t.day != null ? "#wk-stage" : null;
+    if (at) spot(at, t.range ? ".cb-iv" : null);
+  }
+  // the edit's place scrolled to the middle and ringed for a moment
+  function spot(selector, up) {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      let el = body.querySelector(selector);
+      if (el && up) el = el.closest(up) || el;
+      if (!el) return;
+      el.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+      if (selector === "#wk-stage") return; // the day's own column rings (layout)
+      el.classList.remove("cb-flash"); void el.offsetWidth; el.classList.add("cb-flash");
+      setTimeout(() => el.classList.remove("cb-flash"), 1800);
+    }));
+  }
+
+  // ---- «Правки» from any step (#315): every edit as a chip — its tap leads there, ↩ undoes -----
+  const KIND = { day: "Дні", act: "Поза репо", rule: "Правила", line: "Рядки", lock: "Замки", steps: "Разом", text: "Тексти", pay: "Оплата" };
+  const PART = { t: "Назва", v: "Цінність", r: "Ризик", d: "What we did", m: "Лист", x: "What's next" };
+  const short = (t) => (t.length > 26 ? `${t.slice(0, 25)}…` : t) || "—";
+  function chip(e) {
+    let label;
+    if (e.kind === "day") label = `${WEEK_DAYS[dow(e.day)]} ${dm(day(iso(e.day)))} · ${hrs(e.now)} <s>${hrs(e.was)}</s>`;
+    else if (e.kind === "act") label = `${esc(W.kc[e.code][0])} · ${e.days.length === 1 ? dm(day(iso(e.days[0]))) : `${e.days.length} дн`} · ${hrs(e.now)}`;
+    else if (e.kind === "steps") label = `${e.now > 0 ? "+" : "−"}${Math.abs(e.now) * Math.round(W.sp * 100)} % від моделі`;
+    else if (e.kind === "line") label = `${esc(lineName(e.line))} · ${sign(e.now)}`;
+    else if (e.kind === "lock") label = `🔒 ${esc(lineName(e.line))}`;
+    else if (e.kind === "rule") label = `${esc(ruleText(e))}${e.off ? ` · <s>з ${dm(day(e.off))}</s>` : ""}`;
+    else if (e.kind === "text") label = `${e.id.length > 1 ? `${esc(W.l[Number(e.id.slice(1))][1] || "")} · ` : ""}${PART[e.id[0]]}: «${esc(short(e.now))}»`;
+    else { const tk = W.cal.tk.find((x) => x[3] === e.range); label = `${tk ? `${dm(day(tk[0]))}–${dm(day(tk[1]))}` : ""} · ${e.now ? "💵 оплачено" : "не оплачено"}`; }
+    return `<span class="cb-chip${e.sent ? "" : " pend"}" data-e="${esc(e.key)}"><button class="go">${label}</button><button class="x" aria-label="Скасувати">↩</button></span>`;
+  }
+  function chipGroups(list) {
+    const groups = {};
+    list.forEach((e) => { (groups[e.kind] = groups[e.kind] || []).push(e); });
+    return Object.keys(KIND).filter((k) => groups[k]).map((k) => `<div class="cb-g"><span>${KIND[k]}</span><div>${groups[k].map(chip).join("")}</div></div>`).join("");
+  }
+  // a chip's tap: ↩ undoes (then `after` repaints), the rest leads to the edit. False: not a chip.
+  function onChip(ev, after) {
+    const c = ev.target.closest("[data-e]");
+    if (!c) return false;
+    const ed = editList(W, E).find((x) => x.key === c.dataset.e);
+    if (!ed) return true;
+    if (!ev.target.closest(".x")) { haptic("select"); go(ed); return true; }
+    if (undoEdit(W, E, ed)) { haptic("select"); after(); }
+    else { haptic("light"); say("Без відчуття день — понад 16 год: спершу зменш поза репо"); }
+    return true;
+  }
+  function openDrawer() {
+    if (!editList(W, E).length && !unsent(W, E)) { haptic("light"); say("Без правок — рахунок як модель"); return; }
+    drawerOn = true; paintDrawer(); drawer.classList.add("on"); haptic("light");
+  }
+  function closeDrawer() { if (drawerOn) { drawerOn = false; drawer.classList.remove("on"); } }
+  function paintDrawer() {
+    const list = editList(W, E), p = unsent(W, E), was = drawer.querySelector(".cb-dl");
+    const top = was ? was.scrollTop : 0;
+    drawer.innerHTML = `<div class="cb-sh cb-dw" role="dialog" aria-modal="true" aria-label="Правки"><i class="cb-grab"></i>
+      <div class="cb-eh"><h3>Правки <span class="num">${list.length}</span></h3>${p ? `<span class="cb-pd"><i class="dot"></i>${p} не надіслано</span>` : `<span class="cb-ok">усі збережено</span>`}</div>
+      <div class="cb-dl">${list.length ? chipGroups(list) : `<p class="cb-none">Без правок — рахунок дорівнює моделі.</p>`}</div>
+      <p class="cb-dh">Дотик — до правки · ↩ — скасувати</p>
+      <div class="cb-df"><button class="cb-reset"${list.length ? "" : " disabled"}>↩ Усе до моделі</button>${p ? `<button class="cb-dsave">💾 Зберегти · ${p}</button>` : ""}</div></div>`;
+    drawer.querySelector(".cb-dl").scrollTop = top;
+  }
+  const redraw = () => { if (step === 1) update(); else show(step); if (drawerOn) paintDrawer(); };
+  drawer.addEventListener("click", (e) => {
+    if (e.target === drawer) { closeDrawer(); return; }
+    if (onChip(e, redraw)) return;
+    if (e.target.closest(".cb-reset")) { resetAll(W, E); haptic("medium"); redraw(); say("Усе до моделі — надішлеться з ✅ чи «Зберегти»"); }
+    else if (e.target.closest(".cb-dsave")) { closeDrawer(); send("sv"); }
+  });
+  $("#cb-st").addEventListener("click", () => (drawerOn ? closeDrawer() : openDrawer()));
+  screen.querySelectorAll(".cb-steps button").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.step))));
+  $("#cb-go").addEventListener("click", () => {
+    if (E.end !== n) return confirm("sv", `Відкрити ${dm(day(W.f))}–${dm(day(iso(E.end - 1)))}?`, `Застосунок закриється, бот відкриє картку нового періоду й пришле нову кнопку «📊 Кабінет».${Object.keys(E.lines).length ? " Правки рядків не переносяться: у новому періоді інші рядки." : ""}`, "Відкрити");
+    if (step < 2) return show(step + 1);
+    send("ok");
+  });
+  $("#cb-gh").addEventListener("click", () => confirm("gh", "🔄 Перечитати GitHub", `Застосунок закриється, бот перечитає GitHub і пришле нову кнопку. ${unsent(W, E) ? `Правки (${unsent(W, E)}) збережуться й лишаться на місці.` : "Правки лишаться на місці."}`, "Перечитати"));
+
+  // ---- step 1: the calendar ------------------------------------------------------------------
+  // the end follows the finger over the days (a tap on a day sets it too); a taken or a future
+  // day stops it, and the page neither scrolls nor closes while it moves
+  let calMove = null;
+  addEventListener("pointermove", (e) => { if (calMove) calMove(e); }, { passive: false });
+  const calStop = () => { if (calMove) { calMove = null; swipes(true); } };
+  addEventListener("pointerup", calStop); addEventListener("pointercancel", calStop);
+  function calendar() {
+    const el = h("div", "cb-cal");
+    const most = maxEnd(W), sun = sundayEnd(W), today = W.cal.t;
+    const lastIso = () => iso(E.end - 1);
+    // the weeks that matter: one before the start (the last invoice, locked), to the week after
+    // today or the range's end — a calm grid, the month named on its first day
+    const monday = (d) => isoAdd(d, -((new Date(d + "T12:00:00Z").getUTCDay() + 6) % 7));
+    const from = monday(isoAdd(W.f, -7)), lastDay = isoAdd(monday(today > iso(n - 1) ? today : iso(n - 1)), 13);
+    const taken = (d) => W.cal.tk.find(([a, b]) => a <= d && d <= b);
+    const heat = (i) => (i < n ? weekState(W, E).days[i].total : W.cal.hx[i - n] || 0);
+    const peak = Math.max(1, ...W.d.map((_, i) => heat(i)), ...W.cal.hx);
+    el.innerHTML = `<div class="cb-range"><div><span class="eyebrow">Період рахунку</span><b class="num" id="cb-rg"></b></div><div class="cb-nd"><b class="num" id="cb-nd"></b><span>днів</span></div></div>
+      <div class="cb-wd">${WEEK_DAYS.map((d, k) => `<span class="${k > 4 ? "we" : ""}">${d}</span>`).join("")}</div>
+      <div class="cb-months"></div>
+      <div class="chips cb-ends">${sun ? `<button class="chip" data-end="${sun}">до неділі · ${dm(day(iso(sun - 1)))}</button>` : ""}<button class="chip" data-end="${most}">до сьогодні · ${dm(day(iso(most - 1)))}</button></div>
+      <div class="cb-legend"><span><i class="lg heat"></i>модель, год</span><span><i class="lg in"></i>рахунок</span><span><i class="lg tk"></i>виставлено</span><span><i class="lg fut"></i>майбутнє</span></div>
+      <div class="cb-invs"></div>`;
+    const box = el.querySelector(".cb-months"), invs = el.querySelector(".cb-invs");
+    // the client's invoices: a sent one is marked paid (💵) or not (↩), sent with the rest
+    function paintInvs() {
+      const rows = W.cal.tk.filter((x) => x[3]).slice(-4).reverse();
+      invs.innerHTML = rows.map(([a, b, st, key]) => {
+        const paid = paidNow(W, E, key), pend = key in E.pay;
+        const pill = st === "a" ? `<span class="cb-pill">затверджено</span>` : paid ? `<span class="cb-pill paid">оплачено</span>` : `<span class="cb-pill">надіслано</span>`;
+        const btn = st === "a" ? "" : `<button class="chip${pend ? " pend" : ""}" data-pay="${esc(key)}">${paid ? "↩" : "💵 Оплачено"}</button>`;
+        return `<div class="cb-iv"><span class="num">🔒 ${dm(day(a))}–${dm(day(b))}</span>${pill}${btn}</div>`;
+      }).join("");
     }
-    const st = weekState(W, E), bands = [];
+    invs.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-pay]");
+      if (!b || !togglePay(W, E, b.dataset.pay)) return;
+      haptic("select"); paintInvs(); dockPaint();
+    });
+    paintInvs();
+    function paint() {
+      const cells = [];
+      for (let d = from; d <= lastDay; d = isoAdd(d, 1)) {
+        const i = isoDays(W.f, d), tk = taken(d), inside = i >= 0 && i < E.end, free = i >= E.end && i < most;
+        let cls = "cb-d", extra = "", q = 0;
+        if (tk) { cls += " tk"; if (d === tk[0]) extra = `<em>🔒</em>`; }
+        else if (d > today) cls += " fut";
+        else if (W.cal.s && d < W.cal.s) cls += " pre";
+        else if (inside || free) { q = heat(i); cls += inside ? " in" : " free"; }
+        else cls += " off";
+        if (i === 0) { cls += " first"; extra = `<em class="pin">📌</em>`; }
+        if (i === E.end - 1) cls += " end";
+        const a = q ? (0.18 + (0.82 * q) / peak) : 0;
+        if (inside && a < 0.5) cls += " pale";
+        const date = day(d), name = date.getDate() === 1 ? `<span>${date.toLocaleDateString("uk-UA", { month: "short" }).replace(".", "")}</span>` : "";
+        cells.push(`<button class="${cls}" data-i="${i}" style="--a:${a.toFixed(2)}" ${inside || free ? "" : 'tabindex="-1"'} aria-label="${dm(date)}${q ? `, ${hrs(q)} год` : ""}"><b>${date.getDate()}${name}</b>${q ? `<small class="num">${hrs(q)}</small>` : ""}${extra}</button>`);
+      }
+      box.innerHTML = `<div class="cb-grid">${cells.join("")}</div>`;
+      el.querySelector("#cb-rg").innerHTML = `${dm(day(W.f))} <i>→</i> ${dm(day(lastIso()))}`;
+      el.querySelector("#cb-nd").textContent = E.end;
+      el.querySelectorAll("[data-end]").forEach((b) => b.classList.toggle("on", Number(b.dataset.end) === E.end));
+      dockPaint();
+    }
+    const setEnd = (k) => {
+      k = Math.max(1, Math.min(most, k));
+      if (k === E.end) return false;
+      E.end = k; haptic("select"); paint(); return true;
+    };
+    el.querySelectorAll("[data-end]").forEach((b) => b.addEventListener("click", () => setEnd(Number(b.dataset.end))));
+    box.addEventListener("pointerdown", (e) => {
+      const c = e.target.closest(".cb-d");
+      if (!c) return;
+      const i = Number(c.dataset.i);
+      if (c.classList.contains("tk")) { haptic("light"); say("Ці дні вже в рахунку — один день, один рахунок"); return; }
+      if (c.classList.contains("fut")) { haptic("light"); say("Рахунок — лише за дні, що минули"); return; }
+      if (c.classList.contains("pre") || i < 0) { haptic("light"); say("Початок закріплено: перший невиставлений день"); return; }
+      if (i >= most) { haptic("light"); return; }
+      swipes(false);
+      setEnd(i + 1);
+      calMove = (ev) => {
+        const cell = document.elementFromPoint(ev.clientX, ev.clientY)?.closest?.(".cb-d");
+        if (cell && (cell.classList.contains("in") || cell.classList.contains("free"))) setEnd(Number(cell.dataset.i) + 1);
+        ev.cancelable && ev.preventDefault();
+      };
+    });
+    box.addEventListener("keydown", (e) => {
+      const k = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 7, ArrowUp: -7 }[e.key];
+      if (k && setEnd(E.end + k)) { e.preventDefault(); box.querySelector(".cb-d.end")?.focus(); }
+    });
+    paint();
+    return el;
+  }
+
+  // ---- step 2: the canvas — the river and the days, or the lines -----------------------------
+  let river = null, stage = null;
+  function canvas() {
+    const el = h("div", "cb-canvas");
+    el.innerHTML = `<div class="cb-mode"><div class="cb-seg" role="tablist"><button data-m="days">Дні</button><button data-m="rows"${W.l.length ? "" : " disabled"}>Рядки</button></div><span class="num">${esc(W.t)}</span></div>
+      <div class="wk-canvas"><div class="wk-stage" id="wk-stage"><canvas id="wk-rv" aria-label="Період за фічами"></canvas><div class="cb-veil" hidden></div><div class="cb-rib"></div><div class="wk-refl"></div><div class="wk-feel"></div><div class="wk-cols"></div></div><div class="legend wk-legend"></div></div>
+      <section class="wk-panel" id="wk-panel"></section>`;
+    stage = el.querySelector("#wk-stage");
+    const seg = el.querySelectorAll(".cb-seg button");
+    const paintMode = () => { seg.forEach((b) => b.classList.toggle("on", b.dataset.m === mode)); stage.classList.toggle("rows", mode === "rows"); };
+    seg.forEach((b) => b.addEventListener("click", () => {
+      if (b.dataset.m === mode) return;
+      mode = b.dataset.m; sel = -1; haptic("select"); paintMode(); frame();
+      if (river) river.setData(riverData()); // the channel ahead is the days' only
+      tweenRiver(); layout(); panel();
+    }));
+    paintMode();
+    wireColumns();
+    requestAnimationFrame(panel);
+    return el;
+  }
+  function riverData() {
+    const st = weekState(W, E), bands = [], ls = lineState(W, E).lines;
     codes.forEach((c) => {
       const v = st.days.map((d) => d.acts[c] || 0);
       if (v.some(Boolean)) bands.push({ name: W.kc[c][0], color: color(slotOf(c)), manual: true, v });
     });
     W.l.forEach((l, i) => {
       if (l[2]) return; // an activity's own line: its band is the activity's above
-      const v = st.days.map((d) => (d.origRepo ? (l[3][d.i] * d.repo) / d.origRepo : 0));
+      const k = ls[i].base ? ls[i].q / ls[i].base : 1; // a line's edit swells its band
+      const v = st.days.map((d) => (d.origRepo ? ((l[3][d.i] || 0) * d.repo * k) / d.origRepo : 0));
       if (v.some(Boolean)) bands.push({ name: l[1] || `#${i + 1}`, color: color(i), v });
     });
     if (!bands.length) bands.push({ name: "", color: "var(--track)", v: st.days.map((d) => d.total) });
-    return { days: st.days.map((d) => iso(d.i)), bands, from: dm(day(iso(0))), to: dm(day(iso(n - 1))), week: WEEK_DAYS };
+    const out = { days: st.days.map((d) => iso(d.i)), bands, from: dm(day(iso(0))), to: dm(day(iso(n - 1))), week: WEEK_DAYS };
+    const frac = aheadFrac();
+    if (frac > 0) out.ahead = { frac, label: "", exact: true }; // the dashed channel to Sunday (#315)
+    return out;
+  }
+  // the river's part of the width that the days after the range take, so they line up with its
+  // days (river.js: 6 px a side, the channel's end 6 px in)
+  function aheadFrac() {
+    if (!ahead.length || mode !== "days" || !stage) return 0;
+    const L = Math.max(200, stage.clientWidth) - 12;
+    return 1 - ((L - 6) * (n - 1)) / (L * (n - 1 + ahead.length));
+  }
+  // the river gives way to an opened day: its sheet comes up under the columns (#315)
+  const riverH = () => (mode === "rows" ? 120 : sel >= 0 ? 136 : 200);
+  let rhTween = 0;
+  function tweenRiver() {
+    cancelAnimationFrame(rhTween);
+    if (!river || !stage) return;
+    const from = river.o.height, to = riverH(), t0 = performance.now(), ms = reduced ? 0 : 380;
+    if (from === to) return;
+    stage.classList.add("tw");
+    const frameAt = (now) => {
+      const k = ms ? Math.min(1, (now - t0) / ms) : 1, hh = Math.round(from + (to - from) * (1 - (1 - k) ** 3));
+      if (!river) return;
+      river.o.height = hh; river.f.o.height = hh; river.resize(); if (!river.running) river.frame();
+      stage.style.setProperty("--rh", `${hh}px`);
+      if (k < 1) rhTween = requestAnimationFrame(frameAt); else stage.classList.remove("tw");
+    };
+    rhTween = requestAnimationFrame(frameAt);
   }
   function drawRiver() {
+    if (!stage || step !== 1) return;
     if (river) river.destroy();
-    const owner = lens === "owner";
-    river = new River($("#wk-rv"), riverData(), { height: 200, foot: owner ? 0 : 26, days: owner, still: reduced || Boolean(QS_WEEK.get("still")), at: Number(QS_WEEK.get("at")) || 0, onTap: (_b, i) => { if (owner) pick(i); } });
-    stage.classList.toggle("client", !owner);
+    cancelAnimationFrame(rhTween); stage.classList.remove("tw");
+    stage.style.setProperty("--rh", `${riverH()}px`);
+    river = new River(stage.querySelector("#wk-rv"), riverData(), { height: riverH(), foot: 0, days: true, still: reduced || Boolean(QS_WEEK.get("still")), at: Number(QS_WEEK.get("at")) || 0, onTap: (_b, i) => { if (mode === "days") pick(i); } });
+  }
+  // the read's moved days: a ripple runs from the first one, once (#315)
+  function ripple() {
+    if (!river || !pinged.size) return;
+    const i = Math.min(...pinged), f = river.f;
+    setTimeout(() => { pinged.clear(); layout(); }, 5000); // the rings ran their three times
+    if (reduced || river.o.still || river.o.at) return; // a screenshot's frame stays its own
+    setTimeout(() => { if (river && !river.dead && f === river.f) { f.kick((f.dayX[i] - f.x0) / (f.xr - f.x0)); river.play(); } }, 900);
   }
   new MutationObserver(() => river && river.retheme()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  screen.querySelectorAll(".wk-lens button").forEach((b) => b.addEventListener("click", () => {
-    if (b.dataset.l === lens) return;
-    lens = b.dataset.l; haptic("select");
-    screen.querySelectorAll(".wk-lens button").forEach((x) => x.classList.toggle("on", x === b));
-    drawRiver(); layout();
-  }));
 
   // -- the columns: the day's hours under the river, its feel over it, a tap opens it. A picked
   // column is a slider (#288): its bar's end follows the finger, 15 min a step, 16 h at most.
@@ -1599,48 +2530,86 @@ function week(W) {
       segs += `<i class="${hatch ? "hs" : "rp"}" style="top:${y.toFixed(1)}px;height:${Math.max(1, hh - 2).toFixed(1)}px;background:${c}"></i>`;
       y += hh;
     }
+    const ghost = d.feel != null ? `<i class="gh" style="height:${((dayQ(d.model, null, d.act) / scale) * BAR).toFixed(1)}px"></i>` : "";
     const knob = sel === d.i ? `<b class="kn" style="top:${Math.max(0, y - 2).toFixed(1)}px"></b>` : "";
-    return `${segs}${knob}<span class="rt num" style="top:${(y + (knob ? 10 : 4)).toFixed(1)}px">${d.total || sel === d.i ? hrs(d.total) : ""}${d.total > LONG_DAY ? "<em>!</em>" : ""}</span>`;
+    const diff = d.feel != null ? d.total - dayQ(d.model, null, d.act) : 0;
+    return `${ghost}${segs}${knob}<span class="rt num" style="top:${(y + (knob ? 10 : 4)).toFixed(1)}px">${d.total || sel === d.i ? hrs(d.total) : ""}${d.total > LONG_DAY ? "<em>!</em>" : ""}${diff ? `<u>✋${sign(diff)}</u>` : ""}</span>`;
   }
-  const feelMark = (d) => { const f = d.feel == null ? -1 : W.fl.indexOf(d.feel); return d.feel == null ? "·" : f >= 0 ? WEEK_FEEL[f][0] : "🎚"; };
+  const feelMark = (d) => { const f = d.feel == null ? -1 : W.fl.indexOf(d.feel); return d.feel == null ? "·" : f >= 0 ? WEEK_FEEL[f][0] : "✋"; };
   let holding = 0; // fingers on a slider: nothing redraws under them (settle() does after)
   function layout() {
+    if (!river || holding || !stage || step !== 1) return;
     const st = weekState(W, E);
-    if (!river || holding) return;
-    X = river.f.dayX;
-    const step = n > 1 ? X[1] - X[0] : 40;
-    bw = Math.max(6, Math.min(30, step * 0.56));
+    X = river.f.dayX.slice();
+    const gap = n > 1 ? X[1] - X[0] : 40;
+    if (mode === "days") ahead.forEach((_, k) => X.push(river.f.xr + (k + 1) * gap)); // the days after the range
+    bw = Math.max(6, Math.min(30, gap * 0.56));
     scale = Math.max(MAX_Q, ...st.days.map((d) => d.total)); // fixed while a finger drags
     const refl = [], feel = [], cols = [];
     st.days.forEach((d) => {
-      refl.push(`<div class="rb${sel === d.i ? " sel" : ""}" style="left:${(X[d.i] - bw / 2).toFixed(1)}px;width:${bw.toFixed(1)}px">${bar(d)}</div>`);
+      const ring = flashDay === d.i ? " flash" : pinged.has(d.i) ? " new" : "";
+      refl.push(`<div class="rb${sel === d.i ? " sel" : ""}${ring}" style="left:${(X[d.i] - bw / 2).toFixed(1)}px;width:${bw.toFixed(1)}px">${bar(d)}</div>`);
       feel.push(`<span style="left:${X[d.i].toFixed(1)}px" class="${d.feel != null ? "on" : ""}">${feelMark(d)}</span>`);
       const dd = day(iso(d.i));
-      const c0 = Math.max(-10, X[d.i] - step / 2), c1 = Math.min(stage.clientWidth + 10, X[d.i] + step / 2); // the edges' columns stay on the screen
+      const c0 = Math.max(-10, X[d.i] - gap / 2), c1 = Math.min(stage.clientWidth + 10, X[d.i] + gap / 2); // the edges' columns stay on the screen
       const slider = sel === d.i ? ` role="slider" aria-valuemin="0" aria-valuemax="16" aria-valuenow="${d.total / 4}" aria-valuetext="${hrs(d.total)} год"` : "";
       cols.push(`<button data-d="${d.i}" class="${sel === d.i ? "sel" : ""}" style="left:${c0.toFixed(1)}px;width:${(c1 - c0).toFixed(1)}px" aria-label="${WEEK_DAYS[dow(d.i)]} ${dm(dd)}"${slider}><span>${n <= 16 ? WEEK_DAYS[dow(d.i)] : ""}<b>${dd.getDate()}</b></span></button>`);
     });
-    const focused = stage.contains(document.activeElement);
+    // after the range: the free days to today shaded (outside this invoice), the days ahead to
+    // Sunday dashed — neither is this invoice's, a tap says why
+    const many = n + ahead.length;
+    if (mode === "days") ahead.forEach((a, k) => {
+      const x = X[n + k], dd = day(a.iso), wd = (dd.getDay() + 6) % 7;
+      const hh = a.q ? Math.max(3, (Math.min(a.q, scale) / scale) * BAR) : 0;
+      refl.push(a.q == null ? `<div class="rb fut" style="left:${(x - bw / 2).toFixed(1)}px;width:${bw.toFixed(1)}px"></div>`
+        : `<div class="rb out" style="left:${(x - bw / 2).toFixed(1)}px;width:${bw.toFixed(1)}px">${hh ? `<i class="rp" style="top:0;height:${hh.toFixed(1)}px;background:var(--ink)"></i>` : ""}<span class="rt num" style="top:${(hh + 4).toFixed(1)}px">${a.q ? hrs(a.q) : ""}</span></div>`);
+      const c0 = x - gap / 2, c1 = Math.min(stage.clientWidth + 10, x + gap / 2);
+      cols.push(`<button data-x="${k}" class="ax${a.q == null ? " fut" : ""}" style="left:${c0.toFixed(1)}px;width:${(c1 - c0).toFixed(1)}px" aria-label="${WEEK_DAYS[wd]} ${dm(dd)}: ${a.q == null ? "попереду" : "поза рахунком"}"><span>${many <= 16 ? WEEK_DAYS[wd] : ""}<b>${dd.getDate()}</b></span></button>`);
+    });
+    const veil = stage.querySelector(".cb-veil");
+    veil.hidden = mode !== "days" || !ahead.length;
+    if (!veil.hidden) {
+      const x0 = X[n - 1] + gap / 2;
+      veil.style.left = `${x0.toFixed(1)}px`; veil.style.width = `${(stage.clientWidth - x0 + 6).toFixed(1)}px`;
+      veil.innerHTML = `<span>${ahead.some((a) => a.q != null) ? "поза рахунком" : "попереду"}</span>`;
+    }
+    paintRibbons(gap);
+    const focused = stage.contains(document.activeElement) && document.activeElement.closest(".wk-cols");
     stage.querySelector(".wk-refl").innerHTML = refl.join("");
     stage.querySelector(".wk-feel").innerHTML = feel.join("");
     stage.querySelector(".wk-cols").innerHTML = cols.join("");
-    if (focused && sel >= 0) stage.querySelector(".wk-cols .sel").focus({ preventScroll: true });
+    if (focused && sel >= 0) stage.querySelector(".wk-cols .sel")?.focus({ preventScroll: true });
     stage.classList.toggle("picked", sel >= 0);
     const bands = riverData().bands;
-    screen.querySelector(".wk-legend").innerHTML = bands.map((b) => `<span><i class="sw${b.manual ? " hatch" : ""}" style="background:${b.color}"></i>${esc(b.name)}</span>`).join("");
+    body.querySelector(".wk-legend").innerHTML = bands.map((b) => `<span><i class="sw${b.manual ? " hatch" : ""}" style="background:${b.color}"></i>${esc(b.name)}</span>`).join("");
   }
-  // While a finger drags: only the day's bar, its feel mark, the day's total and the hero — the
+  // a standing rule under the river (#315): a thin line through its days, a dot on each it lays
+  // on, dotted on into the days ahead; its pill names the kind and the rhythm
+  function paintRibbons(gap) {
+    const el = stage.querySelector(".cb-rib");
+    if (mode !== "days") { el.innerHTML = ""; return; }
+    const r0 = (k) => X[k], out = [];
+    ruleSlots(W, E, ahead).slice(0, 3).forEach(({ r, on, fut }, k) => {
+      const c = color(slotOf(r.code)), y = -k * 7, all = on.concat(fut), a = all[0], b = on.length ? on[on.length - 1] : a;
+      if (on.length > 1) out.push(`<i class="ln" style="left:${r0(on[0]).toFixed(1)}px;width:${(r0(b) - r0(on[0])).toFixed(1)}px;top:${y}px;--c:${c}"></i>`);
+      on.forEach((j) => out.push(`<i class="dt" style="left:${(r0(j) - bw / 2 - 2).toFixed(1)}px;width:${(bw + 4).toFixed(1)}px;top:${y}px;--c:${c}"></i>`));
+      if (fut.length && !r.last) out.push(`<i class="fu" style="left:${(r0(b) + (on.length ? bw / 2 + 3 : 0)).toFixed(1)}px;width:${Math.max(4, r0(fut[fut.length - 1]) + gap / 2 - r0(b) - (on.length ? bw / 2 + 3 : 0)).toFixed(1)}px;top:${y}px;--c:${c}"></i>`);
+      out.push(`<span class="pl" style="left:${Math.max(0, r0(a) - bw / 2 - 2).toFixed(1)}px;top:${y}px;--c:${c}">${esc((W.kc[r.code] ? W.kc[r.code][0] : r.code).split(" ")[0])} ${r.wd ? "будні" : "щодня"}</span>`);
+    });
+    el.innerHTML = out.join("");
+  }
+  // While a finger drags: only the day's bar, its feel mark, the day's total and the dock — the
   // river and the panel wait for the release (settle).
   function live(i) {
-    const st = weekState(W, E), d = st.days[i];
+    const d = weekState(W, E).days[i];
     const rb = stage.querySelector(".wk-refl").children[i], mark = stage.querySelector(".wk-feel").children[i];
     if (rb) rb.innerHTML = bar(d);
     if (mark) { mark.textContent = feelMark(d); mark.classList.toggle("on", d.feel != null); }
     const col = stage.querySelector(`.wk-cols [data-d="${i}"]`);
     if (col && sel === i) { col.setAttribute("aria-valuenow", d.total / 4); col.setAttribute("aria-valuetext", `${hrs(d.total)} год`); }
-    const dt = screen.querySelector(".wk-dt");
+    const dt = body.querySelector(".wk-dt");
     if (dt && sel === i) dt.innerHTML = `${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}`;
-    hero(true);
+    dockPaint(true);
   }
   let settleTimer = 0;
   function settle() { clearTimeout(settleTimer); settleTimer = 0; update(); }
@@ -1661,8 +2630,8 @@ function week(W) {
       if (r.q == null) return;
       if (r.tick) { const k = on(r.q); if (k !== kept) haptic("select"); kept = k; }
       if (r.stop === "lo") { haptic("light"); after.lo && after.lo(); }
-      if (r.stop === "hi") { haptic("light"); say("Понад 16 год за день не записую"); }
-      if (window.__herDrag) window.__herDrag.push(performance.now() - t0); // the frame meter (render_week.py)
+      if (r.stop === "hi") { haptic("light"); say(after.hi || "Понад 16 год за день не записую"); }
+      if (window.__herDrag) window.__herDrag.push(performance.now() - t0); // the frame meter (render_cabinet.py)
     };
     const end = (ev) => {
       if (ev.pointerId !== id) return;
@@ -1676,103 +2645,72 @@ function week(W) {
     // Telegram's swipe always comes back
     addEventListener("pointermove", move, { passive: false }); addEventListener("pointerup", end); addEventListener("pointercancel", end);
   }
-  let tapAt = 0, tapDay = -1, closing = 0, dragEnd = -1e9;
-  stage.querySelector(".wk-cols").addEventListener("pointerdown", (e) => {
-    const b = e.target.closest("button[data-d]");
-    if (!b || Number(b.dataset.d) !== sel) return;
-    const i = sel;
-    clearTimeout(closing); // a tap's pending close never lands under a finger
-    slide(b, e, () => { const d = weekState(W, E).days[i]; return drag("y", d.total, d.act, Math.max(MAX_Q, d.total), Q_PX); },
-      (q) => { const kept = setDay(W, E, i, q); live(i); return kept; },
-      { lo: () => { if (weekState(W, E).days[i].act) say("Спершу зменш поза репо"); },
-        done: (r) => { if (r.moved) { dragEnd = performance.now(); settle(); } } });
-  });
-  stage.querySelector(".wk-cols").addEventListener("click", (e) => {
-    const b = e.target.closest("button[data-d]");
-    if (!b) return;
-    if (performance.now() - dragEnd < 120) return; // the release of a drag is not a tap
-    const i = Number(b.dataset.d), now = performance.now();
-    if (i !== sel) { clearTimeout(closing); pick(i); tapDay = -1; return; } // a double tap counts on a picked day only
-    if (tapDay === i && now - tapAt < 320) { // a double tap: the model again
-      clearTimeout(closing); tapAt = 0; reset(i); return;
-    }
-    tapDay = i; tapAt = now;
-    clearTimeout(closing); closing = setTimeout(() => pick(i), 320); // one tap closes, a second resets
-  });
-  stage.querySelector(".wk-cols").addEventListener("keydown", (e) => {
-    const b = e.target.closest("button[data-d]"), k = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
-    if (!b || !k || Number(b.dataset.d) !== sel) return;
-    e.preventDefault();
-    const d = weekState(W, E).days[sel], kept = setDay(W, E, sel, d.total + k);
-    if (kept !== d.total) haptic("select");
-    live(sel);
-    clearTimeout(settleTimer); settleTimer = setTimeout(settle, 450);
-  });
-  function pick(i) { sel = sel === i ? -1 : i; haptic("select"); layout(); panel(); }
+  function wireColumns() {
+    let tapAt = 0, tapDay = -1, closing = 0, dragEnd = -1e9;
+    const cols = stage.querySelector(".wk-cols");
+    cols.addEventListener("pointerdown", (e) => {
+      const b = e.target.closest("button[data-d]");
+      if (!b || Number(b.dataset.d) !== sel) return;
+      const i = sel;
+      clearTimeout(closing); // a tap's pending close never lands under a finger
+      slide(b, e, () => { const d = weekState(W, E).days[i]; return drag("y", d.total, d.act, Math.max(MAX_Q, d.total), Q_PX); },
+        (q) => { const kept = setDay(W, E, i, q); live(i); return kept; },
+        { lo: () => { if (weekState(W, E).days[i].act) say("Спершу зменш поза репо"); },
+          done: (r) => { if (r.moved) { dragEnd = performance.now(); settle(); } } });
+    });
+    cols.addEventListener("click", (e) => {
+      const x = e.target.closest("button[data-x]");
+      if (x) { haptic("light"); say(ahead[Number(x.dataset.x)].q == null ? "Ще попереду: рахунок — лише за дні, що минули" : "Поза рахунком: кінець періоду — у Календарі"); return; }
+      const b = e.target.closest("button[data-d]");
+      if (!b) return;
+      if (performance.now() - dragEnd < 120) return; // the release of a drag is not a tap
+      const i = Number(b.dataset.d), now = performance.now();
+      if (i !== sel) { clearTimeout(closing); pick(i); tapDay = -1; return; } // a double tap counts on a picked day only
+      if (tapDay === i && now - tapAt < 320) { clearTimeout(closing); tapAt = 0; reset(i); return; } // a double tap: the model again
+      tapDay = i; tapAt = now;
+      clearTimeout(closing); closing = setTimeout(() => pick(i), 320); // one tap closes, a second resets
+    });
+    cols.addEventListener("keydown", (e) => {
+      const b = e.target.closest("button[data-d]"), k = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+      if (!b || !k || Number(b.dataset.d) !== sel) return;
+      e.preventDefault();
+      const d = weekState(W, E).days[sel], kept = setDay(W, E, sel, d.total + k);
+      if (kept !== d.total) haptic("select");
+      live(sel);
+      clearTimeout(settleTimer); settleTimer = setTimeout(settle, 450);
+    });
+  }
+  function pick(i) { if (mode !== "days") return; sel = sel === i ? -1 : i; haptic("select"); layout(); panel(); tweenRiver(); }
   function reset(i) {
     if (!resetDay(W, E, i)) { haptic("light"); say("Без відчуття день — понад 16 год: спершу зменш поза репо"); return; }
     haptic("select"); update();
   }
-
-  // -- the hero and the range: the approved periods before as rings, this one the bar
-  function hero(now) { // now: under a finger, no count-up
-    const st = weekState(W, E), [lo, hi] = st.range, t = st.total;
-    const node = $("#wk-hero"), from = Number(node.dataset.q || t);
-    node.dataset.q = t;
-    const paint = (q) => { node.innerHTML = `${hrs(q)}<small>год</small>`; };
-    if (reduced || from === t || now) paint(t);
-    else { const t0 = performance.now(); const go = (now) => { const k = Math.min(1, (now - t0) / 420); paint(Math.round(from + (t - from) * (1 - (1 - k) ** 3))); if (k < 1) requestAnimationFrame(go); }; requestAnimationFrame(go); }
-    $("#wk-money").textContent = money(t);
-    const sv = E.steps ? `${E.steps > 0 ? "+" : "−"}${Math.abs(E.steps) * Math.round(W.sp * 100)} %` : "пропозиція";
-    $("#wk-sv").textContent = sv;
-    $("#wk-minus").disabled = E.steps <= W.sb[0]; $("#wk-plus").disabled = E.steps >= W.sb[1];
-    const past = W.p.map((p) => p[1] / 4), all = [lo, hi, t / 4, ...past];
-    const a = Math.min(...all) * 0.88, z = Math.max(...all) * 1.06 || 1, p = (v) => ((v - a) / (z - a)) * 100;
-    const box = $("#wk-rng");
-    box.innerHTML = `<div class="tr"><span class="band" style="left:${p(lo)}%;right:${100 - p(hi)}%"></span>${past.map((v) => `<i class="past" style="left:${p(v)}%"></i>`).join("")}<i class="me" style="left:${p(t / 4)}%"></i></div>
-      <div class="lbl"><span class="lo" style="left:${p(lo)}%">${lo}</span><span class="hi" style="left:${p(hi)}%">${hi}</span></div>
-      <div class="cap">діапазон за активністю${W.p.length ? ` · ○ ${esc(W.p[0][0])}${W.p.length > 1 ? "–" + esc(W.p[W.p.length - 1][0]).replace(/^\D+/, "") : ""}` : ""}</div>`;
-    // the ends' labels never touch: too close, one label «46–56» in the middle
-    const l1 = box.querySelector(".lo"), l2 = box.querySelector(".hi"), r1 = l1.getBoundingClientRect(), r2 = l2.getBoundingClientRect();
-    if (r2.left - r1.right < 8) { l2.remove(); l1.textContent = `${lo}–${hi}`; l1.style.left = `${(p(lo) + p(hi)) / 2}%`; }
-    const ok = $("#wk-ok");
-    ok.disabled = !t;
-    ok.classList.toggle("dirty", changed());
-    post("web_app_setup_closing_behavior", { need_confirmation: changed() });
-  }
-
-  // -- the panel under the river: the week's evidence, or the picked day
   function panel() {
-    const box = $("#wk-panel");
-    box.replaceChildren(sel >= 0 ? dayPanel(sel) : weekPanel());
+    const box = body.querySelector("#wk-panel");
+    if (!box) return;
+    box.replaceChildren(mode === "rows" ? rowsPanel() : sel >= 0 ? dayPanel(sel) : weekPanel());
     box.classList.remove("in"); void box.offsetWidth; box.classList.add("in");
   }
-  const sum4 = (k) => W.d.reduce((x, row) => x + row[5][SIG.indexOf(k)], 0);
   const SIG = ["commits", "prs_opened", "prs_merged", "issues_opened", "issues_closed", "moves", "comments", "doing"];
+  const sum4 = (k) => W.d.reduce((x, row) => x + row[5][SIG.indexOf(k)], 0);
   const arrow = (now, was) => (was == null ? "" : now > was ? `<span class="up">↑</span>` : now < was ? `<span class="down">↓</span>` : "");
   function weekPanel() {
     const st = weekState(W, E), el = h("div", "wk-week");
     const big = [["коміти", "commits"], ["PR змердж.", "prs_merged"], ["issues закр.", "issues_closed"], ["переходи", "moves"]];
-    const pl = [["репо", "repo", 0], ["борд", "board", 2], ["поза репо", "manual", 5]].map(([name, k, slot]) => [name, W.pl[k] || 0, slot, k]).filter((x) => x[1] > 0);
-    const pt = pl.reduce((x, y) => x + y[1], 0) || 1;
     const covered = st.days.filter((d) => d.total && (W.d[d.i][6] || d.act)).reduce((x, d) => x + d.total, 0);
     const blind = st.days.filter((d) => d.total && !W.d[d.i][6] && !d.act);
     const cov = st.whole ? Math.round((covered / st.whole) * 100) : 100;
     el.innerHTML = `<div class="wk-sgs">${big.map(([name, k]) => { const v = sum4(k); return `<div><b class="num">${v}${arrow(v, W.lw[k])}</b><span>${name}</span></div>`; }).join("")}</div>
-    ${pl.length ? `<div class="wk-planes">${pl.map(([, v, slot]) => `<i style="flex:${v};background:${color(slot)}"></i>`).join("")}</div>
-    <div class="wk-plw">${pl.map(([name, v, slot, k]) => `<span><i class="sw" style="background:${color(slot)}"></i>${name} <b class="num">${Math.round((v / pt) * 100)}%</b>${arrow(v, W.lw[k])}</span>`).join("")}</div>` : ""}
-    <div class="wk-cov"><div class="ring" style="--p:${cov}"><b class="num">${cov}<small>%</small></b></div><div><b>годин із видимим сигналом</b>${blind.length ? blind.map((d) => `<button class="wk-blind" data-d="${d.i}">${WEEK_DAYS[dow(d.i)]} ${dm(day(iso(d.i)))} · ${hrs(d.total)} год без пояснення ›</button>`).join("") : `<span>кожна година має пояснення</span>`}<span class="muted">дотик на день — сигнали, відчуття, поза репо</span></div></div>
-    <button class="wk-deeper" id="wk-gest">🎛 Жестами по рядках ›</button>`;
+    <div class="wk-cov"><div class="ring" style="--p:${cov}"><b class="num">${cov}<small>%</small></b></div><div><b>годин із видимим сигналом</b>${blind.length ? blind.map((d) => `<button class="wk-blind" data-d="${d.i}">${WEEK_DAYS[dow(d.i)]} ${dm(day(iso(d.i)))} · ${hrs(d.total)} год без пояснення ›</button>`).join("") : `<span>кожна година має пояснення</span>`}<span class="muted">дотик на стовпчик — сигнали, відчуття, поза репо</span></div></div>`;
     el.querySelectorAll(".wk-blind").forEach((b) => b.addEventListener("click", () => pick(Number(b.dataset.d))));
-    el.querySelector("#wk-gest").addEventListener("click", () => send(true));
     return el;
   }
   function dayPanel(i) {
     const st = weekState(W, E), d = st.days[i], row = W.d[i], sg = row[5], el = h("div", "wk-day");
-    const dd = day(iso(i));
-    const lines = W.l.map((l, k) => [l[1] || `#${k + 1}`, d.origRepo ? (l[3][i] * d.repo) / d.origRepo : 0, k]).filter((x) => x[1] > 0 && !W.l[x[2]][2]).sort((a, b) => b[1] - a[1]);
+    const dd = day(iso(i)), base = dayQ(d.model, null, d.act);
+    const lines = W.l.map((l, k) => [l[1] || `#${k + 1}`, d.origRepo ? ((l[3][i] || 0) * d.repo) / d.origRepo : 0, k]).filter((x) => x[1] > 0 && !W.l[x[2]][2]).sort((a, b) => b[1] - a[1]);
     el.innerHTML = `
-    <div class="wk-dh"><div><span class="eyebrow">${WEEK_DAYS[dow(i)]} ${dm(dd)}</span><div class="wk-dt num">${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}</div></div>
+    <div class="wk-dh"><div><span class="eyebrow">${WEEK_DAYS[dow(i)]} ${dm(dd)}</span><div class="wk-dt num">${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}</div>${d.feel != null ? `<button class="cb-was" data-reset>модель ${hrs(base)} · ↩</button>` : `<span class="cb-was">= модель</span>`}</div>
     <div class="wk-git num">git-час<br><b>${row[4] == null ? "—" : hrs(row[4])}</b></div></div>
     <div class="wk-sig">
       <div><b class="num">${sg[0]}</b><span>коміти</span></div>
@@ -1783,28 +2721,41 @@ function week(W) {
       <div><b class="num">${sg[7]}</b><span>у Doing</span></div>
     </div>
     <div class="eyebrow l">Відчуття дня · тягни стовпчик</div>
-    <div class="chips">${W.fl.map((q, k) => `<button class="chip${d.feel === q ? " on" : ""}" data-feel="${q}">${WEEK_FEEL[k] ? WEEK_FEEL[k][0] : "🎚"} ${hrs(q)}</button>`).join("")}${d.feel != null ? `<button class="chip reset" data-reset aria-label="Повернути модель">↺</button>` : ""}</div>
+    <div class="chips">${W.fl.map((q, k) => `<button class="chip${d.feel === q ? " on" : ""}" data-feel="${q}">${WEEK_FEEL[k] ? WEEK_FEEL[k][0] : "✋"} ${hrs(q)}</button>`).join("")}</div>
     <div class="eyebrow l">Поза репо · дотик +1 год</div>
     <div class="wk-acts">${codes.filter((c) => d.acts[c]).map((c) => { const v = d.acts[c]; return `<div class="wk-act" data-row="${c}"><button class="wk-an" data-act="${c}"><i class="sw hatch" style="background:${color(slotOf(c))}"></i>${esc(W.kc[c][0])} <span>+1</span></button><b class="wk-av num">${hrs(v)}</b><div class="wk-tr" data-tr="${c}" tabindex="0" role="slider" aria-label="${esc(W.kc[c][0])}" aria-valuemin="0" aria-valuemax="16" aria-valuenow="${v / 4}" aria-valuetext="${hrs(v)} год" style="--c:${color(slotOf(c))};--p:${((v / MAX_Q) * 100).toFixed(2)}%"><i></i><b></b></div><button class="chip less" data-less="${c}" aria-label="−15 хв">−</button></div>`; }).join("")}</div>
+    ${W.ru ? `<div class="cb-rls">${codes.filter((c) => d.acts[c]).map((c) => {
+      const r = !(`${i}:${c}` in E.acts) && d.laid[c];
+      return r ? `<div class="cb-rl"><span>${esc(ruleText(r))}</span><button class="chip" data-off="${c}">вимкнути з ${dm(dd)}</button></div>`
+        : `<div class="cb-rl"><span>${esc(W.kc[c][0])} ${hrs(d.acts[c])}</span><button class="chip" data-mk="${c}:d">↻ щодня</button><button class="chip" data-mk="${c}:w">↻ будні</button></div>`;
+    }).join("")}</div>` : ""}
     <div class="chips">${codes.filter((c) => !d.acts[c]).map((c) => `<button class="chip act" data-act="${c}"><i class="sw hatch" style="background:${color(slotOf(c))}"></i>${esc(W.kc[c][0])}</button>`).join("")}</div>
     ${lines.length ? `<details class="wk-lines"><summary>Фічі дня · ${lines.length} ›</summary>${lines.map(([name, q, k]) => `<div class="row-t"><i class="sw" style="background:${color(k)}"></i>${esc(name)}<em class="num">${hrs(Math.round(q))}</em></div>`).join("")}</details>` : ""}`;
     el.querySelectorAll("[data-feel]").forEach((b) => b.addEventListener("click", () => {
       const q = Number(b.dataset.feel), now = i in E.feel ? E.feel[i] : row[1];
-      if (now === q) { reset(i); return; } // the chip again: the model, as «↺»
+      if (now === q) { reset(i); return; } // the chip again: the model, as «↩»
       E.feel[i] = q;
       if (q === row[1]) delete E.feel[i];
       haptic("select"); update();
     }));
     el.querySelector("[data-reset]")?.addEventListener("click", () => reset(i));
     // a tap on a name: +1 h (as far as 16 h lets it); «−» 15 min less; 0 removes it from the day
-    const step = (c, delta) => {
+    const add = (c, delta) => {
       const now = weekState(W, E).days[i].acts[c] || 0;
-      // «+1» never shrinks an activity stored over 16 h before the rule
       if ((delta > 0 && now >= MAX_Q) || setAct(W, E, i, c, now + delta) === now) { haptic("light"); if (delta > 0) say("Понад 16 год за день не записую"); return; }
       haptic("select"); update();
     };
-    el.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", () => step(b.dataset.act, 4)));
-    el.querySelectorAll("[data-less]").forEach((b) => b.addEventListener("click", () => step(b.dataset.less, -1)));
+    el.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", () => add(b.dataset.act, 4)));
+    el.querySelectorAll("[data-mk]").forEach((b) => b.addEventListener("click", () => {
+      const [c, mode] = b.dataset.mk.split(":");
+      if (!addRule(W, E, i, c, mode)) return;
+      haptic("medium"); update(); say(`${W.kc[c][0]} ${mode === "w" ? "щобудня" : "щодня"} з ${dm(dd)} — до сьогодні й далі`);
+    }));
+    el.querySelectorAll("[data-off]").forEach((b) => b.addEventListener("click", () => {
+      if (!endRule(W, E, i, b.dataset.off)) return;
+      haptic("medium"); update();
+    }));
+    el.querySelectorAll("[data-less]").forEach((b) => b.addEventListener("click", () => add(b.dataset.less, -1)));
     // an activity's slider: 0–16 h, the knob follows the finger (the track is the scale)
     const paintAct = (tr, c) => {
       const v = weekState(W, E).days[i].acts[c] || 0;
@@ -1817,7 +2768,7 @@ function week(W) {
       const c = tr.dataset.tr;
       tr.addEventListener("pointerdown", (e) => {
         const w = tr.getBoundingClientRect(), x0 = e.clientX;
-        slide(tr, e, () => { const d = weekState(W, E).days[i], v = d.acts[c] || 0; return drag("x", v, 0, v + room(d.model, d.feel, d.act), w.width / MAX_Q); },
+        slide(tr, e, () => { const dd2 = weekState(W, E).days[i], v = dd2.acts[c] || 0; return drag("x", v, 0, v + room(dd2.model, dd2.feel, dd2.act), w.width / MAX_Q); },
           (q) => { const kept = setAct(W, E, i, c, q); paintAct(tr, c); return kept; },
           { done: (r) => { // a tap on the track: the value under the finger
             if (r.tap) { const v = weekState(W, E).days[i].acts[c] || 0; setAct(W, E, i, c, Math.round(((x0 - w.left) / w.width) * MAX_Q)); if ((weekState(W, E).days[i].acts[c] || 0) !== v) haptic("select"); }
@@ -1837,52 +2788,292 @@ function week(W) {
     return el;
   }
 
-  // -- ✅ and «🎛 Жестами»: one sendData, the bot checks and stores it
-  function send(editor) {
+  // where a hand-made line comes from: its own days (two by date, more as a count) and its rules
+  function hand(i) {
+    const key = W.l[i][0], mine = codes.filter((c) => W.kc[c][1] === key), st = weekState(W, E), one = [], rules = [];
+    st.days.forEach((d) => mine.forEach((c) => {
+      if (!d.acts[c]) return;
+      const r = !(`${d.i}:${c}` in E.acts) && d.laid[c];
+      if (r) { if (!rules.some((x) => x.id === r.id)) rules.push(r); } else one.push(d.i);
+    }));
+    const parts = [];
+    if (one.length) parts.push(one.length <= 2 ? one.map((k) => dm(day(iso(k)))).join(", ") : `${one.length} дн`);
+    rules.forEach((r) => parts.push(`↻ ${r.wd ? "будні" : "щодня"} з ${dm(day(r.first))}`)); // the line names its kind
+    return `<span class="cb-hand">✋ вручну</span>${parts.length ? ` · ${parts.join(" · ")}` : ""}`;
+  }
+  // -- «Рядки»: the disk (the total, 15 min a detent, turning freely), the share strip (borders
+  // move time between neighbours), the lines with − / + and 🔒
+  function rowsPanel() {
+    const el = h("div", "cb-rows");
+    const D = 260, c = D / 2, R = 112, RT = 92;
+    el.innerHTML = `<div class="cb-disk"><button class="round" data-n="-1" aria-label="−15 хв">−</button><div class="cb-dial" tabindex="0" role="slider" aria-label="Разом за період"><svg viewBox="0 0 ${D} ${D}"></svg><div class="cb-dc"><b class="num" id="cb-dq"></b><span>год</span><em class="num" id="cb-dm"></em></div></div><button class="round" data-n="1" aria-label="+15 хв">+</button></div>
+      <p class="cb-dv" id="cb-dv"></p>
+      <div class="cb-strip"><div class="cb-ghost"></div><div class="cb-bar"></div></div>
+      <div class="cb-lh"><span class="eyebrow">Що зроблено</span><span class="eyebrow">✋ вручну · 🔒 замок</span></div>
+      <div class="cb-list"></div>`;
+    const g = el.querySelector("svg");
+    s("circle", { cx: c, cy: c, r: R, fill: "none", stroke: "var(--track)", "stroke-width": 14, "stroke-opacity": 0.55 }, g);
+    const modelArc = s("path", { fill: "none", stroke: "var(--ink-2)", "stroke-width": 2, "stroke-opacity": 0.55 }, g);
+    const ownerArc = s("path", { fill: "none", stroke: "var(--series-1)", "stroke-width": 14, "stroke-linecap": "round" }, g);
+    const marks = s("g", {}, g); // the model and ±10 %: quiet marks, never detents
+    const ring = s("g", { class: "dial-ring" }, g);
+    for (let k = 0; k < DISK_Q; k++) {
+      const a = (2 * Math.PI * k) / DISK_Q, major = k % 4 === 0, r0 = major ? RT - 12 : RT - 6;
+      s("line", { x1: c + r0 * Math.sin(a), y1: c - r0 * Math.cos(a), x2: c + RT * Math.sin(a), y2: c - RT * Math.cos(a), stroke: major ? "var(--ink-2)" : "var(--muted)", "stroke-width": major ? 2 : 1, "stroke-linecap": "round" }, ring);
+    }
+    s("circle", { cx: c, cy: c - RT + 1, r: 7, fill: "var(--ink)" }, ring);
+    const span = Math.max(16, model0 * 2); // the gauge: 0 … twice the model
+    const at = (q) => (2 * Math.PI * Math.min(q, span)) / span;
+    const dot = (q, r) => [c + r * Math.sin(at(q)), c - r * Math.cos(at(q))];
+    [[model0, 7, "var(--ink)"], [Math.round(model0 * 1.1), 3.5, "var(--muted)"], [Math.round(model0 * 0.9), 3.5, "var(--muted)"]].forEach(([q, r, f]) => { const [x, y] = dot(q, R); s("circle", { cx: x, cy: y, r, fill: "var(--surface)", stroke: f, "stroke-width": 2 }, marks); });
+    const dial = el.querySelector(".cb-dial"), bar = el.querySelector(".cb-bar"), ghost = el.querySelector(".cb-ghost"), list = el.querySelector(".cb-list");
+    const shown = W.l.map((l, i) => i);
+    ghost.innerHTML = shown.map((i) => `<i style="flex:${Math.max(0.0001, W.l[i][5])};background:${color(i)}"></i>`).join("");
+    function paint(now) {
+      const { lines, total } = lineState(W, E);
+      el.querySelector("#cb-dq").textContent = hrs(total);
+      el.querySelector("#cb-dm").textContent = money(total);
+      const d = total - model0;
+      el.querySelector("#cb-dv").innerHTML = d ? `<i class="ln"></i> модель ${hrs(model0)} · <b>${sign(d)} год</b>` : `<i class="ln"></i> модель ${hrs(model0)} · <b>як модель</b>`;
+      ring.style.transform = `rotate(${total * (360 / DISK_Q)}deg)`; // never modulo: no spin back at a full turn
+      modelArc.setAttribute("d", model0 ? arc(c, c, R + 12, 0, at(model0)) : "");
+      ownerArc.setAttribute("d", total ? arc(c, c, R, 0, at(total)) : "");
+      dial.setAttribute("aria-valuenow", total / 4); dial.setAttribute("aria-valuetext", `${hrs(total)} год`);
+      const loose = lines.filter((x) => !x.lock && !x.manual).length;
+      dial.classList.toggle("off", !loose);
+      if (now) return dockPaint(true);
+      const all = lines.reduce((x, y) => x + y.q, 0) || 1;
+      bar.innerHTML = lines.map((x, k) => {
+        const next = lines[k + 1], movable = next && !x.lock && !next.lock && !x.manual && !next.manual;
+        return `<div class="seg${x.lock ? " locked" : ""}${x.manual ? " manual" : ""}" style="flex:${Math.max(0.0001, x.q / all)};--c:${color(x.i)}"></div>${next ? `<b class="hd${movable ? "" : " fixed"}" data-k="${k}"><i></i></b>` : ""}`;
+      }).join("");
+      list.innerHTML = lines.map((x) => `<div class="cb-line${x.lock ? " locked" : ""}${x.dq ? " moved" : ""}" data-i="${x.i}">
+        <i class="sw${x.manual ? " hatch" : ""}" style="background:${color(x.i)}"></i>
+        <div class="cb-ln">${canText ? `<button class="cb-rn" data-ren aria-label="Перейменувати">${esc(lineName(x.i))}</button>` : `<b>${esc(lineName(x.i))}</b>`}<small>${x.manual ? hand(x.i) : `модель ${hrs(x.model)}${x.dq ? ` · <u>${sign(x.dq)}</u>` : ""}`}${canText && textNow(W, E, `t${x.i}`) !== textModel(W, `t${x.i}`) ? `<button class="cb-rv" data-unren>змінено ↩</button>` : ""}</small></div>
+        <b class="cb-lq num">${hrs(x.q)}</b>
+        ${x.manual ? `<span class="cb-pm"></span>` : `<span class="cb-pm"><button data-d="-1" aria-label="−15 хв"${x.lock || !x.q ? " disabled" : ""}>−</button><button data-d="1" aria-label="+15 хв"${x.lock ? " disabled" : ""}>+</button></span>`}
+        <button class="cb-lock${x.lock ? " on" : ""}" data-l aria-label="Замок рядка"${x.manual ? " disabled" : ""}><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button></div>`).join("");
+      dockPaint();
+    }
+    const after = () => { if (river) river.setData(riverData()); };
+    // the disk: the angle the finger turned, in detents; the model and ±10 % never stop it
+    let turn = null;
+    const angle = (e) => { const r = dial.getBoundingClientRect(); return Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))); };
+    dial.addEventListener("pointerdown", (e) => {
+      if (dial.classList.contains("off")) { haptic("light"); say("Усі рядки під замком: зніми 🔒, щоб крутити"); return; }
+      try { dial.setPointerCapture(e.pointerId); } catch (x) { /* a synthetic pointer */ }
+      swipes(false);
+      turn = { last: angle(e), sum: 0, from: lineState(W, E).total };
+    });
+    dial.addEventListener("pointermove", (e) => {
+      if (!turn) return;
+      e.cancelable && e.preventDefault();
+      const a = angle(e);
+      let da = a - turn.last;
+      if (da > Math.PI) da -= 2 * Math.PI; else if (da < -Math.PI) da += 2 * Math.PI;
+      turn.last = a; turn.sum += da;
+      const want = turn.from + Math.round(turn.sum / ((2 * Math.PI) / DISK_Q)), was = lineState(W, E).total;
+      if (want === was) return;
+      const kept = turnTo(W, E, want);
+      if (kept !== was) haptic("select"); else if (kept !== want) haptic("light");
+      paint(true);
+    });
+    const stopTurn = () => { if (turn) { turn = null; swipes(true); paint(); after(); } };
+    dial.addEventListener("pointerup", stopTurn); dial.addEventListener("pointercancel", stopTurn);
+    const by = (k) => { const was = lineState(W, E).total; if (turnTo(W, E, was + k) !== was) { haptic("select"); paint(); after(); } else haptic("light"); };
+    el.querySelectorAll("[data-n]").forEach((b) => b.addEventListener("click", () => by(Number(b.dataset.n))));
+    dial.addEventListener("keydown", (e) => { const k = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key]; if (k) { e.preventDefault(); by(k); } });
+    // a border: dragged right, the left line takes quarters from the right one
+    bar.addEventListener("pointerdown", (e) => {
+      const hd = e.target.closest(".hd");
+      if (!hd) return;
+      if (hd.classList.contains("fixed")) { haptic("light"); say("🔒 чи ✋ рядок: межа стоїть"); return; }
+      const k = Number(hd.dataset.k), L = lineState(W, E).lines, total = L.reduce((x, y) => x + y.q, 0) || 1;
+      const px = Math.max(bar.getBoundingClientRect().width / total, 3), x0 = e.clientX, start = JSON.stringify(E.lines);
+      let moved = 0;
+      hd.classList.add("on"); swipes(false);
+      try { hd.setPointerCapture(e.pointerId); } catch (x) { /* a synthetic pointer */ }
+      const move = (ev) => {
+        ev.cancelable && ev.preventDefault();
+        const want = Math.round((ev.clientX - x0) / px);
+        if (want === moved) return;
+        E.lines = JSON.parse(start); // from the gesture's start: no drift
+        const got = -moveQ(W, E, k, k + 1, -want);
+        haptic(got !== want ? "light" : "select");
+        moved = want;
+        paint();
+      };
+      const end = () => { removeEventListener("pointermove", move); removeEventListener("pointerup", end); removeEventListener("pointercancel", end); swipes(true); paint(); after(); };
+      addEventListener("pointermove", move, { passive: false }); addEventListener("pointerup", end); addEventListener("pointercancel", end);
+    });
+    // ✎ in place: the client's title, any line, a hand-made one the same way
+    const rename = (btn, i) => {
+      const inp = document.createElement("input");
+      inp.className = "cb-ren"; inp.value = textNow(W, E, `t${i}`); inp.maxLength = 160; inp.setAttribute("aria-label", "Назва рядка для клієнта");
+      btn.replaceWith(inp); inp.focus(); inp.select();
+      let done = false;
+      const commit = (save) => {
+        if (done) return; done = true;
+        const was = textNow(W, E, `t${i}`);
+        if (save) setText(W, E, `t${i}`, inp.value);
+        haptic("light"); paint(); after();
+        if (save && textNow(W, E, `t${i}`) !== was) say(`✎ «${textNow(W, E, `t${i}`)}» — так побачить і клієнт`);
+      };
+      inp.addEventListener("keydown", (ev) => { if (ev.key === "Enter") { ev.preventDefault(); commit(true); } if (ev.key === "Escape") commit(false); });
+      inp.addEventListener("blur", () => commit(true));
+    };
+    list.addEventListener("click", (e) => {
+      const row = e.target.closest(".cb-line");
+      if (!row) return;
+      const i = Number(row.dataset.i), b = e.target.closest("button");
+      if (!b) return;
+      if ("ren" in b.dataset) { rename(b, i); return; }
+      if ("unren" in b.dataset) { setText(W, E, `t${i}`, textModel(W, `t${i}`)); haptic("light"); }
+      else if (b.dataset.d) { if (nudgeLine(W, E, i, Number(b.dataset.d))) haptic("select"); else haptic("light"); }
+      else if ("l" in b.dataset) { if (lockLine(W, E, i)) haptic("light"); }
+      paint(); after();
+    });
+    paint();
+    return el;
+  }
+
+  // ---- step 3: the review — the invoice, what the client reads (EN, each text editable with
+  // its ↩), every edit with ↩, the payload's size ----------------------------------------------
+  function review() {
+    const el = h("div", "cb-review");
+    el.innerHTML = `<div class="cb-top"></div>${canText ? `<section class="cb-paper" aria-label="Що прочитає клієнт"></section>` : ""}<div class="cb-ed"></div>`;
+    const top = el.querySelector(".cb-top"), paper = el.querySelector(".cb-paper"), eds = el.querySelector(".cb-ed");
+    function paintTop() {
+      const { lines, total } = lineState(W, E), most = Math.max(total, model0, 1);
+      top.innerHTML = `<div class="cb-inv"><span class="eyebrow">${esc(W.c[1])} · ${dm(day(W.f))}–${dm(day(iso(n - 1)))} · ${n} дн</span>
+        <div class="cb-big num">${hrs(total)}<small>год</small></div><div class="cb-cash num">${money(total)}</div>
+        <div class="cb-vs"><span>модель</span><i><b style="width:${((model0 / most) * 100).toFixed(1)}%"></b></i><em class="num">${hrs(model0)}</em><span>рахунок</span><i class="me"><b style="width:${((total / most) * 100).toFixed(1)}%"></b></i><em class="num">${hrs(total)}</em></div></div>
+        ${lines.length && !canText ? `<div class="cb-sum-l">${lines.filter((x) => x.q).map((x) => `<div><i class="sw${x.manual ? " hatch" : ""}" style="background:${color(x.i)}"></i><b>${esc(lineName(x.i))}</b>${x.dq ? `<u>${sign(x.dq)}</u>` : ""}${x.lock ? " 🔒" : ""}<em class="num">${hrs(x.q)}${rateCents != null ? ` · ${money(x.q)}` : ""}</em></div>`).join("")}</div>` : ""}`;
+    }
+    // the paper: the letter, What we did, the lines (title · value · risk), What's next — as the
+    // client reads them, in English; a tap edits in place, «змінено ↩» back to the model
+    const field = (id, cls = "") => {
+      const v = textNow(W, E, id), chg = v !== textModel(W, id);
+      return `<span class="cb-tx${chg ? " chg" : ""}${cls}" contenteditable="plaintext-only" spellcheck="false" data-id="${id}" data-ph="${esc(PART[id[0]])}">${esc(v)}</span>${chg ? `<button class="cb-rv" data-rv="${id}">змінено ↩</button>` : ""}`;
+    };
+    function paintPaper() {
+      if (!paper) return;
+      const { lines } = lineState(W, E), has = (p) => typeof W.tx[p] === "string";
+      const shown = lines.filter((x) => x.q).sort((a, b) => b.q - a.q);
+      paper.innerHTML = `<div class="cb-ph"><span class="eyebrow">Що прочитає клієнт · дотик — правити</span><span class="cb-lang">EN</span></div>
+        ${has("m") ? `<article class="cb-mail"><h4>Letter</h4>${field("m", " long")}</article>` : ""}
+        <article class="cb-sheet-p">
+          ${has("d") ? `<div class="cb-ps"><h4>What we did</h4>${field("d", " long")}</div>` : ""}
+          <div class="cb-ps"><h4>Lines</h4>${shown.map((x) => `<div class="cb-pl"><div class="cb-plt"><i class="sw${x.manual ? " hatch" : ""}" style="background:${color(x.i)}"></i>${field(`t${x.i}`, " t")}<em class="num">${hrs(x.q)} h${rateCents != null ? ` · ${money(x.q)}` : ""}</em></div><div class="cb-plv">${field(`v${x.i}`)}</div><div class="cb-plr">${field(`r${x.i}`)}</div></div>`).join("")}</div>
+          ${has("x") ? `<div class="cb-ps"><h4>What's next</h4>${field("x", " long")}</div>` : ""}
+          ${has("d") ? "" : `<p class="cb-none">Звіт для клієнта ще не готовий — листа й «What we did» поки немає.</p>`}
+        </article>`;
+    }
+    function paintEdits() {
+      const list = editList(W, E), p = unsent(W, E), text = payload(W, E, "ok"), size = new TextEncoder().encode(text).length;
+      eds.innerHTML = `<div class="cb-eh"><span class="eyebrow">Правки</span>${p ? `<span class="cb-pd"><i class="dot"></i>${p} не надіслано</span>` : `<span class="cb-ok">${list.length ? "усі збережено" : "без правок"}</span>`}</div>
+        ${list.length ? chipGroups(list) : `<p class="cb-none">Без правок — рахунок дорівнює моделі.</p>`}
+        <button class="cb-reset"${list.length ? "" : " disabled"}>Скинути все до моделі</button>
+        <div class="cb-meter${size > 4096 ? " over" : ""}"><i style="width:${Math.min(100, (size / 4096) * 100).toFixed(1)}%"></i><span>Піде одним <b>sendData</b>: <b class="num">${size} Б</b> з 4096. Застосунок закриється, бот пришле PDF у чат.</span></div>
+        <button class="cb-save"${p ? "" : " disabled"}>💾 Зберегти й закрити</button>`;
+    }
+    const all = () => { paintTop(); paintPaper(); paintEdits(); dockPaint(); };
+    eds.addEventListener("click", (e) => {
+      if (onChip(e, all)) return;
+      if (e.target.closest(".cb-reset")) { resetAll(W, E); haptic("medium"); all(); say("Усе до моделі — надішлеться з ✅ чи «Зберегти»"); }
+      else if (e.target.closest(".cb-save")) send("sv");
+    });
+    if (paper) {
+      // typing never redraws the paper (the caret stays); only its mark, the chips and the dock
+      paper.addEventListener("input", (e) => {
+        const t = e.target.closest("[data-id]");
+        if (!t) return;
+        const id = t.dataset.id;
+        if (t.textContent.length > textMax(id)) { haptic("light"); say(`Задовгий текст: до ${textMax(id)} знаків`); }
+        setText(W, E, id, t.textContent);
+        const chg = textNow(W, E, id) !== textModel(W, id);
+        t.classList.toggle("chg", chg);
+        let mk = t.nextElementSibling && t.nextElementSibling.matches(".cb-rv") ? t.nextElementSibling : null;
+        if (chg && !mk) { mk = h("button", "cb-rv"); mk.dataset.rv = id; mk.textContent = "змінено ↩"; t.after(mk); }
+        if (!chg && mk) mk.remove();
+        paintEdits(); dockPaint();
+      });
+      paper.addEventListener("keydown", (e) => { const t = e.target.closest("[data-id]"); if (t && e.key === "Enter" && t.dataset.id.length > 1) { e.preventDefault(); t.blur(); } });
+      paper.addEventListener("focusout", (e) => { // an emptied title shows its model again; else no redraw (a tap on «↩» must land)
+        const t = e.target.closest && e.target.closest("[data-id]");
+        if (t && t.dataset.id[0] === "t" && !t.textContent.trim()) paintPaper();
+      });
+      paper.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-rv]");
+        if (!b) return;
+        setText(W, E, b.dataset.rv, textModel(W, b.dataset.rv)); haptic("light"); all();
+      });
+    }
+    all();
+    return el;
+  }
+
+  // ---- 🔄 / ✅ / «Зберегти»: one sendData, the bot checks and stores it ------------------------
+  function confirm(action, title, text, yes) {
+    sheet.innerHTML = `<div class="cb-sh" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(text)}</p><div><button class="cb-no">Скасувати</button><button class="cb-yes">${esc(yes)}</button></div></div>`;
+    sheet.classList.add("on");
+    const close = () => sheet.classList.remove("on");
+    sheet.querySelector(".cb-no").addEventListener("click", close);
+    sheet.querySelector(".cb-yes").addEventListener("click", () => { close(); send(action); });
+    sheet.onclick = (e) => { if (e.target === sheet) close(); };
+  }
+  function send(action) {
     if (sent) return;
-    const text = decisionText(W, E, editor);
-    if (new TextEncoder().encode(text).length > 4096) { haptic("light"); say("Забагато змін для Telegram: затверди частину, решту — після"); return; }
+    closeDrawer();
+    const long = Object.keys(E.texts).find((id) => E.texts[id].length > textMax(id));
+    if (long) { haptic("light"); say(`Задовгий текст (${PART[long[0]]}): до ${textMax(long)} знаків — інакше бот відмовить`); return; }
+    const text = payload(W, E, action), size = new TextEncoder().encode(text).length;
+    if (size > 4096) { haptic("light"); say(`Забагато для Telegram (${size} Б): збережи частину, решту — після`); return; }
     window.__herDecision = text; // the local preview and the tests read it
     post("web_app_trigger_haptic_feedback", { type: "notification", notification_type: "success" });
     post("web_app_setup_closing_behavior", { need_confirmation: false });
-    $("#wk-ok").classList.add("sent");
+    $("#cb-go").classList.add("sent");
     if (TG.inside) { sent = true; setTimeout(() => post("web_app_data_send", { data: text }), reduced ? 0 : 280); }
-    else say(`Боту пішло б ${new TextEncoder().encode(text).length} байт${editor ? " · відкрити жести" : ""}`);
+    else say(`Боту пішло б ${size} Б · ${{ ok: "✅ рахунок", gh: "🔄 GitHub", sv: "💾 збереження" }[JSON.parse(text).x]}`);
   }
-  $("#wk-ok").addEventListener("click", () => send(false));
-  $("#wk-minus").addEventListener("click", () => { if (E.steps > W.sb[0]) { E.steps--; haptic("select"); hero(); } });
-  $("#wk-plus").addEventListener("click", () => { if (E.steps < W.sb[1]) { E.steps++; haptic("select"); hero(); } });
   let toastTimer = 0;
   function say(message) {
-    const t = $("#wk-toast"); t.textContent = message; t.classList.add("on");
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2600);
+    toast.textContent = message; toast.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("on"), 2600);
   }
-  function update() { if (holding) return; if (river && lens === "owner") river.setData(riverData()); layout(); hero(); panel(); } // in place: no re-pour (#291)
+  function update() { if (holding) return; if (river) river.setData(riverData()); layout(); panel(); paintNews(); dockPaint(); if (drawerOn) paintDrawer(); } // in place: no re-pour (#291)
 
   const first = QS_WEEK.get("day");
   if (first != null && Number(first) < n) sel = Number(first);
-  requestAnimationFrame(() => { drawRiver(); layout(); hero(); panel(); performance.mark("her-week-drawn"); });
-  new ResizeObserver(() => requestAnimationFrame(layout)).observe(stage); // after the river's own
+  show(step);
+  if (first != null && Number(first) < n && step === 1) sel = Number(first);
+  if (step === 1) requestAnimationFrame(() => { layout(); panel(); performance.mark("her-week-drawn"); });
+  let seenW = 0;
+  new ResizeObserver(() => requestAnimationFrame(() => {
+    const w = stage ? stage.clientWidth : 0; // a new width: the days ahead line up again
+    if (river && step === 1 && ahead.length && w !== seenW) river.setData(riverData());
+    seenW = w; layout();
+  })).observe(body); // after the river's own
   return E;
 }
 const QS_WEEK = new URLSearchParams(typeof location === "undefined" ? "" : location.search); // node: the tests
 function esc(text) { return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
 
-// The page's entry: the sealed snapshot of the card's 📊 (her.week_app, field «w»).
-async function openWeek() {
-  const again = "Натисни 📊 у картці тижня ще раз.";
+// The page's entry: the sealed snapshot of the card's 📊 (her.cabinet, field «w»).
+async function openCabinet() {
+  const again = "Натисни «📊 Кабінет» у картці ще раз.";
   const W = await sealedSnapshot("w", again);
   if (!W) return;
-  if (W.v !== 1) return gate("⬆️", "Нова версія", again);
+  if (W.v !== 2) return gate("⬆️", "Нова версія", again);
   // A keyboard button's launch names no user: only the owner's private chat has that button,
   // and the bot checks who sent the decision. A launch that names someone else is refused.
   const who = viewer();
-  if (TG.inside && who != null && who !== W.o) return gate("🔒", "Лише для власника", "Цей тиждень показую тільки тому, для кого його зроблено.");
-  if (Date.now() / 1000 > W.exp) return gate("⌛", "Сторінка застаріла", "Тиждень міг змінитися. " + again);
-  week(W);
+  if (TG.inside && who != null && who !== W.o) return gate("🔒", "Лише для власника", "Цей кабінет показую тільки тому, для кого його зроблено.");
+  if (Date.now() / 1000 > W.exp) return gate("⌛", "Кабінет застарів", "Пропозиція могла змінитися. " + again);
+  cabinet(W);
 }
 
-if (typeof module !== "undefined") module.exports = { pyRound, dayQ, weekTotal, weekState, decisionText, drag, room, setDay, resetDay, setAct, MAX_Q };
+if (typeof module !== "undefined") module.exports = { newsOf, aheadDays, ruleSlots, goTarget, ruleList, ruleOn, baseActs, textIds, textSnap, textModel, textNow, setText, addRule, endRule, paidNow, togglePay, pageActs, pyRound, dayQ, weekTotal, fresh, dayState, lineBases, weekState, lineState, shareQ, turnTo, moveQ, nudgeLine, lockLine, editList, undoEdit, resetAll, unsent, payload, maxEnd, sundayEnd, rangeQ, isoAdd, isoDays, drag, room, setDay, resetDay, setAct, MAX_Q };
 
 // Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
 // the data is in the URL fragment, sealed with the owner's key and signed by Her (seal.js,
@@ -2435,7 +3626,7 @@ function invoice(screen, P) {
       row.append(h("b", "", client(c[0])[1]), bar, h("span", "num", c[4] ? amount(c[4]) : ""));
       b.append(row);
     }
-    b.append(h("p", "soon", "Правити жестами: /invoice <клієнт> → 🎛 Жестами."));
+    b.append(h("p", "soon", "Правити: кнопка 📊 з назвою клієнта у Vector."));
   } }]);
   screen.append(box);
   if (P.iv) screen.append(card("paid", "Оплата рахунків", [{ hint: "оплачене за період · чекає і прострочене — зараз", draw: (b) => {
@@ -2546,7 +3737,7 @@ async function start() {
       ? gate("🔑", "Ключ збережено", "Цей акаунт Telegram тепер відкриває дашборд і редактор на всіх пристроях. Повернись у чат і відкрий сторінку.")
       : gate("⚠️", "Telegram не зберіг ключ", "Онови Telegram і торкнись 🔑 ще раз.");
   }
-  if (launch.get("w")) return openWeek();
+  if (launch.get("w")) return openCabinet();
   if (launch.get("i")) return openEditor();
   if (!launch.get("d")) return gate("✨", "Немає знімка", "Натисни «✨ Дашборд» у /stats — я покладу в посилання свіжі цифри.");
   S = await sealedSnapshot("d", "Відкрий дашборд із /stats.");
@@ -2563,9 +3754,9 @@ async function start() {
   wire();
   render();
 }
-// The invoice editor (#176): its own snapshot, from the 🎛 keyboard button of /invoice.
+// The invoice editor (#176): its own snapshot, from the 🎛 keyboard button of the 🧾 draft card.
 async function openEditor() {
-  const again = "Натисни «🎛 Жестами» у картці /invoice ще раз.";
+  const again = "Натисни «🎛 Жестами» у 🧾 чернетці ще раз.";
   const E = await sealedSnapshot("i", again);
   if (!E) return;
   if (E.v !== 1) return gate("⬆️", "Нова версія", again);

@@ -533,7 +533,7 @@ const River = (() => {
 
   // ---- the physics: no DOM, so node runs it in the tests -------------------------------------
   // data: {days: [iso], bands: [{name, color, manual, done, v: [level a day]}], from, to,
-  //        ahead?: {frac, label}, focus?: [first, last] day indexes, numbers?: [text a day],
+  //        ahead?: {frac, label, exact?}, focus?: [first, last] day indexes, numbers?: [text a day],
   //        week?: [7 short weekday names, Monday first]}
   class Flow {
     constructor(data, o) {
@@ -547,7 +547,8 @@ const River = (() => {
 
     layout(width) {
       const n = this.d.days.length, pad = 6, H = this.o.height, S = this.d.bands.length;
-      const ahead = this.d.ahead ? Math.max(0.1, Math.min(0.4, this.d.ahead.frac)) : 0;
+      // `exact`: the owner's cabinet lines its days ahead up with the river's (#315)
+      const a = this.d.ahead, ahead = !a ? 0 : a.exact ? Math.max(0, Math.min(0.9, a.frac)) : Math.max(0.1, Math.min(0.4, a.frac));
       this.W = width; this.H = H;
       this.x0 = pad; this.xr = pad + (width - 2 * pad) * (1 - ahead); this.xe = width - pad - 6;
       this.xs = Float32Array.from({ length: N }, (_, j) => this.x0 + (j * (this.xr - this.x0)) / (N - 1));
@@ -1135,6 +1136,14 @@ function render() {
 // The report's age against TODAY (#253): «This week» only for this week, a month as a month.
 function ageLabel() {
   const week = D.period.key.match(/^(\d{4})-W(\d+)$/), month = D.period.key.match(/^(\d{4})-(\d{2})$/);
+  const range = D.period.key.match(/\.\.(\d{4})-(\d{2})-(\d{2})$/); // #302: by its last day
+  if (range) {
+    const end = new Date(Number(range[1]), Number(range[2]) - 1, Number(range[3])), now = new Date(TODAY);
+    end.setDate(end.getDate() - ((end.getDay() + 6) % 7));
+    now.setDate(TODAY.getDate() - ((TODAY.getDay() + 6) % 7));
+    const back = Math.round((now - end) / (7 * 864e5));
+    return back === 0 ? W.thisWeek : back === 1 ? W.lastWeek : W.latest;
+  }
   if (week) {
     const jan4 = new Date(Number(week[1]), 0, 4), mon = new Date(jan4);
     mon.setDate(jan4.getDate() - ((jan4.getDay() + 6) % 7) + (Number(week[2]) - 1) * 7);
@@ -1319,8 +1328,8 @@ function dueChip() {
 // No server and no download: Telegram shows the file natively. An older snapshot without the
 // bot's name: the hint where the PDF already is.
 function pdfLink() {
-  const key = D.period ? D.period.key.replace(/-/g, "") : "";
-  if (!/^[A-Za-z0-9_]{5,32}$/.test(D.bot || "") || !/^[A-Za-z0-9]{1,32}$/.test(key)) return "";
+  const key = D.period ? D.period.key.replace(/-/g, "").replace("..", "_") : ""; // pdf_start
+  if (!/^[A-Za-z0-9_]{5,32}$/.test(D.bot || "") || !/^[A-Za-z0-9_]{1,32}$/.test(key)) return "";
   return `/${D.bot}?start=pdf_${key}`;
 }
 function getPdf(e) {
