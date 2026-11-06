@@ -146,8 +146,7 @@ svg { display: block; overflow: visible; }
 .zone { font: var(--weight-semibold) 11px/1 var(--font); letter-spacing: .12em; text-transform: uppercase; fill: var(--muted); }
 .lbl { font: var(--weight-semibold) 12.5px/1 var(--font); fill: var(--ink); }
 .lbl2 { font: 11.5px/1 var(--font); fill: var(--muted); }
-.onfill { font: var(--weight-semibold) 12.5px/1 var(--font); fill: #fff; }
-.onfill2 { font: 11.5px/1 var(--font); fill: rgba(255,255,255,.82); }
+.onfill { font: var(--weight-semibold) 12.5px/1 var(--font); fill: #fff; paint-order: stroke; stroke: rgba(0,0,0,.18); stroke-width: 2px; stroke-linejoin: round; }
 
 /* the road: done, now, next */
 .lanes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--grid); }
@@ -406,6 +405,11 @@ html.still .tour .tst.end .node::after { display: none; }
   .tour .swapin .typing { display: none; }
   .tour .tst.end .node::after, .tour .outline path { animation: none; }
 }
+
+/* the one-file report (her.client_app.sheet): the week, then the invoice, one column a phone wide */
+html.sheet body { padding-bottom: 48px; }
+html.sheet #app { max-width: 480px; margin: 0 auto; }
+html.sheet .screen + .screen { margin-top: 44px; padding-top: 30px; border-top: 1px solid var(--border); }
 
 </style>
 </head>
@@ -1049,6 +1053,9 @@ function h(tag, cls, text) { const n = document.createElement(tag); if (cls) n.c
 function s(tag, attrs, parent) { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
 function txt(parent, x, y, value, attrs) { const n = s("text", Object.assign({ x, y }, attrs || {}), parent); n.textContent = value; return n; }
 const color = (i) => (i >= 0 && i < 8 ? `var(--series-${i + 1})` : "var(--track)");
+// Hidden for now (owner, 2026-11-06): Done · Now · Next under the river and «What's next», here
+// and in the PDF (her.paper HIDE_DONE, HIDE_NEXT). false brings them back.
+const HIDE = { road: true, next: true };
 const sum = (a) => a.reduce((x, y) => x + y, 0);
 const icon = (path) => `<svg viewBox="0 0 24 24">${path}</svg>`;
 const ICON = {
@@ -1097,6 +1104,9 @@ function curve(points, reverse) {
 
 // ---- the frame ----------------------------------------------------------------------------
 let D = null, current = "week";
+// The one-file report (her.client_app.sheet, owner 2026-11-06): the snapshot inside the page,
+// the week and the invoice one under the other; no tabs, no key, no Telegram.
+const SHEET = (() => { const n = document.getElementById("her-sheet"); return n ? json(n.textContent) : null; })();
 function bar(right) {
   const n = h("header", "bar"), logo = h("span", "logo");
   if (D.logo && D.logo.startsWith("data:image/svg+xml;base64,")) { const img = h("img"); img.src = D.logo; img.alt = ""; logo.append(img); }
@@ -1179,8 +1189,8 @@ function weekScreen(root) {
   root.append(flow ? riverCard(flow, D.deadline ? Math.round((day(D.deadline.date) - TODAY) / 864e5) : -1, true) : roadCard());
   const valued = D.lines.map((l, i) => Object.assign({ slot: i }, l)).filter((l) => l.v || l.r);
   if (valued.length) root.append(valueCard(valued));
-  if (D.next.length) root.append(nextCard());
-  root.append(invoiceTeaser());
+  if (D.next.length && !HIDE.next) root.append(nextCard());
+  if (!SHEET) root.append(invoiceTeaser());
 }
 
 function roadCard() {
@@ -1335,7 +1345,14 @@ function pdfLink() {
 function getPdf(e) {
   if (e) e.stopPropagation(); // the teaser's own tap opens the invoice
   haptic();
-  if (D.preview) { toast(W.peekPdf(viewer())); return; } // the owner's preview (#233): no Signal
+  if (D.preview) { // the owner's preview (#233): no Signal; the owner's own bot sends the files
+    const own = typeof D.pdf === "string" && /^\/[A-Za-z0-9_]{5,32}\?start=pdf_[A-Za-z0-9_-]{1,60}$/.test(D.pdf) ? D.pdf : "";
+    if (!own) { toast(W.peekPdf(viewer())); return; }
+    toast(W.pdfSending);
+    if (TG.inside) post("web_app_open_tg_link", { path_full: own }); else window.open(`https://t.me${own}`, "_blank");
+    setTimeout(() => post("web_app_close"), 900);
+    return;
+  }
   const path = pdfLink();
   toast(path ? W.pdfSending : W.pdfHint);
   if (path && TG.inside) post("web_app_open_tg_link", { path_full: path });
@@ -1472,7 +1489,28 @@ function nextFrame(node, draw) { // laid out first; never on a screen replaced s
   requestAnimationFrame(() => { if (gen === screens && node.isConnected) draw(); });
 }
 const RQ = { at: Number(QS.get("at")) || 0, tap: Number(QS.get("tap")) || 0, after: Number(QS.get("after")) || 0 };
+// The river of the invoice's own lines (owner, 2026-11-06): the cabinet's picture with the
+// invoice's names and colours, the period's days. The monitor's flow only without them.
+function linesRiver() {
+  const n = D.days.length;
+  if (!D.period || !/^\d{4}-\d{2}-\d{2}$/.test(D.period.first || "") || n < 2 || !D.lines.length) return null;
+  if (!D.days.every((r) => Array.isArray(r) && r.length === D.lines.length)) return null;
+  const first = day(D.period.first);
+  const days = Array.from({ length: n }, (_, i) => { const d = new Date(first); d.setDate(first.getDate() + i); return isoOf(d); });
+  const bands = D.lines.map((l, i) => ({ name: String(l.t), color: color(i), slot: i, manual: false, done: false, v: D.days.map((r) => Math.max(0, Number(r[i]) || 0)) }))
+    .filter((b) => b.v.some((x) => x > 0));
+  if (!bands.length) return null;
+  const last = days[n - 1];
+  const data = { days, bands, from: dateText(days[0]), to: last === isoOf(TODAY) ? W.today : dateText(last), week: W.weekdays };
+  if (D.deadline && day(D.deadline.date) > day(last)) {
+    const ahead = Math.round((day(D.deadline.date) - day(last)) / 864e5);
+    data.ahead = { frac: Math.min(0.3, Math.max(0.18, ahead / (n - 1 + ahead))), label: dateText(D.deadline.date) };
+  }
+  return data;
+}
 function riverData(week) {
+  const mine = linesRiver();
+  if (mine) return mine;
   const F = D.flow;
   if (!F || !(F.days > 1) || !Array.isArray(F.lines) || !F.lines.length || !/^\d{4}-\d{2}-\d{2}$/.test(F.first || "")) return null;
   const first = day(F.first), n = F.days;
@@ -1543,7 +1581,7 @@ function riverCard(data, left, week) {
   seg.append(...modes);
   foot.append(outside, seg);
   card.append(foot);
-  const road = roadColumns([done, now, next]);
+  const road = HIDE.road ? null : roadColumns([done, now, next]);
   if (road) card.append(road);
   return card;
 }
@@ -1657,7 +1695,10 @@ function sankeyCard() {
   const inv = D.invoice, card = h("section", "card deep");
   card.append(h("h3", "", W.paying), h("div", "hint", W.payingHint));
   const total = sum(D.lines.map((l) => l.q)) || 1, Wd = 318, gap = 8, x0 = 6, bw = 6, x1 = Wd - 12;
-  const H = Math.max(180, Math.min(300, 60 * D.lines.length)), TH = H * 0.56, T0 = (H - TH) / 2;
+  // Every line's name on its band (owner, 2026-11-06): the thinnest band takes a line of text
+  const MIN = 22, least = Math.min(...D.lines.map((l) => l.q).filter((q) => q > 0), total);
+  const H = Math.max(180, Math.min(640, 60 * D.lines.length, gap * (D.lines.length - 1) + (MIN * total) / least));
+  const TH = H * 0.56, T0 = (H - TH) / 2;
   const k = (H - gap * (D.lines.length - 1)) / total;
   const svg = s("svg", { viewBox: `0 0 ${Wd} ${H}`, width: "100%", role: "img" }, card);
   svg.style.marginTop = "18px";
@@ -1668,21 +1709,20 @@ function sankeyCard() {
     const hh = Math.max(l.q * k, 3), th = (l.q * TH) / total, id = `rb${i}`;
     const grad = s("linearGradient", { id, x1: 0, x2: 1 }, defs);
     s("stop", { offset: 0, "stop-color": color(i), "stop-opacity": 0.88 }, grad);
+    s("stop", { offset: 0.6, "stop-color": color(i), "stop-opacity": 0.8 }, grad); // the name reads on it
     s("stop", { offset: 1, "stop-color": color(i), "stop-opacity": 0.35 }, grad);
     const m1 = x0 + bw + 150, m2 = x1 - 90;
     s("path", { d: `M${x0 + bw},${y} C${m1},${y} ${m2},${ty} ${x1},${ty} L${x1},${ty + th} C${m2},${ty + th} ${m1},${y + hh} ${x0 + bw},${y + hh}Z`, fill: `url(#${id})` }, g);
     s("rect", { x: x0, y, width: bw, height: hh, rx: 2, fill: color(i) }, g);
-    if (hh > 34) {
-      txt(g, x0 + bw + 10, y + 18, l.t.length > 28 ? l.t.slice(0, 27) + "…" : l.t, { class: "onfill" });
-      txt(g, x0 + bw + 10, y + 34, hours(l.q), { class: "onfill2" });
-    } else small.push([l, i]);
+    if (hh >= 16) txt(g, x0 + bw + 10, y + hh / 2 + 4.5, l.t.length > 28 ? l.t.slice(0, 27) + "…" : l.t, { class: "onfill" });
+    else small.push([l, i]);
     y += hh + gap; ty += th;
   });
   s("rect", { x: x1, y: T0, width: 12, height: TH, rx: 4, fill: "var(--ink)" }, g);
   if (small.length) {
     const legend = h("div", "");
     legend.style.cssText = "display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:12px;font:13px/1.2 var(--font);color:var(--ink-2)";
-    for (const [l, i] of small) { const sw = h("span", "sw"); sw.style.cssText = `width:8px;height:8px;margin-right:6px;background:${color(i)}`; const t = h("span", ""); t.append(sw, document.createTextNode(`${l.t} · ${hours(l.q)}`)); legend.append(t); }
+    for (const [l, i] of small) { const sw = h("span", "sw"); sw.style.cssText = `width:8px;height:8px;margin-right:6px;background:${color(i)}`; const t = h("span", ""); t.append(sw, document.createTextNode(l.t)); legend.append(t); }
     card.append(legend);
   }
   const list = h("div", "");
@@ -1720,7 +1760,8 @@ function payCard() {
     haptic(ok ? "medium" : "light");
     toast(ok ? W.copied : text.split("\n")[0]);
   };
-  btns.append(copy, pdf);
+  btns.append(copy);
+  if (!SHEET) btns.append(pdf); // the sheet travels with its PDF
   card.append(btns);
   const parties = h("div", "parties");
   for (const [label, who] of [[W.from, inv.from], [W.to, inv.to]]) {
@@ -1981,8 +2022,23 @@ async function opening(sealed, store) {
   return { D: d };
 }
 
+function renderSheet() {
+  clearRivers();
+  document.documentElement.classList.add("sheet");
+  const week = h("section", "screen"), bill = h("section", "screen");
+  weekScreen(week);
+  if (D.invoice) invoiceScreen(bill);
+  app.replaceChildren(week, ...(D.invoice ? [bill] : []));
+}
+
 async function start() {
   theme(TG.theme);
+  if (SHEET) {
+    D = SHEET;
+    speak();
+    document.title = `${D.client} · ${D.period ? D.period.title : ""}`;
+    return renderSheet();
+  }
   post("web_app_ready");
   post("web_app_expand");
   const lang = (TG.data && json(new URLSearchParams(TG.data).get("user")) || {}).language_code || navigator.language || "en";
