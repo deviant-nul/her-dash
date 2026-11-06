@@ -1795,7 +1795,7 @@ function lineState(W, E) {
   const st = weekState(W, E), bases = lineBases(W, E, st);
   const lines = W.l.map((l, i) => {
     const base = bases[i], [raw, lock] = (E.lines || {})[i] || [0, 0], dq = effective(raw, base);
-    return { i, key: l[0], name: l[1] || `#${i + 1}`, manual: Boolean(l[2]), model: l[5], base, dq, lock: Boolean(lock), q: base + dq };
+    return { i, key: l[0], name: lineTitle(W, i), manual: Boolean(l[2]), model: l[5], base, dq, lock: Boolean(lock), q: base + dq };
   });
   return { lines, total: st.total, base: st.base };
 }
@@ -1958,6 +1958,8 @@ function textSnap(W, id) {
 }
 const textModel = (W, id) => (W.tx && W.tx.o && id in W.tx.o ? W.tx.o[id] : textSnap(W, id));
 const textNow = (W, E, id) => (id in E.texts ? E.texts[id] : textSnap(W, id));
+// a line's name (#326): the owner's, else the client's title, else «#N» (a level dropped both)
+const lineTitle = (W, i) => W.l[i][1] || textSnap(W, `t${i}`) || `#${i + 1}`;
 // a text's most characters, as her.cabinet.parse takes it (MAX_LINE_TEXT, MAX_REPORT_TEXT)
 const textMax = (id) => (id.length > 1 ? 160 : id === "m" ? 1200 : 2000);
 // A text set: the bot's own again → no edit; an empty title stays the model's.
@@ -2158,7 +2160,7 @@ function cabinet(W) {
   const model0 = W.d.reduce((x, row) => x + row[0], 0); // the repo's model alone: no feel, no activity, no edit
   const canText = Boolean(W.tx && W.tx.l); // a level that dropped the texts edits none
   // a line's name: the owner's, or the client's title once it was renamed (here or stored)
-  const lineName = (i) => (canText && (`t${i}` in E.texts || textModel(W, `t${i}`) !== textSnap(W, `t${i}`)) ? textNow(W, E, `t${i}`) : W.l[i][1] || `#${i + 1}`);
+  const lineName = (i) => (canText && (`t${i}` in E.texts || textModel(W, `t${i}`) !== textSnap(W, `t${i}`)) ? textNow(W, E, `t${i}`) : lineTitle(W, i));
   const ruleText = (r) => `↻ ${W.kc[r.code] ? W.kc[r.code][0] : r.code} ${hrs(r.q)} · ${r.wd ? "будні" : "щодня"} з ${dm(day(r.first))}`;
   // right after 🔄 the cabinet opens on the canvas: the new proposal with the owner's edits on top
   // (a page opened later from the card starts at the calendar, the banner still on)
@@ -2291,7 +2293,7 @@ function cabinet(W) {
     else if (e.kind === "line") label = `${esc(lineName(e.line))} · ${sign(e.now)}`;
     else if (e.kind === "lock") label = `🔒 ${esc(lineName(e.line))}`;
     else if (e.kind === "rule") label = `${esc(ruleText(e))}${e.off ? ` · <s>з ${dm(day(e.off))}</s>` : ""}`;
-    else if (e.kind === "text") label = `${e.id.length > 1 ? `${esc(W.l[Number(e.id.slice(1))][1] || "")} · ` : ""}${PART[e.id[0]]}: «${esc(short(e.now))}»`;
+    else if (e.kind === "text") label = `${e.id.length > 1 ? `${esc(lineTitle(W, Number(e.id.slice(1))))} · ` : ""}${PART[e.id[0]]}: «${esc(short(e.now))}»`;
     else { const tk = W.cal.tk.find((x) => x[3] === e.range); label = `${tk ? `${dm(day(tk[0]))}–${dm(day(tk[1]))}` : ""} · ${e.now ? "💵 оплачено" : "не оплачено"}`; }
     return `<span class="cb-chip${e.sent ? "" : " pend"}" data-e="${esc(e.key)}"><button class="go">${label}</button><button class="x" aria-label="Скасувати">↩</button></span>`;
   }
@@ -2467,7 +2469,7 @@ function cabinet(W) {
       if (l[2]) return; // an activity's own line: its band is the activity's above
       const k = ls[i].base ? ls[i].q / ls[i].base : 1; // a line's edit swells its band
       const v = st.days.map((d) => (d.origRepo ? ((l[3][d.i] || 0) * d.repo * k) / d.origRepo : 0));
-      if (v.some(Boolean)) bands.push({ name: l[1] || `#${i + 1}`, color: color(i), v });
+      if (v.some(Boolean)) bands.push({ name: lineTitle(W, i), color: color(i), v });
     });
     if (!bands.length) bands.push({ name: "", color: "var(--track)", v: st.days.map((d) => d.total) });
     const out = { days: st.days.map((d) => iso(d.i)), bands, from: dm(day(iso(0))), to: dm(day(iso(n - 1))), week: WEEK_DAYS };
@@ -2708,7 +2710,7 @@ function cabinet(W) {
   function dayPanel(i) {
     const st = weekState(W, E), d = st.days[i], row = W.d[i], sg = row[5], el = h("div", "wk-day");
     const dd = day(iso(i)), base = dayQ(d.model, null, d.act);
-    const lines = W.l.map((l, k) => [l[1] || `#${k + 1}`, d.origRepo ? ((l[3][i] || 0) * d.repo) / d.origRepo : 0, k]).filter((x) => x[1] > 0 && !W.l[x[2]][2]).sort((a, b) => b[1] - a[1]);
+    const lines = W.l.map((l, k) => [lineTitle(W, k), d.origRepo ? ((l[3][i] || 0) * d.repo) / d.origRepo : 0, k]).filter((x) => x[1] > 0 && !W.l[x[2]][2]).sort((a, b) => b[1] - a[1]);
     el.innerHTML = `
     <div class="wk-dh"><div><span class="eyebrow">${WEEK_DAYS[dow(i)]} ${dm(dd)}</span><div class="wk-dt num">${hrs(d.total)}<small> год</small>${d.total > LONG_DAY ? `<span class="flag">! понад 12</span>` : ""}</div>${d.feel != null ? `<button class="cb-was" data-reset>модель ${hrs(base)} · ↩</button>` : `<span class="cb-was">= модель</span>`}</div>
     <div class="wk-git num">git-час<br><b>${row[4] == null ? "—" : hrs(row[4])}</b></div></div>
@@ -3073,7 +3075,7 @@ async function openCabinet() {
   cabinet(W);
 }
 
-if (typeof module !== "undefined") module.exports = { newsOf, aheadDays, ruleSlots, goTarget, ruleList, ruleOn, baseActs, textIds, textSnap, textModel, textNow, setText, addRule, endRule, paidNow, togglePay, pageActs, pyRound, dayQ, weekTotal, fresh, dayState, lineBases, weekState, lineState, shareQ, turnTo, moveQ, nudgeLine, lockLine, editList, undoEdit, resetAll, unsent, payload, maxEnd, sundayEnd, rangeQ, isoAdd, isoDays, drag, room, setDay, resetDay, setAct, MAX_Q };
+if (typeof module !== "undefined") module.exports = { lineTitle, newsOf, aheadDays, ruleSlots, goTarget, ruleList, ruleOn, baseActs, textIds, textSnap, textModel, textNow, setText, addRule, endRule, paidNow, togglePay, pageActs, pyRound, dayQ, weekTotal, fresh, dayState, lineBases, weekState, lineState, shareQ, turnTo, moveQ, nudgeLine, lockLine, editList, undoEdit, resetAll, unsent, payload, maxEnd, sundayEnd, rangeQ, isoAdd, isoDays, drag, room, setDay, resetDay, setAct, MAX_Q };
 
 // Her dashboard (#174): the owner's /stats as visuals. Vanilla JS, no library, no network:
 // the data is in the URL fragment, sealed with the owner's key and signed by Her (seal.js,
