@@ -410,6 +410,13 @@ html.still .tour .tst.end .node::after { display: none; }
 html.sheet body { padding-bottom: 48px; }
 html.sheet #app { max-width: 480px; margin: 0 auto; }
 html.sheet .screen + .screen { margin-top: 44px; padding-top: 30px; border-top: 1px solid var(--border); }
+html.still.sheet { width: auto; overflow: visible; }
+html.sheet .sv { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid var(--border); }
+html.sheet .sv:first-of-type { margin-top: 10px; }
+html.sheet .sv .sw { flex: none; width: 10px; height: 10px; margin-top: 5px; border-radius: 3px; }
+html.sheet .sv b { font: var(--weight-semibold) 16px/1.25 var(--font); }
+html.sheet .sv p { margin-top: 4px; font: 15px/1.4 var(--font); color: var(--ink); }
+html.sheet .sv small { display: block; margin-top: 6px; font: 13px/1.35 var(--font); color: var(--good); }
 
 </style>
 </head>
@@ -1278,6 +1285,7 @@ function lanesOf() {
 }
 
 function valueCard(items) {
+  if (SHEET && items.length > 1) return sheetValues(items);
   const card = h("section", "card tap"), head = h("div", "head"), dots = h("div", "dots");
   head.append(h("span", "eyebrow", W.value));
   if (items.length > 1) { items.forEach(() => dots.append(h("i"))); head.append(dots); }
@@ -1325,6 +1333,22 @@ function nextCard() {
     list.append(row);
   });
   card.append(list);
+  return card;
+}
+
+// The sheet (a page to read, maybe with no script): every line's value at once, no tapping.
+function sheetValues(items) {
+  const card = h("section", "card");
+  card.append(h("span", "eyebrow", W.value));
+  for (const l of items) {
+    const row = h("div", "sv"), sw = h("span", "sw"), words = h("div", "");
+    sw.style.background = color(l.slot);
+    words.append(h("b", "", l.t));
+    if (l.v) words.append(h("p", "", l.v));
+    if (l.r) words.append(h("small", "", l.r));
+    row.append(sw, words);
+    card.append(row);
+  }
   return card;
 }
 
@@ -2029,6 +2053,20 @@ function renderSheet() {
   weekScreen(week);
   if (D.invoice) invoiceScreen(bill);
   app.replaceChildren(week, ...(D.invoice ? [bill] : []));
+  if (QS.get("freeze")) setTimeout(freeze, 400); // the river is drawn by then (one still frame)
+}
+// The frozen sheet (her.client_app.frozen): Chrome runs the page once, then the river becomes a
+// picture and every script goes, so a viewer with no JavaScript (Telegram's own) shows it all.
+function freeze() {
+  document.querySelectorAll("canvas").forEach((c) => {
+    const img = h("img", c.className);
+    img.src = c.toDataURL("image/png");
+    img.alt = c.getAttribute("aria-label") || "";
+    img.style.cssText = `display:block;width:100%;height:${c.clientHeight}px`;
+    c.replaceWith(img);
+  });
+  document.querySelectorAll(".seg, .tip, .toast, script").forEach((n) => n.remove());
+  document.documentElement.dataset.frozen = "1";
 }
 
 async function start() {
